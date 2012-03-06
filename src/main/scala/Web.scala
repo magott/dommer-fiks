@@ -1,3 +1,4 @@
+import no.magott.fiks.data.Snippets
 import unfiltered.request.{Path, GET}
 import unfiltered.response.Html
 import util.Properties
@@ -10,6 +11,7 @@ object Web {
     println("Starting on port:" + port)
     jetty.Http(port).resources(getClass().getResource("/static")).filter(filter.Planify {
       case GET(Path("/foo")) => Html(<h1>bar</h1>)
+      case GET(Path("/bar")) => Html(Snippets.emptyPage(<p>Foobar</p>))
     }).run
   }
 }
