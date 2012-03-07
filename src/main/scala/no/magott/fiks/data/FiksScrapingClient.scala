@@ -8,7 +8,7 @@ object FiksScrapingClient extends App{
   val pass = System.getProperty("fiks.password")
   val login =  new FiksLogin().login(username, pass)
   login match {
-    case Right(cookie) => new FiksLogin().availableMatches(cookie)
+    case Right(cookie) => MatchScraper.assignedMatches(cookie)
     case Left(exception) => Console println "Login failed"
   }
 //  Console println login.parse.body.html

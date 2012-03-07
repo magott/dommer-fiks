@@ -11,14 +11,13 @@ import org.joda.time.format.DateTimeFormat
 class FiksLogin {
 
   val COOKIE_NAME = "ASP.NET_SessionId"
-  val dateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm")
 
 
   def login(username: String, password: String) = {
-    val initResponse: Response = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Login/Login.aspx").method(Method.GET).execute()
-    val document: Document = initResponse.parse
-    val viewstate: String = document.getElementById("__VIEWSTATE").attr("value")
-    val eventvalidation: String = document.getElementById("__EVENTVALIDATION").attr("value")
+    val initResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Login/Login.aspx").method(Method.GET).execute()
+    val document = initResponse.parse
+    val viewstate = document.getElementById("__VIEWSTATE").attr("value")
+    val eventvalidation = document.getElementById("__EVENTVALIDATION").attr("value")
     val sessionId = initResponse.cookie(COOKIE_NAME)
     val params = Map("tbAnvandarnamn" -> username, "tbLosenord" -> password, "__VIEWSTATE" -> viewstate, "__EVENTVALIDATION" -> eventvalidation, "btnLoggaIn" -> "Logg inn")
     val response = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Login/Login.aspx")
@@ -37,26 +36,6 @@ class FiksLogin {
     }
   }
 
-  def availableMatches(loginCookie: (String, String)) = {
-    val availableMatchesDoc = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Start/StartLedigaUppdragLista.aspx").cookie(loginCookie._1, loginCookie._2).timeout(5000).get()
-    val matchElements = availableMatchesDoc.select("tbody > tr").listIterator().asScala
 
-    val matches = matchElements.drop(1).map {
-      matchElement: Element =>
-        AvailableMatch(matchElement.child(0).text,
-          matchElement.child(1).text,
-          dateTimeFormat.parseLocalDateTime(matchElement.child(2).text),
-          matchElement.child(4).text,
-          matchElement.child(5).text,
-          matchElement.child(6).text,
-          matchElement.child(7).text,
-          matchElement.child(8).child(0).attr("href")
-        )
-    }
-    matches.foreach(println)
-  }
-
-  case class AvailableMatch(val category: String, val tournament: String, val date: LocalDateTime,
-                            val matchId: String, val teams: String, val arena: String, val role: String, val signupUrl: String)
 
 }
