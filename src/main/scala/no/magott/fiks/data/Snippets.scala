@@ -4,6 +4,10 @@ import xml.NodeSeq
 
 object Snippets {
 
+//  def matches(matches: List){
+//
+//  }
+
   def emptyPage(body: NodeSeq): NodeSeq =
     <html lang="en">
       <head>
