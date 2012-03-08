@@ -14,7 +14,6 @@ object MatchScraper {
     //TODO: Handle SocketTimeoutException? is 3000 millis not enough? Increase?
     val assignedMatchesDoc = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragUppdragLista.aspx").cookie(loginCookie._1, loginCookie._2).get
     val matchesElements = assignedMatchesDoc.select("div#divUppdrag").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
-//    matchesElements.foreach(println)
     val assignedMatches = matchesElements.map{
       el:Element =>
         AssignedMatch(dateTimeFormat.parseLocalDateTime(el.child(0).text),

@@ -14,11 +14,11 @@ class FiksLogin {
 
 
   def login(username: String, password: String) = {
-    val initResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Login/Login.aspx").method(Method.GET).execute()
-    val document = initResponse.parse
-    val viewstate = document.getElementById("__VIEWSTATE").attr("value")
-    val eventvalidation = document.getElementById("__EVENTVALIDATION").attr("value")
-    val sessionId = initResponse.cookie(COOKIE_NAME)
+    val loginPage = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Login/Login.aspx").method(Method.GET).execute()
+    val loginDocument = loginPage.parse
+    val sessionId = loginPage.cookie(COOKIE_NAME)
+    val viewstate = loginDocument.getElementById("__VIEWSTATE").attr("value")
+    val eventvalidation = loginDocument.getElementById("__EVENTVALIDATION").attr("value")
     val params = Map("tbAnvandarnamn" -> username, "tbLosenord" -> password, "__VIEWSTATE" -> viewstate, "__EVENTVALIDATION" -> eventvalidation, "btnLoggaIn" -> "Logg inn")
     val response = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Login/Login.aspx")
       .data(params.asJava)
