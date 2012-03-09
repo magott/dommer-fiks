@@ -1,7 +1,8 @@
 package no.magott.fiks.data
 
-import xml.NodeSeq
 import no.magott.fiks.data.MatchScraper.AssignedMatch
+import org.joda.time.LocalDateTime
+import xml.{XML, NodeSeq}
 
 object Snippets {
 
@@ -62,6 +63,7 @@ object Snippets {
           {body}
 
         </div> <!-- /container -->
+        <div class="alert alert-info">Denne siden er under utvikling og kan derfor være noe ustabil mens mer funksjonalitet utvikles. </div>
         <footer>Morten Andersen-Gott (c) 2012</footer>
 
 
@@ -122,6 +124,13 @@ object Snippets {
       }
       case None =>
     }
+  }
+
+  def googleCalendarLink(start: LocalDateTime, heading:String, location:String, details:String):NodeSeq = {
+    val timeString = start.toString("yyyyMMdd'T'HHmmss'Z") +"/" +start.plusHours(2).toString("yyyyMMdd'T'HHmmss'Z")
+    val xmlString = """<a href="http://www.google.com/calendar/event?action=TEMPLATE&amp;text=""" +
+      heading + """&amp;dates="""+ timeString + """&amp;details=Kampdata&amp;location=Fjompesletta&amp;trp=false&amp;sprop=&amp;sprop=name:" target="_blank"><img src="//www.google.com/calendar/images/ext/gc_button1_no.gif" border="0"/></a>"""
+    XML.loadString(xmlString)
   }
 
 }
