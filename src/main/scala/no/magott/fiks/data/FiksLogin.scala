@@ -4,7 +4,7 @@ import org.jsoup.Jsoup
 import org.jsoup.Connection.Method
 import scala.collection.JavaConverters._
 
-class FiksLogin {
+object FiksLogin {
 
   val COOKIE_NAME = "ASP.NET_SessionId"
 

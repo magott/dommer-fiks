@@ -1,12 +1,9 @@
 package no.magott.fiks.data
 
 import xml.NodeSeq
+import no.magott.fiks.data.MatchScraper.AssignedMatch
 
 object Snippets {
-
-//  def matches(matches: List){
-//
-//  }
 
   def emptyPage(body: NodeSeq): NodeSeq =
     <html lang="en">
@@ -62,10 +59,6 @@ object Snippets {
 
         <div class="container">
 
-          <h1>Bootstrap starter template</h1>
-          <p>Use this document as a way to quick start any new project. <br/>
-            All you get is this message and a barebones HTML document.</p>
-
           {body}
 
         </div> <!-- /container -->
@@ -78,5 +71,57 @@ object Snippets {
       </body>
     </html>
 
+  def tableOfAssignedMatches(assignedMatches: Iterator[AssignedMatch]) = {
+    <table class="table table-striped table-bordered table-condensed">
+      <thead>
+        <tr>
+          <th>Dato</th>
+          <th>Tid</th>
+          <th>Turnering</th>
+          <th>Kamp</th>
+          <th>Sted</th>
+          <th>Dommere</th>
+        </tr>
+
+      </thead>
+      <tbody>
+        {assignedMatches.map {
+        m =>
+          <tr>
+            <td>
+              {m.date.toString("dd.MM.YYYY")}
+            </td>
+            <td>
+              {m.date.toString("HH:mm")}
+            </td>
+            <td>
+              {m.tournament}
+            </td>
+            <td>
+              {m.teams}
+            </td>
+            <td>
+              {m.venue}
+            </td>
+            <td>
+              {m.referees}
+            </td>
+          </tr>
+      }}
+      </tbody>
+    </table>
+  }
+
+  def loginMessages(messageParams: Map[String, Seq[String]]) = {
+
+    messageParams.get("message") match {
+      case Some(msg) => msg.mkString("") match {
+        case "loginRequired" => <div class="alert alert-info">Du må logge inn for å få tilgang til denne siden</div>
+        case "loginError" => <div class="alert alert-error">Login feilet, prøv igjen</div>
+        case "sessionTimeout" => <div class="alert alert">Sesjonen din er for gammel, du må logge inn på nytt</div>
+      }
+      case None =>
+    }
+  }
 
 }

@@ -19,10 +19,10 @@ object MatchScraper {
         AssignedMatch(dateTimeFormat.parseLocalDateTime(el.child(0).text),
         el.child(1).text,
         el.child(3).getElementsByTag("a").text,
-        "",
-        "",
-        "")
-    }.filter(_.date.isAfter(LocalDate.now.minusDays(1)))
+        el.child(4).text,
+        el.child(5).text,
+        el.child(6).text)
+    }.filter(_.date.toLocalDate.isAfter(LocalDate.now.minusDays(1)))
 
     upcomingAssignedMatches;
   }
