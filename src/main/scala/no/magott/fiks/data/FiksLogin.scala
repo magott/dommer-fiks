@@ -1,12 +1,8 @@
 package no.magott.fiks.data
 
 import org.jsoup.Jsoup
-import org.jsoup.Connection.{Response, Method}
+import org.jsoup.Connection.Method
 import scala.collection.JavaConverters._
-import org.jsoup.nodes.{Element, Document}
-import java.util.Date
-import org.joda.time.LocalDateTime
-import org.joda.time.format.DateTimeFormat
 
 class FiksLogin {
 
