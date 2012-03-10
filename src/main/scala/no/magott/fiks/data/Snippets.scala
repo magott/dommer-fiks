@@ -3,6 +3,7 @@ package no.magott.fiks.data
 import no.magott.fiks.data.MatchScraper.AssignedMatch
 import org.joda.time.LocalDateTime
 import xml.{XML, NodeSeq}
+import org.apache.http.client.utils.URIUtils
 
 object Snippets {
 
@@ -64,7 +65,10 @@ object Snippets {
 
         </div> <!-- /container -->
         <div class="alert alert-info">Denne siden er under utvikling og kan derfor være noe ustabil mens mer funksjonalitet utvikles. </div>
-        <footer>Morten Andersen-Gott (c) 2012</footer>
+        <footer>
+          <p><a href="http:///www.andersen-gott.com">Morten Andersen-Gott</a> (c) 2012</p>
+          <p><a href="https://github.com/magott/ofk-fiks/issues">Foreslå forbedringer eller rapportér feil</a></p>
+        </footer>
 
 
         <!-- Placed at the end of the document so the pages load faster -->
@@ -83,6 +87,7 @@ object Snippets {
           <th>Kamp</th>
           <th>Sted</th>
           <th>Dommere</th>
+          <th>Kalender</th>
         </tr>
 
       </thead>
@@ -108,6 +113,9 @@ object Snippets {
             <td>
               {m.referees}
             </td>
+            <td>
+              {googleCalendarLink(m.date, m.teams,m.venue, m.referees)}
+            </td>
           </tr>
       }}
       </tbody>
@@ -129,9 +137,23 @@ object Snippets {
 
   def googleCalendarLink(start: LocalDateTime, heading:String, location:String, details:String):NodeSeq = {
     val timeString = start.toString("yyyyMMdd'T'HHmmss'Z") +"/" +start.plusHours(2).toString("yyyyMMdd'T'HHmmss'Z")
-    val xmlString = """<a href="http://www.google.com/calendar/event?action=TEMPLATE&amp;text=""" +
-      heading + """&amp;dates="""+ timeString + """&amp;details=Kampdata&amp;location=Fjompesletta&amp;trp=false&amp;sprop=&amp;sprop=name:" target="_blank"><img src="//www.google.com/calendar/images/ext/gc_button1_no.gif" border="0"/></a>"""
+    var linkString = """http://www.google.com/calendar/event?action=TEMPLATE&amp;text="""+
+      heading + """&amp;dates="""+ timeString + """&amp;details=""" + details +"""&amp;location=""" + location +"""&amp;trp=false&amp;sprop=&amp;sprop=name:"""
+    val xmlString = """<a href="""" +santitizeURL(linkString)  +"""" target="_blank"><img src="//www.google.com/calendar/images/ext/gc_button1_no.gif" border="0"/></a>"""
     XML.loadString(xmlString)
   }
 
+  def santitizeURL(url:String)= {
+    url.replaceAllLiterally(" ","%20")
+    url.replaceAllLiterally("-","%2D")
+      .replaceAllLiterally("æ","%C3%A6")
+      .replaceAllLiterally("Æ","%C3%86")
+      .replaceAllLiterally("ø","%C3%B8")
+      .replaceAllLiterally("Ø","%C3%98")
+      .replaceAllLiterally("å","%C3%A5")
+      .replaceAllLiterally("Å","%C3%85")
+      .replaceAllLiterally("<br/>","%C3%85")
+      .replaceAllLiterally("<br>","%C3%85")
+      .replaceAllLiterally("</br>","%C3%85")
+  }
 }
