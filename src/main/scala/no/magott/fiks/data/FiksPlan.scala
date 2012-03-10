@@ -3,7 +3,8 @@ package no.magott.fiks.data
 import unfiltered.filter.Plan
 import unfiltered.request._
 import unfiltered.Cookie
-import unfiltered.response.{ResponseFunction, Html, Ok, Redirect}
+import unfiltered.response._
+import org.joda.time.LocalDateTime
 
 object FiksPlan extends Plan{
   def intent = {
@@ -17,6 +18,7 @@ object FiksPlan extends Plan{
           }
         case _ => Redirect("/login?message=loginRequired")
       }
+    case GET(Path(Seg("ical"::Nil))) & Params(p) => Ok ~> CalendarContentType ~> ResponseString(Snippets.iCal(p))
     case GET(Path(Seg("/"::Nil))) => Redirect("/fiks/mymatches")
   }
 
@@ -27,5 +29,7 @@ object FiksPlan extends Plan{
       case e:SessionTimeoutException => Redirect("/login?message=sessionTimeout")
     }
   }
+
+  object CalendarContentType extends CharContentType("text/calendar")
 
 }

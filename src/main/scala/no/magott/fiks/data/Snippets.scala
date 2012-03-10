@@ -7,6 +7,8 @@ import org.apache.http.client.utils.URIUtils
 
 object Snippets {
 
+  val calendarFormatString = "yyyyMMdd'T'HHmmss'Z"
+
   def emptyPage(body: NodeSeq): NodeSeq =
     <html lang="en">
       <head>
@@ -114,7 +116,7 @@ object Snippets {
               {m.referees}
             </td>
             <td>
-              {googleCalendarLink(m.date, m.teams,m.venue, m.referees)}
+              {googleCalendarLink(m.date, m.teams,m.venue, m.referees)} | {icsLink(m.date, m.teams,m.venue, m.referees)}
             </td>
           </tr>
       }}
@@ -136,10 +138,10 @@ object Snippets {
   }
 
   def googleCalendarLink(start: LocalDateTime, heading:String, location:String, details:String):NodeSeq = {
-    val timeString = start.toString("yyyyMMdd'T'HHmmss'Z") +"/" +start.plusHours(2).toString("yyyyMMdd'T'HHmmss'Z")
+    val timeString = start.toString(calendarFormatString) +"/" +start.plusHours(2).toString(calendarFormatString)
     var linkString = """http://www.google.com/calendar/event?action=TEMPLATE&amp;text="""+
       heading + """&amp;dates="""+ timeString + """&amp;details=""" + details +"""&amp;location=""" + location +"""&amp;trp=false&amp;sprop=&amp;sprop=name:"""
-    val xmlString = """<a href="""" +santitizeURL(linkString)  +"""" target="_blank"><img src="//www.google.com/calendar/images/ext/gc_button1_no.gif" border="0"/></a>"""
+    val xmlString = """<a href="""" +santitizeURL(linkString)  +"""" target="_blank">Google</a>"""
     XML.loadString(xmlString)
   }
 
@@ -152,8 +154,30 @@ object Snippets {
       .replaceAllLiterally("Ø","%C3%98")
       .replaceAllLiterally("å","%C3%A5")
       .replaceAllLiterally("Å","%C3%85")
-      .replaceAllLiterally("<br/>","%C3%85")
-      .replaceAllLiterally("<br>","%C3%85")
-      .replaceAllLiterally("</br>","%C3%85")
+      .replaceAllLiterally("<br/>","%0A")
+      .replaceAllLiterally("<br>","%0A")
+      .replaceAllLiterally("</br>","%0A")
+  }
+
+  def icsLink(start: LocalDateTime, heading:String, location:String, details:String) = {
+    val url = "/ical?startTime="+start.toDate.getTime+"&heading="+heading+"&location="+location+"&details="+details;
+    <a href={santitizeURL(url)}>Outlook/iCal</a>
+  }
+
+  def iCal(uriParams: Map[String, Seq[String]]) = {
+    val heading = uriParams.getOrElse("heading", Seq("")).head
+    val startTime = uriParams.getOrElse("startTime",Seq("")).head.toLong
+    val details = uriParams.getOrElse("details",Seq("")).head
+    val start = new LocalDateTime(startTime)
+    "BEGIN:VCALENDAR\n"+
+    "VERSION:2.0\n" +
+    "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\n"+
+    "BEGIN:VEVENT\n"+
+    "DTSTART:"+start.toString(calendarFormatString) +"\n"+
+    "DTEND:" + start.plusHours(2).toString(calendarFormatString)+ "\n"+
+    "SUMMARY:"+heading+"\n"+
+    "DESCRIPTION:"+details +"\n"+
+    "END:VEVENT\n"+
+    "END:VCALENDAR\n"
   }
 }
