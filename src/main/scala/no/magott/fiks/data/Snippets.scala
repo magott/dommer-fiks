@@ -119,8 +119,9 @@ object Snippets {
     messageParams.get("message") match {
       case Some(msg) => msg.mkString("") match {
         case "loginRequired" => <div class="alert alert-info">Du må logge inn for å få tilgang til denne siden</div>
-        case "loginError" => <div class="alert alert-error">Login feilet, prøv igjen</div>
+        case "loginFailed" => <div class="alert alert-error">Login feilet, prøv igjen</div>
         case "sessionTimeout" => <div class="alert alert">Sesjonen din er for gammel, du må logge inn på nytt</div>
+        case _ =>
       }
       case None =>
     }
