@@ -30,4 +30,8 @@ object Pages {
     }
   }
 
+  def about = {
+
+  }
+
 }

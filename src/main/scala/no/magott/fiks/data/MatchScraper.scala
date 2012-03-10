@@ -5,6 +5,7 @@ import org.jsoup.nodes.Element
 import scala.collection.JavaConverters._
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.{LocalDate, LocalDateTime}
+import org.jsoup.Connection.Method
 
 object MatchScraper {
 
@@ -12,7 +13,14 @@ object MatchScraper {
 
   def assignedMatches(loginCookie: (String, String)) = {
     //TODO: Handle SocketTimeoutException? is 3000 millis not enough? Increase?
-    val assignedMatchesDoc = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragUppdragLista.aspx").cookie(loginCookie._1, loginCookie._2).get
+    val assignedMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragUppdragLista.aspx")
+      .cookie(loginCookie._1, loginCookie._2).method(Method.GET).followRedirects(false).execute
+
+    if(assignedMatchesResponse.statusCode == 302){
+      throw new SessionTimeoutException()
+    }
+
+    val assignedMatchesDoc = assignedMatchesResponse.parse;
     val matchesElements = assignedMatchesDoc.select("div#divUppdrag").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
     val upcomingAssignedMatches = matchesElements.map{
       el:Element =>
