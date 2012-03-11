@@ -1,9 +1,9 @@
 package no.magott.fiks.data
 
 import no.magott.fiks.data.MatchScraper.AssignedMatch
-import org.joda.time.LocalDateTime
 import xml.{XML, NodeSeq}
 import org.apache.http.client.utils.URIUtils
+import org.joda.time.{DateTimeZone, DateTime, LocalDateTime}
 
 object Snippets {
 
@@ -138,7 +138,8 @@ object Snippets {
   }
 
   def googleCalendarLink(start: LocalDateTime, heading:String, location:String, details:String):NodeSeq = {
-    val timeString = start.toString(calendarFormatString) +"/" +start.plusHours(2).toString(calendarFormatString)
+    val utcStart = toUTC(start)
+    val timeString = utcStart.toString(calendarFormatString) +"/" +utcStart.plusHours(2).toString(calendarFormatString)
     var linkString = """http://www.google.com/calendar/event?action=TEMPLATE&amp;text="""+
       heading + """&amp;dates="""+ timeString + """&amp;details=""" + details +"""&amp;location=""" + location +"""&amp;trp=false&amp;sprop=&amp;sprop=name:"""
     val xmlString = """<a href="""" +santitizeURL(linkString)  +"""" target="_blank">Google</a>"""
@@ -159,20 +160,26 @@ object Snippets {
       .replaceAllLiterally("</br>","%0A")
   }
 
+  def toUTC(dateTime: LocalDateTime) = {
+    dateTime.toDateTime(DateTimeZone.forID("Europe/Oslo")).withZone(DateTimeZone.UTC).toLocalDateTime
+  }
+
   def icsLink(start: LocalDateTime, heading:String, location:String, details:String) = {
     val url = "/ical?startTime="+start.toDate.getTime+"&heading="+heading+"&location="+location+"&details="+details;
     <a href={santitizeURL(url)}>Outlook/iCal</a>
   }
 
-  def iCal(uriParams: Map[String, Seq[String]]) = {
+  def isc(uriParams: Map[String, Seq[String]]) = {
     val heading = uriParams.getOrElse("heading", Seq("")).head
     val startTime = uriParams.getOrElse("startTime",Seq("")).head.toLong
     val details = uriParams.getOrElse("details",Seq("")).head
-    val start = new LocalDateTime(startTime)
+    val location = uriParams.getOrElse("location",Seq("")).head
+    val start = toUTC(new LocalDateTime(startTime))
     "BEGIN:VCALENDAR\n"+
     "VERSION:2.0\n" +
     "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\n"+
     "BEGIN:VEVENT\n"+
+    "LOCATION:"+location+"\n"+
     "DTSTART:"+start.toString(calendarFormatString) +"\n"+
     "DTEND:" + start.plusHours(2).toString(calendarFormatString)+ "\n"+
     "SUMMARY:"+heading+"\n"+

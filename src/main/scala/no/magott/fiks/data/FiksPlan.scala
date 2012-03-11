@@ -18,7 +18,7 @@ object FiksPlan extends Plan{
           }
         case _ => Redirect("/login?message=loginRequired")
       }
-    case GET(Path(Seg("ical"::Nil))) & Params(p) => Ok ~> CalendarContentType ~> ResponseString(Snippets.iCal(p))
+    case GET(Path(Seg("ical"::Nil))) & Params(p) => Ok ~> CalendarContentType ~> ResponseString(Snippets.isc(p))
     case GET(Path(Seg("/"::Nil))) => Redirect("/fiks/mymatches")
   }
 
