@@ -5,11 +5,13 @@ import unfiltered.request._
 import collection.immutable.Map
 import unfiltered.Cookie
 import unfiltered.response.{Html5, Redirect, SetCookies, Html}
+import no.magott.fiks.data.HerokuRedirect.XForwardProto
 
 object SecurityPlan extends Plan{
 
 
   def intent = {
+    case r@GET(_) & XForwardProto("http") => HerokuRedirect(r,r.uri)
     case GET(Path(Seg("login" :: Nil))) & Params(p)=> {
       Html5(Pages.loginForm(p));
     }
