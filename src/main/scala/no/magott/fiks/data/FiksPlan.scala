@@ -6,19 +6,19 @@ import unfiltered.response._
 
 object FiksPlan extends Plan {
   def intent = {
-    case GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout {
+    case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
       Ok ~> Html(Pages.assignedMatches(MatchScraper.assignedMatches(FiksLogin.COOKIE_NAME, loginToken)))
-    }
+    })
     case GET(Path(Seg("ical" :: Nil))) & Params(p) => Ok ~> CalendarContentType ~> ResponseString(Snippets.isc(p))
-    case GET(Path(Seg(Nil))) & FiksCookie(_) => Redirect("/fiks/mymatches")
-    case GET(Path(Seg(Nil))) => Redirect("/login")
+    case r@GET(Path(Seg(Nil))) & FiksCookie(_) => HerokuRedirect(r,"/fiks/mymatches")
+    case r@GET(Path(Seg(Nil))) => HerokuRedirect(r,"/login")
   }
 
-  def redirectToLoginIfTimeout(f: => ResponseFunction[Any]) = {
+  def redirectToLoginIfTimeout[A](req: HttpRequest[A], f: => ResponseFunction[Any]) = {
     try {
       f
     } catch {
-      case e: SessionTimeoutException => Redirect("/login?message=sessionTimeout")
+      case e: SessionTimeoutException => HerokuRedirect(req,"/login?message=sessionTimeout")
     }
   }
 

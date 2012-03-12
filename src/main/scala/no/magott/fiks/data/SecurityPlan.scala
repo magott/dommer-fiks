@@ -13,22 +13,22 @@ object SecurityPlan extends Plan{
     case GET(Path(Seg("login" :: Nil))) & Params(p)=> {
       Html5(Pages.loginForm(p));
     }
-    case POST(Path(Seg("login" :: Nil))) & Params(p) => handleLogin(p)
+    case r@POST(Path(Seg("login" :: Nil))) & Params(p) => handleLogin(r,p)
 
     case GET(Path(Seg("foo" :: Nil))) => Html(Snippets.emptyPage(<p>Security plan</p>))
 
 //    case GET(_) => Html(Snippets.emptyPage(<p>Security plan</p>))
   }
 
-  def handleLogin(map: Map[String, Seq[String]]) = {
+  def handleLogin[A](req: HttpRequest[A], map: Map[String, Seq[String]]) = {
     val username = map.get("username")
     val password = map.get("password")
     FiksLogin.login(username.get.head, password.get.head) match {
       case Right(cookie) => {
         SetCookies(Cookie(name = "fiksToken", value=cookie._2, secure = Some(false))) ~>
-        Redirect("/fiks/mymatches")
+          HerokuRedirect(req,"/fiks/mymatches")
       }
-      case _ => Redirect("/login?message=loginFailed")
+      case _ => HerokuRedirect(req,"/login?message=loginFailed")
     }
   }
 }
