@@ -20,13 +20,13 @@ object Snippets {
           <meta name="google-site-verification" content="ptF2AFWdgpfQFz8_Uu2o_kDR704noD60eKR4nHC3uT8" />
 
         <!-- Le styles -->
-          <link href="/css/bootstrap.css" rel="stylesheet"/>
+          <link href="/css/bootstrap.min.css" rel="stylesheet"/>
         <style type="text/css">
           {"""body
         {padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */}
         """}
         </style>
-          <link href="/css/bootstrap-responsive.css" rel="stylesheet"/>
+          <link href="/css/bootstrap-responsive.min.css" rel="stylesheet"/>
           <link href="/css/fiks.css" rel="stylesheet"/>
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -77,7 +77,7 @@ object Snippets {
 
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="/js/jquery.js"></script>
-        <script src="/js/bootstrap.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
         <script type="text/javascript">
           {"""
           var _gaq = _gaq || [];
