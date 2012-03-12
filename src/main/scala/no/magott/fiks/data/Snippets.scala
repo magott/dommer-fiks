@@ -15,8 +15,9 @@ object Snippets {
           <meta charset="utf-8"/>
         <title>Fiks fix</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-          <meta name="description" content=" "/>
-          <meta name="author" content=" "/>
+          <meta name="description" content="Fiks, without the #fail"/>
+          <meta name="author" content="Morten Andersen-Gott"/>
+          <meta name="google-site-verification" content="ptF2AFWdgpfQFz8_Uu2o_kDR704noD60eKR4nHC3uT8" />
 
         <!-- Le styles -->
           <link href="/css/bootstrap.css" rel="stylesheet"/>
