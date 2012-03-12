@@ -20,17 +20,15 @@ object SecurityPlan extends Plan{
 //    case GET(_) => Html(Snippets.emptyPage(<p>Security plan</p>))
   }
 
-
-
   def handleLogin(map: Map[String, Seq[String]]) = {
     val username = map.get("username")
     val password = map.get("password")
     FiksLogin.login(username.get.head, password.get.head) match {
       case Right(cookie) => {
         SetCookies(Cookie(name = "fiksToken", value=cookie._2, secure = Some(false))) ~>
-        Redirect("fiks/mymatches")
+        Redirect("/fiks/mymatches")
       }
-      case _ => Redirect("login?message=loginFailed")
+      case _ => Redirect("/login?message=loginFailed")
     }
   }
 }
