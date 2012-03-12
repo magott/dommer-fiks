@@ -1,0 +1,6 @@
+.navbar .brand {
+    background-image: url("../img/fiks.png");
+    background-repeat: no-repeat;
+    background-position: -1px 4px;
+    padding-left: 35px;
+}
