@@ -10,7 +10,7 @@ object FiksLogin {
 
 
   def login(username: String, password: String) = {
-    val loginPage = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Login/Login.aspx").method(Method.GET).execute()
+    val loginPage = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Login/Login.aspx").method(Method.GET).timeout(10000).execute()
     val loginDocument = loginPage.parse
     val sessionId = loginPage.cookie(COOKIE_NAME)
     val viewstate = loginDocument.getElementById("__VIEWSTATE").attr("value")

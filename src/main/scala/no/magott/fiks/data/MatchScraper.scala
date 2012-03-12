@@ -14,7 +14,7 @@ object MatchScraper {
   def assignedMatches(loginCookie: (String, String)) = {
     //TODO: Handle SocketTimeoutException? is 3000 millis not enough? Increase?
     val assignedMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragUppdragLista.aspx")
-      .cookie(loginCookie._1, loginCookie._2).method(Method.GET).followRedirects(false).execute
+      .cookie(loginCookie._1, loginCookie._2).method(Method.GET).timeout(10000).followRedirects(false).execute
 
     if(assignedMatchesResponse.statusCode == 302){
       throw new SessionTimeoutException()
