@@ -10,7 +10,8 @@ object FiksPlan extends Plan {
       Ok ~> Html(Pages.assignedMatches(MatchScraper.assignedMatches(FiksLogin.COOKIE_NAME, loginToken)))
     }
     case GET(Path(Seg("ical" :: Nil))) & Params(p) => Ok ~> CalendarContentType ~> ResponseString(Snippets.isc(p))
-    case GET(Path(Seg(Nil))) => Redirect("/fiks/mymatches")
+    case GET(Path(Seg(Nil))) & FiksCookie(_) => Redirect("/fiks/mymatches")
+    case GET(Path(Seg(Nil))) => Redirect("/login")
   }
 
   def redirectToLoginIfTimeout(f: => ResponseFunction[Any]) = {
