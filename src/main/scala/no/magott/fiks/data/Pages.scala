@@ -1,7 +1,7 @@
 package no.magott.fiks.data
 
 import no.magott.fiks.data.Snippets._
-import no.magott.fiks.data.MatchScraper.AssignedMatch
+import no.magott.fiks.data.MatchScraper.{AvailableMatch, AssignedMatch}
 
 object Pages {
   def loginForm(messageParams: Map[String, Seq[String]]) = {
@@ -28,32 +28,27 @@ object Pages {
       emptyPage(tableOfAssignedMatches(assignedMatches))
   }
 
+  def availableMatches(availableMatches: Iterator[AvailableMatch]) = {
+    emptyPage(<h2>Kommer...</h2>)
+  }
+
   def about = {
-    <h2>Om denne siden</h2>
+    emptyPage(
+    <h3>Om denne siden</h3>
       <p>
         Denne siden er utviklet av Morten Andersen-Gott. Dersom du har innspill til forbedringer eller vil rapportere
         en feil kan du gjøre dette
-        <a href="https://github.com/magott/ofk-fiks/issues">her</a>
+        <a href="http://www.facebook.com/dommerfiks">her</a>
       </p>
 
-      <h2>Sikkerhet</h2>
+      <h3>Sikkerhet</h3>
       <p>
-        Dommer-FIKS trenger ditt brukernavn og passord for fiks for å hente ut og oppdatere informasjon om deg.
-        I alphaversjon sendes brukernavn og passord i klartekst. Dette betyr at det er enkelt for kyndige personer å lese
-        passord og brukernavnet ditt. I fremtiden vil passord og brukernavn gå over HTTPS slik at dette ikke er noe problem.
-      </p>
-      <p>
-        Dommer-FIKS ser ditt brukernavn og passord, men hverken lagrer ikke dette.
+        Dommer-FIKS trenger ditt brukernavn og passord for fiks for å hente ut informasjon om dine kamper.
+        Brukernavnet og passordet sendes kryptert fra deg til Dommer-FIKS og fra Dommer-FIKS til Fiks.
+        Dommer-FIKS ser ditt brukernavn og passord, men lagrer ikke dette på noen måte.
         Det finnes ingen steder i Dommer-FIKS etter innlogging er fortetatt
       </p>
-
-      <h2>Donér</h2>
-      <p>
-        Jeg har ingen direkte utgifter (foreløpig) forbundet med utvikling og drift av Dommer-FIKS, men jeg bruker en del tid
-        på det. Har du lyst til å vise at du setter pris på tjenesten? Jeg setter stor pris på bidrag via paypal
-
-
-      </p>
+    )
 
   }
 

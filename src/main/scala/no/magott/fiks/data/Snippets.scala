@@ -48,13 +48,13 @@ object Snippets {
               <div class="nav-collapse">
                 <ul class="nav">
                   <li class="active">
-                    <a href="#">Dine oppdrag</a>
+                    <a href="/fiks/mymatches">Dine oppdrag</a>
                   </li>
                   <li>
-                    <a href="#available">Ledige oppdrag</a>
+                    <a href="/fiks/availablematches">Ledige oppdrag</a>
                   </li>
                   <li>
-                    <a href="#about">Om</a>
+                    <a href="/fiks/about">Om</a>
                   </li>
                 </ul>
               </div> <!--/.nav-collapse -->

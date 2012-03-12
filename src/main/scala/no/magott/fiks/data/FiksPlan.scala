@@ -9,6 +9,11 @@ object FiksPlan extends Plan {
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
       Ok ~> Html(Pages.assignedMatches(MatchScraper.assignedMatches(FiksLogin.COOKIE_NAME, loginToken)))
     })
+    case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
+      Ok ~> Html(Pages.availableMatches(Iterator.empty))
+    })
+    case GET(Path(Seg("fiks" :: "about" :: Nil))) =>  Ok ~> Html(Pages.about)
+
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil)))  => HerokuRedirect(r,"/login?message=loginRequired")
     case GET(Path(Seg("ical" :: Nil))) & Params(p) => Ok ~> CalendarContentType ~> ResponseString(Snippets.isc(p))
     case r@GET(Path(Seg(Nil))) & FiksCookie(_) => HerokuRedirect(r,"/fiks/mymatches")
