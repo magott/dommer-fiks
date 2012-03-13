@@ -23,7 +23,8 @@ object SecurityPlan extends Plan{
     val password = map.get("password")
     FiksLogin.login(username.get.head, password.get.head) match {
       case Right(cookie) => {
-        SetCookies(Cookie(name = "fiksToken", value=cookie._2, secure = Some(req.isSecure), httpOnly = true)) ~>
+        val secure = req match { case XForwardProto("https") => Some(true) case _ => Some(false)}
+        SetCookies(Cookie(name = "fiksToken", value=cookie._2, secure = secure, httpOnly = true)) ~>
           HerokuRedirect(req,"/fiks/mymatches")
       }
       case _ => HerokuRedirect(req,"/login?message=loginFailed")
