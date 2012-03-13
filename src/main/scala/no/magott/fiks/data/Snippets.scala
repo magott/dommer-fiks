@@ -1,15 +1,14 @@
 package no.magott.fiks.data
 
-import no.magott.fiks.data.MatchScraper.AssignedMatch
 import xml.{XML, NodeSeq}
-import org.apache.http.client.utils.URIUtils
 import org.joda.time.{DateTimeZone, DateTime, LocalDateTime}
+import no.magott.fiks.data.MatchScraper.{AvailableMatch, AssignedMatch}
 
 object Snippets {
 
   val calendarFormatString = "yyyyMMdd'T'HHmmss'Z"
 
-  def emptyPage(body: NodeSeq): NodeSeq =
+  def emptyPage(body: NodeSeq, page:Option[String] = None ): NodeSeq =
     <html lang="en">
       <head>
           <meta charset="utf-8"/>
@@ -47,13 +46,13 @@ object Snippets {
               <a class="brand" href="#">Dommer-FIKS</a>
               <div class="nav-collapse">
                 <ul class="nav">
-                  <li class="active">
+                  <li class= {if (page.getOrElse("").contains("mymatches"))"active" else "inactive"}>
                     <a href="/fiks/mymatches">Dine oppdrag</a>
                   </li>
-                  <li>
+                  <li class= {if (page.getOrElse("").contains("availablematches"))"active" else "inactive"}>
                     <a href="/fiks/availablematches">Ledige oppdrag</a>
                   </li>
-                  <li>
+                  <li class= {if (page.getOrElse("").contains("about"))"active" else "inactive"}>
                     <a href="/fiks/about">Om</a>
                   </li>
                 </ul>
@@ -137,6 +136,40 @@ object Snippets {
       }}
       </tbody>
     </table>
+  }
+
+  def tableOfAvailableMatches(availableMatches: Iterator[AvailableMatch]) ={
+    <div class="well">
+      Mulighet for å melde interesse for kamper er ikke implementert ennå, men kommer snart.
+      I mellomtiden må du bruke "vanlig" fiks for å melde interesse.
+    </div>
+    <table class="table table-striped table-bordered table-condensed">
+      <thead>
+        <tr>
+          <th>Tid</th>
+          <th>Turnering</th>
+          <th>Kamp</th>
+          <th>Sted</th>
+          <th>Type</th>
+          <th>Meld interesse</th>
+        </tr>
+        </thead>
+      <tbody>
+        {
+          availableMatches.map{
+            m =>
+              <tr>
+                <td>{m.date.toString("dd.MM.yyyy HH:mm")}</td>
+                <td>{m.tournament}</td>
+                <td>{m.teams}</td>
+                <td>{m.venue}</td>
+                <td>{m.role}</td>
+                <td>Kommer</td>
+              </tr>
+          }
+        }
+        </tbody>
+      </table>
   }
 
   def loginMessages(messageParams: Map[String, Seq[String]]) = {

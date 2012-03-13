@@ -14,7 +14,7 @@ object MatchScraper {
   def assignedMatches(loginCookie: (String, String)) = {
     //TODO: Handle SocketTimeoutException? is 3000 millis not enough? Increase?
     val assignedMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragUppdragLista.aspx")
-      .cookie(loginCookie._1, loginCookie._2).method(Method.GET).timeout(10000).followRedirects(false).execute
+      .cookie(loginCookie._1, loginCookie._2).method(Method.GET).timeout(10000).followRedirects(false).execute()
 
     if(assignedMatchesResponse.statusCode == 302){
       throw new SessionTimeoutException()
@@ -36,10 +36,18 @@ object MatchScraper {
   }
 
   def availableMatches(loginCookie: (String, String)) = {
-    val availableMatchesDoc = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Start/StartLedigaUppdragLista.aspx").cookie(loginCookie._1, loginCookie._2).get
-    val matchElements = availableMatchesDoc.select("tbody > tr").listIterator.asScala.drop(1)
+    val availableMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Start/StartLedigaUppdragLista.aspx")
+      .cookie(loginCookie._1, loginCookie._2).method(Method.GET).followRedirects(false).timeout(10000).execute()
 
-    val matches = matchElements.map {
+    if(availableMatchesResponse.statusCode == 302){
+      throw new SessionTimeoutException();
+    }
+
+    val availableMatchesDoc = availableMatchesResponse.parse()
+    Console.println(availableMatchesDoc)
+    val matchElements = availableMatchesDoc.select("div#divMainContent").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
+
+    matchElements.map {
       el: Element =>
         AvailableMatch(el.child(0).text,  
           el.child(1).text,
@@ -51,8 +59,6 @@ object MatchScraper {
           el.child(8).child(0).attr("href")
         )
     }
-    matches.foreach(println)
-    matches
   }
   case class AvailableMatch(val category: String, val tournament: String, val date: LocalDateTime,
                             val matchId: String, val teams: String, val venue: String, val role: String, val signupUrl: String)

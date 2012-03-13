@@ -5,12 +5,13 @@ import unfiltered.request._
 import unfiltered.response._
 
 object FiksPlan extends Plan {
+
   def intent = {
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      Ok ~> Html(Pages.assignedMatches(MatchScraper.assignedMatches(FiksLogin.COOKIE_NAME, loginToken)))
+      Ok ~> Html5(Pages.assignedMatches(MatchScraper.assignedMatches(FiksLogin.COOKIE_NAME, loginToken)))
     })
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      Ok ~> Html(Pages.availableMatches(Iterator.empty))
+      Ok ~> Html5(Pages.availableMatches(MatchScraper.availableMatches(FiksLogin.COOKIE_NAME, loginToken)))
     })
     case GET(Path(Seg("fiks" :: "about" :: Nil))) =>  Ok ~> Html(Pages.about)
 
