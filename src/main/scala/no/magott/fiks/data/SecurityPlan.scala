@@ -16,10 +16,6 @@ object SecurityPlan extends Plan{
       Html5(Pages.loginForm(p));
     }
     case r@POST(Path(Seg("login" :: Nil))) & Params(p) => handleLogin(r,p)
-
-    case GET(Path(Seg("foo" :: Nil))) => Html(Snippets.emptyPage(<p>Security plan</p>))
-
-//    case GET(_) => Html(Snippets.emptyPage(<p>Security plan</p>))
   }
 
   def handleLogin[A](req: HttpRequest[A], map: Map[String, Seq[String]]) = {
