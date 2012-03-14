@@ -1,7 +1,6 @@
 package no.magott.fiks.data
 
 import no.magott.fiks.data.Snippets._
-import no.magott.fiks.data.MatchScraper.{AvailableMatch, AssignedMatch}
 
 object Pages {
   def loginForm(messageParams: Map[String, Seq[String]]) = {
@@ -43,11 +42,11 @@ object Pages {
     ,Some("about"))
   }
 
-  def assignedMatches(assignedMatches: Iterator[AssignedMatch]) = {
+  def assignedMatches(assignedMatches: List[AssignedMatch]) = {
     emptyPage(tableOfAssignedMatches(assignedMatches),Some("mymatches"))
   }
 
-  def availableMatches(availableMatches: Iterator[AvailableMatch]) = {
+  def availableMatches(availableMatches: List[AvailableMatch]) = {
     emptyPage(tableOfAvailableMatches(availableMatches),Some("availablematches"))
   }
 

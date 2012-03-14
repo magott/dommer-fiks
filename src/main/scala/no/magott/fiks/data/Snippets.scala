@@ -2,7 +2,6 @@ package no.magott.fiks.data
 
 import xml.{XML, NodeSeq}
 import org.joda.time.{DateTimeZone, DateTime, LocalDateTime}
-import no.magott.fiks.data.MatchScraper.{AvailableMatch, AssignedMatch}
 
 object Snippets {
 
@@ -93,7 +92,7 @@ object Snippets {
       </body>
     </html>
 
-  def tableOfAssignedMatches(assignedMatches: Iterator[AssignedMatch]) = {
+  def tableOfAssignedMatches(assignedMatches: List[AssignedMatch]) = {
     <table class="table table-striped table-bordered table-condensed">
       <thead>
         <tr>
@@ -138,7 +137,7 @@ object Snippets {
     </table>
   }
 
-  def tableOfAvailableMatches(availableMatches: Iterator[AvailableMatch]) ={
+  def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) ={
     <div class="well">
       Mulighet for å melde interesse for kamper er ikke implementert ennå, men kommer snart.
       I mellomtiden må du bruke "vanlig" fiks for å melde interesse.

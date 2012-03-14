@@ -4,42 +4,32 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import scala.collection.JavaConverters._
 import org.joda.time.format.DateTimeFormat
-import org.joda.time.{LocalDate, LocalDateTime}
+import org.joda.time.{LocalDate}
 import org.jsoup.Connection.Method
+import java.util.concurrent.TimeUnit
+import Guava2ScalaConversions._
+import com.google.common.cache.{CacheLoader, CacheBuilder}
 
-object MatchScraper {
+class MatchScraper {
+  val COOKIE_NAME = "ASP.NET_SessionId"
+  val assignedMatchesCache = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((loginToken: String) => scrapeAssignedMatches(loginToken)))
+  val availableMatchesCache = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((loginToken:String) => scrapeAvailableMatches(loginToken)))
 
   val dateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm")
 
-  def assignedMatches(loginCookie: (String, String)) = {
-    //TODO: Handle SocketTimeoutException? is 3000 millis not enough? Increase?
-    val assignedMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragUppdragLista.aspx")
-      .cookie(loginCookie._1, loginCookie._2).method(Method.GET).timeout(10000).followRedirects(false).execute()
-
-    if(assignedMatchesResponse.statusCode == 302){
-      throw new SessionTimeoutException()
-    }
-
-    val assignedMatchesDoc = assignedMatchesResponse.parse;
-    val matchesElements = assignedMatchesDoc.select("div#divUppdrag").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
-    val upcomingAssignedMatches = matchesElements.map{
-      el:Element =>
-        AssignedMatch(dateTimeFormat.parseLocalDateTime(el.child(0).text),
-        el.child(1).text,
-        el.child(3).getElementsByTag("a").text,
-        el.child(4).text,
-        el.child(5).text,
-        el.child(6).text)
-    }.filter(_.date.toLocalDate.isAfter(LocalDate.now.minusDays(1)))
-
-    upcomingAssignedMatches;
+  def assignedMatches(loginCookie: (String, String)): List[AssignedMatch] = {
+    assignedMatchesCache.get(loginCookie._2)
   }
 
   def availableMatches(loginCookie: (String, String)) = {
-    val availableMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Start/StartLedigaUppdragLista.aspx")
-      .cookie(loginCookie._1, loginCookie._2).method(Method.GET).followRedirects(false).timeout(10000).execute()
+    availableMatchesCache.get(loginCookie._2)
+  }
 
-    if(availableMatchesResponse.statusCode == 302){
+  def scrapeAvailableMatches(loginToken: String) = {
+    val availableMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Start/StartLedigaUppdragLista.aspx")
+      .cookie(COOKIE_NAME, loginToken).method(Method.GET).followRedirects(false).timeout(10000).execute()
+
+    if (availableMatchesResponse.statusCode == 302) {
       throw new SessionTimeoutException();
     }
 
@@ -49,7 +39,7 @@ object MatchScraper {
 
     matchElements.map {
       el: Element =>
-        AvailableMatch(el.child(0).text,  
+        AvailableMatch(el.child(0).text,
           el.child(1).text,
           dateTimeFormat.parseLocalDateTime(el.child(2).text),
           el.child(4).text,
@@ -58,12 +48,28 @@ object MatchScraper {
           el.child(7).text,
           el.child(8).child(0).attr("href")
         )
-    }
+    }.toList
   }
-  case class AvailableMatch(val category: String, val tournament: String, val date: LocalDateTime,
-                            val matchId: String, val teams: String, val venue: String, val role: String, val signupUrl: String)
 
-  case class AssignedMatch(val date:LocalDateTime, val tournament: String, val matchId:String, val teams:String, val venue:String, val referees:String)
+  def scrapeAssignedMatches(loginToken: String) = {
+    val assignedMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragUppdragLista.aspx")
+      .cookie(COOKIE_NAME, loginToken).method(Method.GET).timeout(10000).followRedirects(false).execute()
 
+    if (assignedMatchesResponse.statusCode == 302) {
+      throw new SessionTimeoutException()
+    }
+    val assignedMatchesDoc = assignedMatchesResponse.parse;
+    val matchesElements = assignedMatchesDoc.select("div#divUppdrag").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
+    val upcomingAssignedMatches = matchesElements.map {
+      el: Element =>
+        AssignedMatch(dateTimeFormat.parseLocalDateTime(el.child(0).text),
+          el.child(1).text,
+          el.child(3).getElementsByTag("a").text,
+          el.child(4).text,
+          el.child(5).text,
+          el.child(6).text)
+    }.filter(_.date.toLocalDate.isAfter(LocalDate.now.minusDays(1)))
+    upcomingAssignedMatches.toList
+  }
 
 }

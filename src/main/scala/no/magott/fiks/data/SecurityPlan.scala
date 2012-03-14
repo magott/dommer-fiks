@@ -13,7 +13,7 @@ object SecurityPlan extends Plan{
   def intent = {
     case r@GET(_) & XForwardProto("http") => HerokuRedirect(r,r.uri)
     case GET(Path(Seg("login" :: Nil))) & Params(p)=> {
-      Html5(Pages.loginForm(p));
+       Html5(Pages.loginForm(p));
     }
     case r@POST(Path(Seg("login" :: Nil))) & Params(p) => handleLogin(r,p)
   }

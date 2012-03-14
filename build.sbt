@@ -6,6 +6,8 @@ name:="ofk-fiks"
 
 organization := "no.magott"
 
+resolvers += "terracotta-releases" at "http://www.terracotta.org/download/reflector/releases"
+
 libraryDependencies ++=
   Seq(
     "net.databinder" %% "unfiltered" % "0.6.0",
@@ -16,5 +18,5 @@ libraryDependencies ++=
     "commons-logging" % "commons-logging" % "1.1.1",
     "joda-time" % "joda-time" % "2.1",
     "org.joda" % "joda-convert" % "1.2",
-    "org.apache.httpcomponents" % "httpclient" % "4.1.3"
+    "com.google.guava" % "guava" % "11.0.2"
   )
