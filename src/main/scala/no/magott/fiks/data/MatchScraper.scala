@@ -8,14 +8,15 @@ import org.joda.time.{LocalDate}
 import org.jsoup.Connection.Method
 import java.util.concurrent.TimeUnit
 import Guava2ScalaConversions._
-import com.google.common.cache.{CacheLoader, CacheBuilder}
+import org.jsoup.safety.Whitelist
+import com.google.common.cache.{Cache, CacheLoader, CacheBuilder}
 
 class MatchScraper {
   val COOKIE_NAME = "ASP.NET_SessionId"
+  val dateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm")
   val assignedMatchesCache = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((loginToken: String) => scrapeAssignedMatches(loginToken)))
   val availableMatchesCache = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((loginToken:String) => scrapeAvailableMatches(loginToken)))
-
-  val dateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm")
+  val matchInfoCache:Cache[String,AvailableMatch] = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).maximumSize(50).build()
 
   def assignedMatches(loginCookie: (String, String)): List[AssignedMatch] = {
     assignedMatchesCache.get(loginCookie._2)
@@ -23,6 +24,57 @@ class MatchScraper {
 
   def availableMatches(loginCookie: (String, String)) = {
     availableMatchesCache.get(loginCookie._2)
+  }
+
+  def matchInfo(assignmentId: String, loginToken:String) = {
+    val cached = Option(matchInfoCache.getIfPresent(assignmentId))
+    cached match{
+      case Some(x) => x
+      case None => {
+        val matchInfo = scrapeMatchInfo(assignmentId, loginToken)
+        matchInfoCache.put(assignmentId,matchInfo)
+        matchInfo
+      }
+    }
+  }
+
+  def reportInterest(matchId: String, comment:String, loginToken:String) {
+    println("Flushing cache for")
+    availableMatchesCache.invalidate(loginToken)
+    println("Flushed cache for "+loginToken)
+    val url = "https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=" + matchId
+    val reportInterestForm = Jsoup.connect(url).cookie(COOKIE_NAME,loginToken).get
+    val viewstate = reportInterestForm.getElementById("__VIEWSTATE").attr("value")
+    val eventvalidation = reportInterestForm.getElementById("__EVENTVALIDATION").attr("value")
+    val response = Jsoup.connect(url)
+      .method(Method.POST)
+      .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
+      .data("btnAnmal","Meld inn")
+      .data("tbKommentar",comment)
+      .data("__VIEWSTATE",viewstate)
+      .data("__EVENTVALIDATION",eventvalidation)
+      .referrer(url)
+      .cookie(COOKIE_NAME,loginToken).followRedirects(false).timeout(10000).execute()
+  }
+
+  def scrapeMatchInfo(assignmentId: String, loginToken:String) = {
+    val cleanAssignmentId = Jsoup.clean(assignmentId, Whitelist.none)
+    val response = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=" + cleanAssignmentId)
+      .method(Method.GET).cookie(COOKIE_NAME, loginToken).followRedirects(false).timeout(10000).execute()
+    if(response.statusCode == 302){
+      throw new SessionTimeoutException()
+    }
+    val el = response.parse().select("table")
+    AvailableMatch(
+      el.select("span#lblTavlingskategori").text,
+      el.select("span#lblTavling").text,
+      dateTimeFormat.parseLocalDateTime(el.select("span#lblTid").text),
+      el.select("span#lblMatchnr").text,
+      el.select("span#lblMatch").text,
+      el.select("span#lblAnlaggning").text,
+      el.select("span#lblUppdrag").text,
+      Some(cleanAssignmentId)
+    )
   }
 
   def scrapeAvailableMatches(loginToken: String) = {
@@ -34,7 +86,6 @@ class MatchScraper {
     }
 
     val availableMatchesDoc = availableMatchesResponse.parse()
-    Console.println(availableMatchesDoc)
     val matchElements = availableMatchesDoc.select("div#divMainContent").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
 
     matchElements.map {
@@ -46,7 +97,11 @@ class MatchScraper {
           el.child(5).text,
           el.child(6).text,
           el.child(7).text,
-          el.child(8).child(0).attr("href")
+          if(el.child(8).child(0).nodeName =="a"){
+            Some(el.child(8).child(0).attr("href").split("=")(1))
+          }else{
+            None
+          }
         )
     }.toList
   }

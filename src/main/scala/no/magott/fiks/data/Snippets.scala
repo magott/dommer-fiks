@@ -7,7 +7,7 @@ object Snippets {
 
   val calendarFormatString = "yyyyMMdd'T'HHmmss'Z"
 
-  def emptyPage(body: NodeSeq, page:Option[String] = None ): NodeSeq =
+  def emptyPage(body: NodeSeq, page: Option[String] = None): NodeSeq =
     <html lang="en">
       <head>
           <meta charset="utf-8"/>
@@ -15,7 +15,7 @@ object Snippets {
           <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
           <meta name="description" content="Fiks, without the #fail"/>
           <meta name="author" content="Morten Andersen-Gott"/>
-          <meta name="google-site-verification" content="ptF2AFWdgpfQFz8_Uu2o_kDR704noD60eKR4nHC3uT8" />
+          <meta name="google-site-verification" content="ptF2AFWdgpfQFz8_Uu2o_kDR704noD60eKR4nHC3uT8"/>
 
         <!-- Le styles -->
           <link href="/css/bootstrap.min.css" rel="stylesheet"/>
@@ -42,16 +42,16 @@ object Snippets {
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </a>
-              <a class="brand" href="#">Dommer-FIKS</a>
+              <a class="brand" href="/">Dommer-FIKS</a>
               <div class="nav-collapse">
                 <ul class="nav">
-                  <li class= {if (page.getOrElse("").contains("mymatches"))"active" else "inactive"}>
+                  <li class={if (page.getOrElse("").contains("mymatches")) "active" else "inactive"}>
                     <a href="/fiks/mymatches">Dine oppdrag</a>
                   </li>
-                  <li class= {if (page.getOrElse("").contains("availablematches"))"active" else "inactive"}>
+                  <li class={if (page.getOrElse("").contains("availablematches")) "active" else "inactive"}>
                     <a href="/fiks/availablematches">Ledige oppdrag</a>
                   </li>
-                  <li class= {if (page.getOrElse("").contains("about"))"active" else "inactive"}>
+                  <li class={if (page.getOrElse("").contains("about")) "active" else "inactive"}>
                     <a href="/fiks/about">Om</a>
                   </li>
                 </ul>
@@ -66,10 +66,14 @@ object Snippets {
           {body}
 
         </div> <!-- /container -->
-        <div class="alert alert-info">Denne siden er under utvikling og kan derfor være noe ustabil mens mer funksjonalitet utvikles. </div>
+        <div class="alert alert-info">Denne siden er under utvikling og kan derfor være noe ustabil mens mer funksjonalitet utvikles.</div>
         <footer>
-          <p><a href="http:///www.andersen-gott.com">Morten Andersen-Gott</a> (c) 2012</p>
-          <p><a href="http://www.facebook.com/dommerfiks">Foreslå forbedringer eller rapportér feil</a></p>
+          <p>
+            <a href="http:///www.andersen-gott.com">Morten Andersen-Gott</a>
+            (c) 2012</p>
+          <p>
+            <a href="http://www.facebook.com/dommerfiks">Foreslå forbedringer eller rapportér feil</a>
+          </p>
         </footer>
 
 
@@ -88,7 +92,7 @@ object Snippets {
   })();
   """}
 
-  </script>
+        </script>
       </body>
     </html>
 
@@ -129,7 +133,9 @@ object Snippets {
               {m.referees}
             </td>
             <td>
-              {googleCalendarLink(m.date, m.teams,m.venue, m.referees)} | {icsLink(m.date, m.teams,m.venue, m.referees)}
+              {googleCalendarLink(m.date, m.teams, m.venue, m.referees)}
+              |
+              {icsLink(m.date, m.teams, m.venue, m.referees)}
             </td>
           </tr>
       }}
@@ -137,42 +143,56 @@ object Snippets {
     </table>
   }
 
-  def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) ={
+  def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) = {
     <div class="well">
       Mulighet for å melde interesse for kamper er ikke implementert ennå, men kommer snart.
       I mellomtiden må du bruke "vanlig" fiks for å melde interesse.
     </div>
-    <table class="table table-striped table-bordered table-condensed">
-      <thead>
-        <tr>
-          <th>Tid</th>
-          <th>Turnering</th>
-          <th>Kamp</th>
-          <th>Sted</th>
-          <th>Type</th>
-          <th>Meld interesse</th>
-        </tr>
+      <table class="table table-striped table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th>Tid</th>
+            <th>Turnering</th>
+            <th>Kamp</th>
+            <th>Sted</th>
+            <th>Type</th>
+            <th>Meld interesse</th>
+          </tr>
         </thead>
-      <tbody>
-        {
-          availableMatches.map{
-            m =>
-              <tr>
-                <td>{m.date.toString("dd.MM.yyyy HH:mm")}</td>
-                <td>{m.tournament}</td>
-                <td>{m.teams}</td>
-                <td>{m.venue}</td>
-                <td>{m.role}</td>
-                <td>Kommer</td>
-              </tr>
-          }
-        }
+        <tbody>
+          {availableMatches.map {
+          m =>
+            <tr>
+              <td>
+                {m.date.toString("dd.MM.yyyy HH:mm")}
+              </td>
+              <td>
+                {m.tournament}
+              </td>
+              <td>
+                {m.teams}
+              </td>
+              <td>
+                {m.venue}
+              </td>
+              <td>
+                {m.role}
+              </td>
+              <td>
+                {
+                m.availabilityId match{
+                  case Some(id) => <a href={"""availablematches?matchid=""" + m.availabilityId.get + """"""}>Meld interesse</a>
+                  case None => <div>Meldt inn</div>
+                }
+                }
+              </td>
+            </tr>
+        }}
         </tbody>
       </table>
   }
 
   def loginMessages(messageParams: Map[String, Seq[String]]) = {
-
     messageParams.get("message") match {
       case Some(msg) => msg.mkString("") match {
         case "loginRequired" => <div class="alert alert-info">Du må logge inn for å få tilgang til denne siden</div>
@@ -184,54 +204,97 @@ object Snippets {
     }
   }
 
-  def googleCalendarLink(start: LocalDateTime, heading:String, location:String, details:String):NodeSeq = {
+  def reportInterestForm(availableMatch: AvailableMatch) = {
+    println(availableMatch)
+    <table class="table table-striped table-bordered table-condensed">
+      <tr>
+        <th>Oppdrag</th>
+        <td>
+          {availableMatch.role}
+        </td>
+      </tr>
+      <tr>
+        <th>Kamp</th>
+        <td>
+          {availableMatch.teams}
+        </td>
+      </tr>
+      <tr>
+        <th>Tidspunkt</th>
+        <td>
+          {availableMatch.date.toString("dd.MM.yyyy HH:mm")}
+        </td>
+      </tr>
+      <tr>
+        <th>Bane</th>
+        <td>
+          {availableMatch.venue}
+        </td>
+      </tr>
+      <form class="well" action={"""availablematches?matchid="""+availableMatch.availabilityId.get} method="post">
+        <tr>
+          <th>Kommentarer</th>
+          <td>
+              <textarea name="comment" id="comment"/>
+          </td>
+        </tr>
+        <tr>
+          <td/>
+          <td><button type="submit" class="btn btn-primary">Meld interesse</button></td>
+        </tr>
+      </form>
+    </table>
+  }
+
+  def googleCalendarLink(start: LocalDateTime, heading: String, location: String, details: String): NodeSeq = {
     val utcStart = toUTC(start)
-    val timeString = utcStart.toString(calendarFormatString) +"/" +utcStart.plusHours(2).toString(calendarFormatString)
-    var linkString = """http://www.google.com/calendar/event?action=TEMPLATE&amp;text="""+
-      heading + """&amp;dates="""+ timeString + """&amp;details=""" + details +"""&amp;location=""" + location +"""&amp;trp=false&amp;sprop=&amp;sprop=name:"""
-    val xmlString = """<a href="""" +santitizeURL(linkString)  +"""" target="_blank">Google</a>"""
+    val timeString = utcStart.toString(calendarFormatString) + "/" + utcStart.plusHours(2).toString(calendarFormatString)
+    var linkString = """http://www.google.com/calendar/event?action=TEMPLATE&amp;text=""" +
+      heading + """&amp;dates=""" + timeString + """&amp;details=""" + details + """&amp;location=""" + location + """&amp;trp=false&amp;sprop=&amp;sprop=name:"""
+    val xmlString = """<a href="""" + santitizeURL(linkString) + """" target="_blank">Google</a>"""
     XML.loadString(xmlString)
   }
 
-  def santitizeURL(url:String)= {
-    url.replaceAllLiterally(" ","%20")
-    url.replaceAllLiterally("-","%2D")
-      .replaceAllLiterally("æ","%C3%A6")
-      .replaceAllLiterally("Æ","%C3%86")
-      .replaceAllLiterally("ø","%C3%B8")
-      .replaceAllLiterally("Ø","%C3%98")
-      .replaceAllLiterally("å","%C3%A5")
-      .replaceAllLiterally("Å","%C3%85")
-      .replaceAllLiterally("<br/>","%0A")
-      .replaceAllLiterally("<br>","%0A")
-      .replaceAllLiterally("</br>","%0A")
-  }
-
-  def toUTC(dateTime: LocalDateTime) = {
-    dateTime.toDateTime(DateTimeZone.forID("Europe/Oslo")).withZone(DateTimeZone.UTC).toLocalDateTime
-  }
-
-  def icsLink(start: LocalDateTime, heading:String, location:String, details:String) = {
-    val url = "/ical?startTime="+start.toDate.getTime+"&heading="+heading+"&location="+location+"&details="+details;
-    <a href={santitizeURL(url)}>Outlook/iCal</a>
-  }
 
   def isc(uriParams: Map[String, Seq[String]]) = {
     val heading = uriParams.getOrElse("heading", Seq("")).head
-    val startTime = uriParams.getOrElse("startTime",Seq("")).head.toLong
-    val details = uriParams.getOrElse("details",Seq("")).head
-    val location = uriParams.getOrElse("location",Seq("")).head
+    val startTime = uriParams.getOrElse("startTime", Seq("")).head.toLong
+    val details = uriParams.getOrElse("details", Seq("")).head
+    val location = uriParams.getOrElse("location", Seq("")).head
     val start = toUTC(new LocalDateTime(startTime))
-    "BEGIN:VCALENDAR\n"+
-    "VERSION:2.0\n" +
-    "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\n"+
-    "BEGIN:VEVENT\n"+
-    "LOCATION:"+location+"\n"+
-    "DTSTART:"+start.toString(calendarFormatString) +"\n"+
-    "DTEND:" + start.plusHours(2).toString(calendarFormatString)+ "\n"+
-    "SUMMARY:"+heading+"\n"+
-    "DESCRIPTION:"+details +"\n"+
-    "END:VEVENT\n"+
-    "END:VCALENDAR\n"
+    "BEGIN:VCALENDAR\n" +
+      "VERSION:2.0\n" +
+      "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\n" +
+      "BEGIN:VEVENT\n" +
+      "LOCATION:" + location + "\n" +
+      "DTSTART:" + start.toString(calendarFormatString) + "\n" +
+      "DTEND:" + start.plusHours(2).toString(calendarFormatString) + "\n" +
+      "SUMMARY:" + heading + "\n" +
+      "DESCRIPTION:" + details + "\n" +
+      "END:VEVENT\n" +
+      "END:VCALENDAR\n"
+  }
+
+  private def santitizeURL(url: String) = {
+    url.replaceAllLiterally(" ", "%20")
+    url.replaceAllLiterally("-", "%2D")
+      .replaceAllLiterally("æ", "%C3%A6")
+      .replaceAllLiterally("Æ", "%C3%86")
+      .replaceAllLiterally("ø", "%C3%B8")
+      .replaceAllLiterally("Ø", "%C3%98")
+      .replaceAllLiterally("å", "%C3%A5")
+      .replaceAllLiterally("Å", "%C3%85")
+      .replaceAllLiterally("<br/>", "%0A")
+      .replaceAllLiterally("<br>", "%0A")
+      .replaceAllLiterally("</br>", "%0A")
+  }
+
+  private def toUTC(dateTime: LocalDateTime) = {
+    dateTime.toDateTime(DateTimeZone.forID("Europe/Oslo")).withZone(DateTimeZone.UTC).toLocalDateTime
+  }
+
+  private def icsLink(start: LocalDateTime, heading: String, location: String, details: String) = {
+    val url = "/ical?startTime=" + start.toDate.getTime + "&heading=" + heading + "&location=" + location + "&details=" + details;
+    <a href={santitizeURL(url)}>Outlook/iCal</a>
   }
 }

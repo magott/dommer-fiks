@@ -13,7 +13,7 @@ object Pages {
           Logg inn med ditt Fiks brukernavn og passord.
             <br/>
           Du skal bruke samme brukernavn og passord som du bruker på
-          <a href="http://www.fiks.fotball.no">orginale fiks</a>
+          <a href="http://www.fiks.fotball.no">offisielle fiks</a>
         </p>
         <form class="form-horizontal" action="login" method="post">
             <input type="text" name="username"/>
@@ -40,6 +40,10 @@ object Pages {
       Det finnes ingen steder i Dommer-FIKS etter innlogging er fortetatt
     </p>
     ,Some("about"))
+  }
+
+  def reportInterestIn(availableMatch: AvailableMatch) = {
+    emptyPage(reportInterestForm(availableMatch))
   }
 
   def assignedMatches(assignedMatches: List[AssignedMatch]) = {

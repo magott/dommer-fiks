@@ -11,7 +11,6 @@ object FiksScrapingClient extends App{
   login match {
     case Right(cookie) =>
       scraper.assignedMatches(cookie).foreach(println)
-      scraper.assignedMatches(cookie).foreach(println)
     case Left(exception) => Console println "Login failed"
   }
 //  val login2 =  FiksLogin.login(username, pass)
