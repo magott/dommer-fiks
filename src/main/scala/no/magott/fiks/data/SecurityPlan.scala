@@ -7,7 +7,7 @@ import unfiltered.Cookie
 import unfiltered.response.{Html5, Redirect, SetCookies, Html}
 import no.magott.fiks.data.HerokuRedirect.XForwardProto
 
-object SecurityPlan extends Plan{
+class SecurityPlan(val matchservice:MatchService) extends Plan{
 
 
   def intent = {
@@ -23,6 +23,8 @@ object SecurityPlan extends Plan{
     val password = map.get("password")
     FiksLogin.login(username.get.head, password.get.head) match {
       case Right(cookie) => {
+        matchservice.prefetchAssignedMatches(cookie._2)
+        matchservice.prefetchAvailableMatches(cookie._2)
         val secure = req match { case XForwardProto("https") => Some(true) case _ => Some(false)}
         SetCookies(Cookie(name = "fiksToken", value=cookie._2, secure = secure, httpOnly = true)) ~>
           HerokuRedirect(req,"/fiks/mymatches")

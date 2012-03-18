@@ -4,7 +4,7 @@ import unfiltered.request._
 import unfiltered.response._
 import unfiltered.filter.{Intent, Plan}
 
-class FiksPlan(matchscraper: MatchScraper) extends Plan {
+class FiksPlan(matchservice: MatchService) extends Plan {
 
   def intent = {
     myMatches orElse availableMatches orElse about orElse reportInterest
@@ -12,7 +12,7 @@ class FiksPlan(matchscraper: MatchScraper) extends Plan {
 
   val myMatches = Intent {
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      Ok ~> Html5(Pages.assignedMatches(matchscraper.assignedMatches(FiksLogin.COOKIE_NAME, loginToken)))
+      Ok ~> Html5(Pages.assignedMatches(matchservice.assignedMatches(FiksLogin.COOKIE_NAME, loginToken)))
     })
     case GET(Path(Seg("ical" :: Nil))) & Params(p) => Ok ~> CalendarContentType ~> ResponseString(Snippets.isc(p))
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) => HerokuRedirect(r, "/login?message=loginRequired")
@@ -22,17 +22,17 @@ class FiksPlan(matchscraper: MatchScraper) extends Plan {
 
   val availableMatches = Intent {
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & Params(MatchIdParameter(matchId)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      val matchInfo = matchscraper.matchInfo(matchId, loginToken)
+      val matchInfo = matchservice.matchInfo(matchId, loginToken)
       Ok ~> Html5(Pages.reportInterestIn(matchInfo))
     })
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      Ok ~> Html5(Pages.availableMatches(matchscraper.availableMatches(FiksLogin.COOKIE_NAME, loginToken)))
+      Ok ~> Html5(Pages.availableMatches(matchservice.availableMatches(FiksLogin.COOKIE_NAME, loginToken)))
     })
   }
 
   val reportInterest = Intent {
     case r@POST(Path(Seg("fiks" :: "availablematches" :: Nil))) & Params(MatchIdParameter(matchId)) & Params(CommentParameter(comment)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      matchscraper.reportInterest(matchId,comment,loginToken)
+      matchservice.reportInterest(matchId,comment,loginToken)
       HerokuRedirect(r,"/fiks/availablematches")
     })
   }

@@ -66,7 +66,10 @@ object Snippets {
           {body}
 
         </div> <!-- /container -->
-        <div class="alert alert-info">Denne siden er under utvikling og kan derfor være noe ustabil mens mer funksjonalitet utvikles.</div>
+        <div class="alert alert-success">
+          Dommer-FIKS har nå den funksjonaliteten den i utgangspunktet var tiltenkt.
+          Send inn forslag via Facebook dersom det er noe du savner. Gi også beskjed om du opplever noen problemer.
+        </div>
         <footer>
           <p>
             <a href="http:///www.andersen-gott.com">Morten Andersen-Gott</a>
@@ -144,10 +147,6 @@ object Snippets {
   }
 
   def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) = {
-    <div class="well">
-      Mulighet for å melde interesse for kamper er ikke implementert ennå, men kommer snart.
-      I mellomtiden må du bruke "vanlig" fiks for å melde interesse.
-    </div>
       <table class="table table-striped table-bordered table-condensed">
         <thead>
           <tr>
@@ -205,7 +204,6 @@ object Snippets {
   }
 
   def reportInterestForm(availableMatch: AvailableMatch) = {
-    println(availableMatch)
     <table class="table table-striped table-bordered table-condensed">
       <tr>
         <th>Oppdrag</th>
