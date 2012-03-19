@@ -80,7 +80,7 @@ class MatchService(val matchscraper:MatchScraper) {
           println("Available: \t" + availableMatchesCache.stats)
           println("MatchInfo: \t" + matchInfoCache.stats)
         }
-      }, 60, 60, TimeUnit.SECONDS
+      }, 5, 30, TimeUnit.MINUTES
     )
   }
 
