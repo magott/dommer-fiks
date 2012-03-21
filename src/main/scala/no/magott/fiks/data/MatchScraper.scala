@@ -83,4 +83,20 @@ class MatchScraper {
     upcomingAssignedMatches.toList
   }
 
+  def postInterestForm(availabilityId: String, comment:String, loginToken:String) {
+  val url = "https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=" + availabilityId
+  val reportInterestForm = Jsoup.connect(url).cookie(COOKIE_NAME,loginToken).get
+  val viewstate = reportInterestForm.getElementById("__VIEWSTATE").attr("value")
+  val eventvalidation = reportInterestForm.getElementById("__EVENTVALIDATION").attr("value")
+  val response = Jsoup.connect(url)
+    .method(Method.POST)
+    .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
+    .data("btnAnmal","Meld inn")
+    .data("tbKommentar",comment)
+    .data("__VIEWSTATE",viewstate)
+    .data("__EVENTVALIDATION",eventvalidation)
+    .referrer(url)
+    .cookie(COOKIE_NAME,loginToken).followRedirects(false).timeout(10000).execute()
+  }
+
 }
