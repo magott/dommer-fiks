@@ -229,6 +229,12 @@ object Snippets {
           {availableMatch.venue}
         </td>
       </tr>
+      <tr>
+        <th>Turnering</th>
+        <td>
+          {availableMatch.tournament}
+        </td>
+      </tr>
       <form class="well" action={"""availablematches?matchid="""+availableMatch.availabilityId.get} method="post">
         <tr>
           <th>Kommentarer</th>
