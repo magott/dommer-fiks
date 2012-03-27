@@ -298,7 +298,7 @@ object Snippets {
   }
 
   private def icsLink(start: LocalDateTime, heading: String, location: String, details: String) = {
-    val url = "/ical?startTime=" + start.toDate.getTime + "&heading=" + heading + "&location=" + location + "&details=" + details;
+    val url = "/match.ics?startTime=" + start.toDate.getTime + "&heading=" + heading + "&location=" + location + "&details=" + details;
     <a href={santitizeURL(url)}>Outlook/iCal</a>
   }
 }

@@ -14,7 +14,7 @@ class FiksPlan(matchservice: MatchService) extends Plan {
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
       Ok ~> Html5(Pages.assignedMatches(matchservice.assignedMatches(FiksLogin.COOKIE_NAME, loginToken)))
     })
-    case GET(Path(Seg("ical" :: Nil))) & Params(p) => Ok ~> CalendarContentType ~> ResponseString(Snippets.isc(p))
+    case GET(Path(Seg("match.ics" :: Nil))) & Params(p) => Ok ~> CalendarContentType ~> ResponseString(Snippets.isc(p))
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) => HerokuRedirect(r, "/login?message=loginRequired")
     case r@GET(Path(Seg(Nil))) & FiksCookie(_) => HerokuRedirect(r, "/fiks/mymatches")
     case r@GET(Path(Seg(Nil))) => HerokuRedirect(r, "/login")
