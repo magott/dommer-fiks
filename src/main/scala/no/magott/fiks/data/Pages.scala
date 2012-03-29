@@ -1,8 +1,12 @@
 package no.magott.fiks.data
 
-import no.magott.fiks.data.Snippets._
+import unfiltered.request.HttpRequest
 
-object Pages {
+case class Pages(private val req: HttpRequest[Any]) {
+
+  val snippets = Snippets(req)
+  import snippets._
+
   def loginForm(messageParams: Map[String, Seq[String]]) = {
     emptyPage(
       <legend>Logg inn</legend>

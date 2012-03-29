@@ -3,11 +3,15 @@ package no.magott.fiks.data
 import org.jsoup.Jsoup
 import org.jsoup.Connection.Method
 import scala.collection.JavaConverters._
+import unfiltered.response.SetCookies
+import unfiltered.request.HttpRequest
+import unfiltered.Cookie
 
-object FiksLogin {
+object FiksLoginService {
 
   val COOKIE_NAME = "ASP.NET_SessionId"
 
+  def logout = SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0)))
 
   def login(username: String, password: String) = {
     val loginPage = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Login/Login.aspx").method(Method.GET).timeout(10000).execute()

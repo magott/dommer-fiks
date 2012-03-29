@@ -2,10 +2,44 @@ package no.magott.fiks.data
 
 import xml.{XML, NodeSeq}
 import org.joda.time.{DateTimeZone, DateTime, LocalDateTime}
+import unfiltered.request.{Seg, HttpRequest}
 
-object Snippets {
+case class Snippets(req: HttpRequest[Any]) {
 
   val calendarFormatString = "yyyyMMdd'T'HHmmss'Z"
+  val isLoggedIn = FiksCookie.unapply(req).isDefined
+  println(Seg.unapply(req.uri))
+
+  def navbar(page: Option[String]) = {
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">Dommer-FIKS</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+            {
+              if (isLoggedIn) {
+                <li class={if (page.getOrElse("").contains("mymatches")) "active" else "inactive"}>
+                  <a href="/fiks/mymatches">Dine oppdrag</a>
+                </li>
+                <li class={if (page.getOrElse("").contains("availablematches")) "active" else "inactive"}>
+                    <a href="/fiks/availablematches">Ledige oppdrag</a>
+                </li>
+              }
+            }<li class={if (page.getOrElse("").contains("about")) "active" else "inactive"}>
+              <a href="/fiks/about">Om</a>
+            </li>
+            </ul>
+          </div> <!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+  }
 
   def emptyPage(body: NodeSeq, page: Option[String] = None): NodeSeq =
     <html lang="en">
@@ -34,38 +68,12 @@ object Snippets {
 
       </head>
       <body>
-        <div class="navbar navbar-fixed-top">
-          <div class="navbar-inner">
-            <div class="container">
-              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </a>
-              <a class="brand" href="/">Dommer-FIKS</a>
-              <div class="nav-collapse">
-                <ul class="nav">
-                  <li class={if (page.getOrElse("").contains("mymatches")) "active" else "inactive"}>
-                    <a href="/fiks/mymatches">Dine oppdrag</a>
-                  </li>
-                  <li class={if (page.getOrElse("").contains("availablematches")) "active" else "inactive"}>
-                    <a href="/fiks/availablematches">Ledige oppdrag</a>
-                  </li>
-                  <li class={if (page.getOrElse("").contains("about")) "active" else "inactive"}>
-                    <a href="/fiks/about">Om</a>
-                  </li>
-                </ul>
-              </div> <!--/.nav-collapse -->
-            </div>
-          </div>
-        </div>
 
+        {navbar(page)}<div class="container">
 
-        <div class="container">
+        {body}
 
-          {body}
-
-        </div> <!-- /container -->
+      </div> <!-- /container -->
         <div class="alert alert-success">
           Dommer-FIKS har nå den funksjonaliteten den i utgangspunktet var tiltenkt.
           Send inn forslag via Facebook dersom det er noe du savner. Gi også beskjed om du opplever noen problemer.
@@ -147,51 +155,50 @@ object Snippets {
   }
 
   def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) = {
-      <table class="table table-striped table-bordered table-condensed">
-        <thead>
+    <table class="table table-striped table-bordered table-condensed">
+      <thead>
+        <tr>
+          <th>Tid</th>
+          <th>Turnering</th>
+          <th>Kamp</th>
+          <th>Sted</th>
+          <th>Type</th>
+          <th>Meld interesse</th>
+        </tr>
+      </thead>
+      <tbody>
+        {availableMatches.map {
+        m =>
           <tr>
-            <th>Tid</th>
-            <th>Turnering</th>
-            <th>Kamp</th>
-            <th>Sted</th>
-            <th>Type</th>
-            <th>Meld interesse</th>
+            <td>
+              {m.date.toString("dd.MM.yyyy HH:mm")}
+            </td>
+            <td>
+              {m.tournament}
+            </td>
+            <td>
+              {m.teams}
+            </td>
+            <td>
+              {m.venue}
+            </td>
+            <td>
+              {m.role}
+            </td>
+            <td>
+              {m.availabilityId match {
+              case Some(id) => <a href={"""availablematches?matchid=""" + m.availabilityId.get + """"""}>Meld interesse</a>
+              case None => <div>Meldt inn</div>
+            }}
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {availableMatches.map {
-          m =>
-            <tr>
-              <td>
-                {m.date.toString("dd.MM.yyyy HH:mm")}
-              </td>
-              <td>
-                {m.tournament}
-              </td>
-              <td>
-                {m.teams}
-              </td>
-              <td>
-                {m.venue}
-              </td>
-              <td>
-                {m.role}
-              </td>
-              <td>
-                {
-                m.availabilityId match{
-                  case Some(id) => <a href={"""availablematches?matchid=""" + m.availabilityId.get + """"""}>Meld interesse</a>
-                  case None => <div>Meldt inn</div>
-                }
-                }
-              </td>
-            </tr>
-        }}
-        </tbody>
-      </table>
+      }}
+      </tbody>
+    </table>
   }
 
-  def loginMessages(messageParams: Map[String, Seq[String]]) = {
+  def loginMessages
+  (messageParams: Map[String, Seq[String]]) = {
     messageParams.get("message") match {
       case Some(msg) => msg.mkString("") match {
         case "loginRequired" => <div class="alert alert-info">Du må logge inn for å få tilgang til denne siden</div>
@@ -235,7 +242,7 @@ object Snippets {
           {availableMatch.tournament}
         </td>
       </tr>
-      <form class="well" action={"""availablematches?matchid="""+availableMatch.availabilityId.get} method="post">
+      <form class="well" action={"""availablematches?matchid=""" + availableMatch.availabilityId.get} method="post">
         <tr>
           <th>Kommentarer</th>
           <td>
@@ -243,14 +250,17 @@ object Snippets {
           </td>
         </tr>
         <tr>
-          <td/>
-          <td><button type="submit" class="btn btn-primary">Meld interesse</button></td>
+            <td/>
+          <td>
+            <button type="submit" class="btn btn-primary">Meld interesse</button>
+          </td>
         </tr>
       </form>
     </table>
   }
 
-  def googleCalendarLink(start: LocalDateTime, heading: String, location: String, details: String): NodeSeq = {
+  def googleCalendarLink
+  (start: LocalDateTime, heading: String, location: String, details: String): NodeSeq = {
     val utcStart = toUTC(start)
     val timeString = utcStart.toString(calendarFormatString) + "/" + utcStart.plusHours(2).toString(calendarFormatString)
     var linkString = """http://www.google.com/calendar/event?action=TEMPLATE&amp;text=""" +

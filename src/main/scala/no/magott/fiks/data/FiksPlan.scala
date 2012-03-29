@@ -12,9 +12,9 @@ class FiksPlan(matchservice: MatchService) extends Plan {
 
   val myMatches = Intent {
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      Ok ~> Html5(Pages.assignedMatches(matchservice.assignedMatches(FiksLogin.COOKIE_NAME, loginToken)))
+      Ok ~> Html5(Pages(r).assignedMatches(matchservice.assignedMatches(FiksLoginService.COOKIE_NAME, loginToken)))
     })
-    case GET(Path(Seg("match.ics" :: Nil))) & Params(p) => Ok ~> CalendarContentType ~> ResponseString(Snippets.isc(p))
+    case r@GET(Path(Seg("match.ics" :: Nil))) & Params(p) => Ok ~> CalendarContentType ~> ResponseString(Snippets(r).isc(p))
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) => HerokuRedirect(r, "/login?message=loginRequired")
     case r@GET(Path(Seg(Nil))) & FiksCookie(_) => HerokuRedirect(r, "/fiks/mymatches")
     case r@GET(Path(Seg(Nil))) => HerokuRedirect(r, "/login")
@@ -23,10 +23,10 @@ class FiksPlan(matchservice: MatchService) extends Plan {
   val availableMatches = Intent {
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & Params(MatchIdParameter(matchId)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
       val matchInfo = matchservice.matchInfo(matchId, loginToken)
-      Ok ~> Html5(Pages.reportInterestIn(matchInfo))
+      Ok ~> Html5(Pages(r).reportInterestIn(matchInfo))
     })
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      Ok ~> Html5(Pages.availableMatches(matchservice.availableMatches(FiksLogin.COOKIE_NAME, loginToken)))
+      Ok ~> Html5(Pages(r).availableMatches(matchservice.availableMatches(FiksLoginService.COOKIE_NAME, loginToken)))
     })
   }
 
@@ -38,7 +38,7 @@ class FiksPlan(matchservice: MatchService) extends Plan {
   }
 
   val about = Intent {
-    case GET(Path(Seg("fiks" :: "about" :: Nil))) => Ok ~> Html(Pages.about)
+    case r@GET(Path(Seg("fiks" :: "about" :: Nil))) => Ok ~> Html(Pages(r).about)
   }
 
   def redirectToLoginIfTimeout[A](req: HttpRequest[A], f: => ResponseFunction[Any]) = {
@@ -48,10 +48,13 @@ class FiksPlan(matchservice: MatchService) extends Plan {
       case e: SessionTimeoutException => HerokuRedirect(req, "/login?message=sessionTimeout")
       case e: Exception =>
         if (e.getCause.isInstanceOf[SessionTimeoutException]) {
-          HerokuRedirect(req, "/login?message=sessionTimeout")
+          def displayReauthentication: ResponseFunction[Any] = {
+            HerokuRedirect(req, "/login?message=sessionTimeout")
+          }
+          displayReauthentication
         } else {
           println("EXCEPTION "+e.getClass+" : "+ e.getMessage +"\n"+e.getStackTraceString)
-          Html5(Pages.error(e))
+          Html5(Pages(req).error(e))
         }
     }
   }

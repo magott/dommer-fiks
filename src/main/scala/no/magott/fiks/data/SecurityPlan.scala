@@ -12,8 +12,8 @@ class SecurityPlan(val matchservice:MatchService) extends Plan{
 
   def intent = {
     case r@GET(_) & XForwardProto("http") => HerokuRedirect(r,r.uri)
-    case GET(Path(Seg("login" :: Nil))) & Params(p)=> {
-       Html5(Pages.loginForm(p));
+    case r@GET(Path(Seg("login" :: Nil))) & Params(p)=> {
+       Html5(Pages(r).loginForm(p));
     }
     case r@POST(Path(Seg("login" :: Nil))) & Params(p) => handleLogin(r,p)
   }
@@ -21,7 +21,7 @@ class SecurityPlan(val matchservice:MatchService) extends Plan{
   def handleLogin[A](req: HttpRequest[A], map: Map[String, Seq[String]]) = {
     val username = map.get("username")
     val password = map.get("password")
-    FiksLogin.login(username.get.head, password.get.head) match {
+    FiksLoginService.login(username.get.head, password.get.head) match {
       case Right(cookie) => {
         matchservice.prefetchAvailableMatches(cookie._2)
         val secure = req match { case XForwardProto("https") => Some(true) case _ => Some(false)}
