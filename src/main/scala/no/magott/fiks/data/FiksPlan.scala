@@ -32,8 +32,8 @@ class FiksPlan(matchservice: MatchService) extends Plan {
 
   val reportInterest = Intent {
     case r@POST(Path(Seg("fiks" :: "availablematches" :: Nil))) & Params(MatchIdParameter(matchId)) & Params(CommentParameter(comment)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      matchservice.reportInterest(matchId,comment,loginToken)
-      HerokuRedirect(r,"/fiks/availablematches")
+      matchservice.reportInterest(matchId, comment, loginToken)
+      HerokuRedirect(r, "/fiks/availablematches")
     })
   }
 
@@ -45,9 +45,14 @@ class FiksPlan(matchservice: MatchService) extends Plan {
     try {
       f
     } catch {
+      case e: SessionTimeoutException => HerokuRedirect(req, "/login?message=sessionTimeout")
       case e: Exception =>
-        e.printStackTrace()
-        HerokuRedirect(req, "/login?message=sessionTimeout")
+        if (e.getCause.isInstanceOf[SessionTimeoutException]) {
+          HerokuRedirect(req, "/login?message=sessionTimeout")
+        } else {
+          println("EXCEPTION "+e.getClass+" : "+ e.getMessage +"\n"+e.getStackTraceString)
+          Html5(Pages.error(e))
+        }
     }
   }
 
