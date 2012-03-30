@@ -9,7 +9,6 @@ import util.Properties
 import com.google.common.cache.{LoadingCache, Cache, CacheLoader, CacheBuilder}
 
 class MatchService(val matchscraper:MatchScraper) {
-  val COOKIE_NAME = "ASP.NET_SessionId"
   val assignedMatchesCache = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((loginToken: String) => matchscraper.scrapeAssignedMatches(loginToken)))
   val availableMatchesCache:LoadingCache[String, List[AvailableMatch]] = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((loginToken:String) => matchscraper.scrapeAvailableMatches(loginToken)))
   val matchInfoCache:Cache[String,AvailableMatch] = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).maximumSize(50).build()

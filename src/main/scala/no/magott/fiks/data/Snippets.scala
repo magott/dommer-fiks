@@ -7,8 +7,7 @@ import unfiltered.request.{Seg, HttpRequest}
 case class Snippets(req: HttpRequest[Any]) {
 
   val calendarFormatString = "yyyyMMdd'T'HHmmss'Z"
-  val isLoggedIn = FiksCookie.unapply(req).isDefined
-  println(Seg.unapply(req.uri))
+  val isLoggedIn = FiksCookie.unapply(req).isDefined && FiksCookie.unapply(req).get.nonEmpty
 
   def navbar(page: Option[String]) = {
     <div class="navbar navbar-fixed-top">
@@ -34,6 +33,13 @@ case class Snippets(req: HttpRequest[Any]) {
             }<li class={if (page.getOrElse("").contains("about")) "active" else "inactive"}>
               <a href="/fiks/about">Om</a>
             </li>
+            {
+              if (isLoggedIn){
+                <li class={"inactive"}>
+                  <a href="/logout">Logg ut</a>
+                </li>
+              }
+            }
             </ul>
           </div> <!--/.nav-collapse -->
         </div>
@@ -74,10 +80,6 @@ case class Snippets(req: HttpRequest[Any]) {
         {body}
 
       </div> <!-- /container -->
-        <div class="alert alert-success">
-          Dommer-FIKS har nå den funksjonaliteten den i utgangspunktet var tiltenkt.
-          Send inn forslag via Facebook dersom det er noe du savner. Gi også beskjed om du opplever noen problemer.
-        </div>
         <footer>
           <p>
             <a href="http:///www.andersen-gott.com">Morten Andersen-Gott</a>

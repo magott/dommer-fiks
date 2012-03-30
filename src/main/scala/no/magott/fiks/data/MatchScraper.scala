@@ -15,7 +15,7 @@ class MatchScraper {
   def scrapeMatchInfo(assignmentId: String, loginToken:String) = {
     val cleanAssignmentId = Jsoup.clean(assignmentId, Whitelist.none)
     val response = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=" + cleanAssignmentId)
-      .method(Method.GET).cookie(COOKIE_NAME, loginToken).followRedirects(false).timeout(10000).execute()
+      .method(Method.GET).cookie(COOKIE_NAME, loginToken).followRedirects(false).timeout(15000).execute()
     if(response.statusCode == 302){
       throw new SessionTimeoutException()
     }
@@ -35,7 +35,7 @@ class MatchScraper {
   def scrapeAvailableMatches(loginToken: String) = {
     println("Scraping available matches for token \t"+loginToken)
     val availableMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Start/StartLedigaUppdragLista.aspx")
-      .cookie(COOKIE_NAME, loginToken).method(Method.GET).followRedirects(false).timeout(10000).execute()
+      .cookie(COOKIE_NAME, loginToken).method(Method.GET).followRedirects(false).timeout(15000).execute()
 
     if (availableMatchesResponse.statusCode == 302) {
       throw new SessionTimeoutException();
@@ -64,7 +64,7 @@ class MatchScraper {
 
   def scrapeAssignedMatches(loginToken: String) = {
     val assignedMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragUppdragLista.aspx")
-      .cookie(COOKIE_NAME, loginToken).method(Method.GET).timeout(10000).followRedirects(false).execute()
+      .cookie(COOKIE_NAME, loginToken).method(Method.GET).timeout(15000).followRedirects(false).execute()
 
     if (assignedMatchesResponse.statusCode == 302) {
       throw new SessionTimeoutException()

@@ -3,19 +3,21 @@ package no.magott.fiks.data
 import unfiltered.request._
 import unfiltered.response._
 import unfiltered.filter.{Intent, Plan}
+import unfiltered.Cookie._
+import unfiltered.Cookie
 
 class FiksPlan(matchservice: MatchService) extends Plan {
 
   def intent = {
-    myMatches orElse availableMatches orElse about orElse reportInterest
+    myMatches orElse availableMatches orElse about orElse reportInterest orElse fallback
   }
 
   val myMatches = Intent {
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      Ok ~> Html5(Pages(r).assignedMatches(matchservice.assignedMatches(FiksLoginService.COOKIE_NAME, loginToken)))
+      val assigned = matchservice.assignedMatches((FiksLoginService.COOKIE_NAME, loginToken))
+      Ok ~> Html5(Pages(r).assignedMatches(assigned))
     })
     case r@GET(Path(Seg("match.ics" :: Nil))) & Params(p) => Ok ~> CalendarContentType ~> ResponseString(Snippets(r).isc(p))
-    case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) => HerokuRedirect(r, "/login?message=loginRequired")
     case r@GET(Path(Seg(Nil))) & FiksCookie(_) => HerokuRedirect(r, "/fiks/mymatches")
     case r@GET(Path(Seg(Nil))) => HerokuRedirect(r, "/login")
   }
@@ -26,7 +28,8 @@ class FiksPlan(matchservice: MatchService) extends Plan {
       Ok ~> Html5(Pages(r).reportInterestIn(matchInfo))
     })
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      Ok ~> Html5(Pages(r).availableMatches(matchservice.availableMatches(FiksLoginService.COOKIE_NAME, loginToken)))
+      val available = matchservice.availableMatches((FiksLoginService.COOKIE_NAME, loginToken))
+      Ok ~> Html5(Pages(r).availableMatches(available))
     })
   }
 
@@ -37,26 +40,34 @@ class FiksPlan(matchservice: MatchService) extends Plan {
     })
   }
 
+  val fallback = Intent {
+    case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) => HerokuRedirect(r, "/login?message=loginRequired")
+    case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) => HerokuRedirect(r, "/login?message=loginRequired")
+    case Path(Seg("img" :: _ :: Nil)) | Path(Seg("css" :: _ :: Nil)) | Path(Seg("js" :: _ :: Nil)) => Pass
+    case r@GET(_) => NotFound ~> Html5(Pages(r).notFound)
+  }
+
   val about = Intent {
     case r@GET(Path(Seg("fiks" :: "about" :: Nil))) => Ok ~> Html(Pages(r).about)
   }
 
-  def redirectToLoginIfTimeout[A](req: HttpRequest[A], f: => ResponseFunction[Any]) = {
+  def redirectToLoginIfTimeout[A](req: HttpRequest[A], f: => ResponseFunction[Any]): ResponseFunction[A] = {
     try {
       f
     } catch {
-      case e: SessionTimeoutException => HerokuRedirect(req, "/login?message=sessionTimeout")
+      case e: SessionTimeoutException => SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> displayReauthentication(req)
       case e: Exception =>
         if (e.getCause.isInstanceOf[SessionTimeoutException]) {
-          def displayReauthentication: ResponseFunction[Any] = {
-            HerokuRedirect(req, "/login?message=sessionTimeout")
-          }
-          displayReauthentication
+          SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> displayReauthentication(req)
         } else {
-          println("EXCEPTION "+e.getClass+" : "+ e.getMessage +"\n"+e.getStackTraceString)
+          println("EXCEPTION " + e.getClass + " : " + e.getMessage + "\n" + e.getStackTraceString)
           Html5(Pages(req).error(e))
         }
     }
+  }
+
+  def displayReauthentication[A](req: HttpRequest[A]) = {
+    HerokuRedirect(req, "/login?message=sessionTimeout")
   }
 
   object MatchIdParameter extends Params.Extract("matchid", Params.first)

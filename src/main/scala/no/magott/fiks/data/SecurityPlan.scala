@@ -13,9 +13,11 @@ class SecurityPlan(val matchservice:MatchService) extends Plan{
   def intent = {
     case r@GET(_) & XForwardProto("http") => HerokuRedirect(r,r.uri)
     case r@GET(Path(Seg("login" :: Nil))) & Params(p)=> {
-       Html5(Pages(r).loginForm(p));
+      SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~>
+        Html5(Pages(r).loginForm(p))
     }
     case r@POST(Path(Seg("login" :: Nil))) & Params(p) => handleLogin(r,p)
+    case r@GET(Path(Seg("logout" :: Nil))) => handleLogout(r)
   }
 
   def handleLogin[A](req: HttpRequest[A], map: Map[String, Seq[String]]) = {
@@ -31,4 +33,6 @@ class SecurityPlan(val matchservice:MatchService) extends Plan{
       case _ => HerokuRedirect(req,"/login?message=loginFailed")
     }
   }
+
+  def handleLogout(req: HttpRequest[Any]) = SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> HerokuRedirect(req, "/")
 }
