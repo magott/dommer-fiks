@@ -24,7 +24,7 @@ case class Snippets(req: HttpRequest[Any]) {
             {
               if (isLoggedIn) {
                 <li class={if (page.getOrElse("").contains("mymatches")) "active" else "inactive"}>
-                  <a href="/fiks/mymatches">Dine oppdrag</a>
+                  <a href="/fiks/mymatches">Mine oppdrag</a>
                 </li>
                 <li class={if (page.getOrElse("").contains("availablematches")) "active" else "inactive"}>
                     <a href="/fiks/availablematches">Ledige oppdrag</a>
