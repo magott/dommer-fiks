@@ -74,6 +74,11 @@ class MatchService(val matchscraper:MatchScraper) {
         }
       }, 5, 30, TimeUnit.MINUTES
     )
+    Runtime.getRuntime.addShutdownHook(
+      new Thread(){
+        override def run {println("Shutting down statsprinter");scheduler.shutdownNow}
+      }
+    )
   }
 
 }
