@@ -64,7 +64,7 @@ class MatchService(val matchscraper:MatchScraper) {
   }
 
   private def scheduleStatsPrinting {
-    val scheduler = Executors.newScheduledThreadPool(1)
+    val scheduler = Executors.newSingleThreadScheduledExecutor
     scheduler.scheduleAtFixedRate(
       new Runnable {
         def run() {
@@ -76,7 +76,7 @@ class MatchService(val matchscraper:MatchScraper) {
     )
     Runtime.getRuntime.addShutdownHook(
       new Thread(){
-        override def run {println("Shutting down statsprinter");scheduler.shutdownNow}
+        override def run {println("Shutting down statsprinter"); scheduler.shutdownNow}
       }
     )
   }
