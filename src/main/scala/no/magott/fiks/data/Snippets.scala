@@ -2,14 +2,16 @@ package no.magott.fiks.data
 
 import xml.{XML, NodeSeq}
 import org.joda.time.{DateTimeZone, DateTime, LocalDateTime}
-import unfiltered.request.{Seg, HttpRequest}
+import unfiltered.request.{Path, Seg, HttpRequest}
 
 case class Snippets(req: HttpRequest[Any]) {
 
   val calendarFormatString = "yyyyMMdd'T'HHmmss'Z"
   val isLoggedIn = FiksCookie.unapply(req).isDefined && FiksCookie.unapply(req).get.nonEmpty
+  val pages = Path(req)
 
   def navbar(page: Option[String]) = {
+    println("Pages: "+pages)
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -37,6 +39,10 @@ case class Snippets(req: HttpRequest[Any]) {
               if (isLoggedIn){
                 <li class={"inactive"}>
                   <a href="/logout">Logg ut</a>
+                </li>
+              }else{
+                <li class={if (pages.contains("login")) "active" else "inactive"}>
+                  <a href="/login" >Logg inn</a>
                 </li>
               }
             }
@@ -281,6 +287,7 @@ case class Snippets(req: HttpRequest[Any]) {
     "BEGIN:VCALENDAR\n" +
       "VERSION:2.0\n" +
       "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\n" +
+      "METHOD:PUBLISH\n"+
       "BEGIN:VEVENT\n" +
       "LOCATION:" + location + "\n" +
       "DTSTART:" + start.toString(calendarFormatString) + "\n" +
