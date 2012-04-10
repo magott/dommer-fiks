@@ -43,7 +43,7 @@ class FiksPlan(matchservice: MatchService) extends Plan {
   val fallback = Intent {
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) => HerokuRedirect(r, "/login?message=loginRequired")
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) => HerokuRedirect(r, "/login?message=loginRequired")
-    case Path(Seg("img" :: _ :: Nil)) | Path(Seg("css" :: _ :: Nil)) | Path(Seg("js" :: _ :: Nil)) => Pass
+    case Path(Seg("img" :: _ :: Nil)) | Path(Seg("css" :: _ :: Nil)) | Path(Seg("js" :: _ :: Nil)) | Path(Seg("favicon.ico" :: Nil))=> Pass
     case r@GET(_) => NotFound ~> Html5(Pages(r).notFound)
   }
 
