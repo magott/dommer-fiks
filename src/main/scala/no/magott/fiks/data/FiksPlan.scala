@@ -9,7 +9,7 @@ import unfiltered.Cookie
 class FiksPlan(matchservice: MatchService) extends Plan {
 
   def intent = {
-    myMatches orElse availableMatches orElse about orElse reportInterest orElse fallback
+    myMatches orElse availableMatches orElse about orElse reportInterest
   }
 
   val myMatches = Intent {
@@ -38,13 +38,6 @@ class FiksPlan(matchservice: MatchService) extends Plan {
       matchservice.reportInterest(matchId, comment, loginToken)
       HerokuRedirect(r, "/fiks/availablematches")
     })
-  }
-
-  val fallback = Intent {
-    case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) => HerokuRedirect(r, "/login?message=loginRequired")
-    case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) => HerokuRedirect(r, "/login?message=loginRequired")
-    case Path(Seg("img" :: _ :: Nil)) | Path(Seg("css" :: _ :: Nil)) | Path(Seg("js" :: _ :: Nil)) | Path(Seg("favicon.ico" :: Nil))=> Pass
-    case r@GET(_) => NotFound ~> Html5(Pages(r).notFound)
   }
 
   val about = Intent {

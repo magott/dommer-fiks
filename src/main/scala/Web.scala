@@ -1,9 +1,7 @@
 import no.magott.fiks.data._
-import unfiltered.request.{Path, GET}
-import unfiltered.response.Html
+import org.eclipse.jetty.server.session.SessionHandler
 import util.Properties
 import unfiltered.jetty
-import unfiltered.filter
 
 object Web {
   def main(args: Array[String]) {
@@ -11,7 +9,12 @@ object Web {
     val matchservice = new MatchService(matchscraper)
     val port = Properties.envOrElse("PORT", "8080").toInt
     println("Starting on port:" + port)
-    jetty.Http(port).resources(getClass().getResource("/static")).plan(new SecurityPlan(matchservice)).plan(new FiksPlan(matchservice))
+    val http = jetty.Http(port)
+    http.current.setSessionHandler(new SessionHandler)
+      http.resources(getClass().getResource("/static"))
+      .plan(new SecurityPlan(matchservice))
+      .plan(new FiksPlan(matchservice))
+      .plan(new FallbackPlan)
     .run
   }
 
