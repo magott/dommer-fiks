@@ -33,7 +33,6 @@ class MatchScraper {
   }
 
   def scrapeAvailableMatches(loginToken: String) = {
-    println("Scraping available matches for token \t"+loginToken)
     val availableMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Start/StartLedigaUppdragLista.aspx")
       .cookie(COOKIE_NAME, loginToken).method(Method.GET).followRedirects(false).timeout(15000).execute()
 
@@ -62,7 +61,8 @@ class MatchScraper {
     }.toList
   }
 
-  def scrapeAssignedMatches(loginToken: String) = {
+  //TODO support filter function
+  def scrapeAssignedMatches(loginToken: String, f: AssignedMatch => Boolean = _.date.toLocalDate.isAfter(LocalDate.now.minusDays(1))) = {
     val assignedMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragUppdragLista.aspx")
       .cookie(COOKIE_NAME, loginToken).method(Method.GET).timeout(15000).followRedirects(false).execute()
 
@@ -79,7 +79,7 @@ class MatchScraper {
           el.child(4).text,
           el.child(5).text,
           el.child(6).text)
-    }.filter(_.date.toLocalDate.isAfter(LocalDate.now.minusDays(1)))
+    }.filter(f(_))
     upcomingAssignedMatches.toList
   }
 

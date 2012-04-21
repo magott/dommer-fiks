@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /fiks/mymatches
+Disallow: /fiks/match.ics
+Disallow: /fiks/availablematches
+Disallow: /calendar/

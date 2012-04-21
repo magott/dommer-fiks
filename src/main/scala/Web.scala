@@ -1,5 +1,7 @@
+import no.magott.fiks.calendar.{CalendarService, CalendarPlan}
 import no.magott.fiks.data._
-import org.eclipse.jetty.server.session.SessionHandler
+import no.magott.fiks.FallbackPlan
+import no.magott.fiks.user.UserService
 import util.Properties
 import unfiltered.jetty
 
@@ -7,13 +9,15 @@ object Web {
   def main(args: Array[String]) {
     val matchscraper = new MatchScraper
     val matchservice = new MatchService(matchscraper)
+    val calendarservice = new CalendarService(matchscraper)
+    val userservice = new UserService
     val port = Properties.envOrElse("PORT", "8080").toInt
     println("Starting on port:" + port)
     val http = jetty.Http(port)
-    http.current.setSessionHandler(new SessionHandler)
-      http.resources(getClass().getResource("/static"))
+    http.resources(getClass().getResource("/static"))
       .plan(new SecurityPlan(matchservice))
       .plan(new FiksPlan(matchservice))
+      .plan(new CalendarPlan(calendarservice,userservice))
       .plan(new FallbackPlan)
     .run
   }

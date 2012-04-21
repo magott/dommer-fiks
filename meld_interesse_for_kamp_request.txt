@@ -2,6 +2,7 @@ HeadersPreviewResponseCookiesTiming
 Request URL:https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=2880394
 Request Method:POST
 Status Code:302 Found
+
 Request Headersview source
 Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
 Accept-Charset:ISO-8859-1,utf-8;q=0.7,*;q=0.3
@@ -23,6 +24,8 @@ __VIEWSTATE:/wEPDwULLTEwMDc3ODAwMjMPZBYCAgEPZBYQAgEPZBYIZg8WAh4Hb25jbGljawViZG9j
 __EVENTVALIDATION:/wEWAwKTl7bRAwKD3drEBAKrkuXZCFESA3Uf99XkOAOgUa7KkIwa4y6u
 tbKommentar:
 btnAnmal:Meld inn
+
+
 Response Headersview source
 Cache-Control:private
 Content-Length:175

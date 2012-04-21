@@ -1,7 +1,7 @@
 package no.magott.fiks.data
 
 import scala.concurrent.ops.spawn
-import Guava2ScalaConversions._
+import Scala2GuavaConversions._
 import org.jsoup.Connection.Method
 import org.jsoup.Jsoup
 import java.util.concurrent.{Executors, TimeUnit}

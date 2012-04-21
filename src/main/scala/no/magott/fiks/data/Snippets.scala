@@ -3,8 +3,9 @@ package no.magott.fiks.data
 import xml.{XML, NodeSeq}
 import org.joda.time.{DateTimeZone, DateTime, LocalDateTime}
 import unfiltered.request.{Path, Seg, HttpRequest}
+import javax.servlet.http.HttpServletRequest
 
-case class Snippets(req: HttpRequest[Any]) {
+case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
   val calendarFormatString = "yyyyMMdd'T'HHmmss'Z"
   val isLoggedIn = FiksCookie.unapply(req).isDefined && FiksCookie.unapply(req).get.nonEmpty
@@ -36,15 +37,21 @@ case class Snippets(req: HttpRequest[Any]) {
               <a href="/fiks/about">Om</a>
             </li>
             {
-              if (isLoggedIn){
-                <li class={"inactive"}>
-                  <a href="/logout">Logg ut</a>
-                </li>
-              }else{
-                <li class={if (pages.contains("login")) "active" else "inactive"}>
-                  <a href="/login" >Logg inn</a>
-                </li>
-              }
+
+             if(isLoggedIn){
+               <li class={if (pages.contains("calendar")) "active" else "inactive"}>
+                 <a href="/calendar/mycal">Kalender <sup>Beta</sup></a>
+               </li>
+
+               <li class={"inactive"}>
+                 <a href="/logout">Logg ut</a>
+               </li>
+             }else{
+               <li class={if (pages.contains("login")) "active" else "inactive"}>
+                 <a href="/login" >Logg inn</a>
+               </li>
+             }
+
             }
             </ul>
           </div> <!--/.nav-collapse -->
@@ -62,6 +69,7 @@ case class Snippets(req: HttpRequest[Any]) {
           <meta name="description" content="Fiks, without the #fail"/>
           <meta name="author" content="Morten Andersen-Gott"/>
           <meta name="google-site-verification" content="ptF2AFWdgpfQFz8_Uu2o_kDR704noD60eKR4nHC3uT8"/>
+          <link rel="shortcut icon" href="/favicon.ico" />
 
         <!-- Le styles -->
           <link href="/css/bootstrap.min.css" rel="stylesheet"/>
@@ -86,7 +94,7 @@ case class Snippets(req: HttpRequest[Any]) {
         {body}
 
       </div> <!-- /container -->
-        <footer>
+        <footer class="footer">
           <p>
             <a href="http:///www.andersen-gott.com">Morten Andersen-Gott</a>
             (c) 2012</p>
@@ -267,6 +275,79 @@ case class Snippets(req: HttpRequest[Any]) {
     </table>
   }
 
+  def calendarSignupForm(validationErrors: Seq[String]) = {
+    <legend>Sett opp kalender</legend>
+      <p>
+        I <a href="fiks/mymatches">ditt kampoppsett</a> er det mulig å eksportere hver enkelt kamp til din kalender.
+        Dersom du ønsker en kalender feed som automatisk oppdaterer din kalender (f.eks Outlook, Google Calendar eller iCal)
+        når nye kamper kommer til, kamper endrer tidspunkt eller faller fra trenger Dommer-FIKS å lagre ditt brukernavn og passord.
+        Dersom du ikke ønsker dette anbefales det at du bruker den manuelle eksportmuligheten under <a href="fiks/mymatches">ditt kampoppsett</a>.
+        Hvis du ønsker å benytte deg muligheten for automatisk oppdatert kalender, må du fylle ut skjema under.
+      </p>
+      <form class="well" action="mycal" method="post">
+        <div>
+          {
+            if(validationErrors.contains("badcredentials")){
+              <div class="alert alert-error">
+                Ugyldig brukernavn/passord, prøv igjen
+              </div>
+            }
+          }
+        </div>
+        <label>Brukernavn</label>
+        {
+          if(validationErrors.contains("username")){
+            <div class="control-group error">
+            <input type="text" name="username" id="inputError"/>
+            <span class="help-inline">Brukernavn må fylles ut</span>
+            </div>
+          }else{
+            <input type="text" name="username"/>
+          }
+        }
+
+        <label>Passord</label>
+        {
+          if(validationErrors.contains("password")){
+          <div class="control-group error">
+              <input type="password" name="password" id="inputError"/>
+            <span class="help-inline">Passord må fylles ut</span>
+          </div>
+          }else{
+            <input type="password" name="password"/>
+          }
+        }
+
+        <label>E-post</label>
+        {
+          if(validationErrors.contains("email")){
+            <div class="control-group error">
+                <input type="text" name="email" id="inputError"/>
+              <span class="help-inline">E-post må fylles ut</span>
+            </div>
+          }else{
+              <input type="text" name="email"/>
+              <span class="help-inline">Brukes <strong>kun</strong> dersom Dommer-FIKS har viktige meldinger til deg om tjenesten</span>
+          }
+        }
+        {
+          if(validationErrors.contains("terms")){
+            <div class="control-group error">
+              <label class="checkbox">
+                  <input type="checkbox" name="terms"/>
+                Jeg godtar at Dommer-FIKS oppbevarer mitt brukernavn og passord (påkrevd)
+              </label>
+            </div>
+          }else{
+            <label class="checkbox"><input type="checkbox" name="terms"/>
+              Jeg godtar at Dommer-FIKS oppbevarer mitt brukernavn og passord
+            </label>
+          }
+        }
+        <button type="submit" class="btn btn-primary">Sett opp kalender</button>
+      </form>
+  }
+
   def googleCalendarLink
   (start: LocalDateTime, heading: String, location: String, details: String): NodeSeq = {
     val utcStart = toUTC(start)
@@ -320,4 +401,6 @@ case class Snippets(req: HttpRequest[Any]) {
     val url = "/match.ics?startTime=" + start.toDate.getTime + "&heading=" + heading + "&location=" + location + "&details=" + details;
     <a href={santitizeURL(url)}>Outlook/iCal</a>
   }
+
+
 }

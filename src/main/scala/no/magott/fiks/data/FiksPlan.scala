@@ -3,8 +3,10 @@ package no.magott.fiks.data
 import unfiltered.request._
 import unfiltered.response._
 import unfiltered.filter.{Intent, Plan}
-import unfiltered.Cookie._
 import unfiltered.Cookie
+import no.magott.fiks.HerokuRedirect
+import javax.servlet.http.HttpServletRequest
+import no.magott.fiks.user.LoggedOnUser
 
 class FiksPlan(matchservice: MatchService) extends Plan {
 
@@ -13,7 +15,9 @@ class FiksPlan(matchservice: MatchService) extends Plan {
   }
 
   val myMatches = Intent {
-    case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
+    case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) =>
+      val req = r.asInstanceOf[HttpRequest[HttpServletRequest]]
+      redirectToLoginIfTimeout(req, {
       val assigned = matchservice.assignedMatches((FiksLoginService.COOKIE_NAME, loginToken))
       Ok ~> Html5(Pages(r).assignedMatches(assigned))
     })
@@ -43,12 +47,12 @@ class FiksPlan(matchservice: MatchService) extends Plan {
   val about = Intent {
     case r@GET(Path(Seg("fiks" :: "about" :: Nil))) => Ok ~> Html(Pages(r).about)
   }
-
-  def redirectToLoginIfTimeout[A](req: HttpRequest[A], f: => ResponseFunction[Any]): ResponseFunction[A] = {
+  def redirectToLoginIfTimeout[T <: HttpServletRequest](req: HttpRequest[T], f: => ResponseFunction[Any]) = {
     try {
       f
     } catch {
-      case e: SessionTimeoutException => SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> displayReauthentication(req)
+      //TODO: Invalidate session
+      case e: SessionTimeoutException =>SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> displayReauthentication(req)
       case e: Exception =>
         if (e.getCause.isInstanceOf[SessionTimeoutException]) {
           SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> displayReauthentication(req)

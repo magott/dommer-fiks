@@ -1,4 +1,4 @@
-package no.magott.fiks.data
+package no.magott.fiks
 
 import unfiltered.request.{Host, StringHeader, HttpRequest, &}
 import unfiltered.response._

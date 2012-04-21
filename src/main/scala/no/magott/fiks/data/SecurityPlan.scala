@@ -4,11 +4,15 @@ import unfiltered.filter.Plan
 import unfiltered.request._
 import collection.immutable.Map
 import unfiltered.Cookie
-import unfiltered.response.{Html5, Redirect, SetCookies, Html}
-import no.magott.fiks.data.HerokuRedirect.XForwardProto
+import unfiltered.response.{Html5, SetCookies}
+import no.magott.fiks.HerokuRedirect
+import no.magott.fiks.HerokuRedirect.XForwardProto
+import javax.servlet.http.HttpServletRequest
+import no.magott.fiks.user.{UserSession, UserService}
 
 class SecurityPlan(val matchservice:MatchService) extends Plan{
 
+  val userservice = new UserService
 
   def intent = {
     case r@GET(_) & XForwardProto("http") => HerokuRedirect(r,r.uri)
@@ -20,12 +24,13 @@ class SecurityPlan(val matchservice:MatchService) extends Plan{
     case r@GET(Path(Seg("logout" :: Nil))) => handleLogout(r)
   }
 
-  def handleLogin[A](req: HttpRequest[A], map: Map[String, Seq[String]]) = {
-    val username = map.get("username")
-    val password = map.get("password")
-    FiksLoginService.login(username.get.head, password.get.head) match {
+  def handleLogin[T<:HttpServletRequest](req: HttpRequest[T], map: Map[String, Seq[String]]) = {
+    val username = map.get("username").get.head
+    val password = map.get("password").get.head
+    FiksLoginService.login(username, password) match {
       case Right(cookie) => {
         matchservice.prefetchAvailableMatches(cookie._2)
+        userservice.save(UserSession(cookie._2,username))
         val secure = req match { case XForwardProto("https") => Some(true) case _ => Some(false)}
         SetCookies(Cookie(name = "fiksToken", value=cookie._2, secure = secure, httpOnly = true)) ~>
           HerokuRedirect(req,"/fiks/mymatches")

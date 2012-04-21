@@ -3,9 +3,7 @@ package no.magott.fiks.data
 import org.jsoup.Jsoup
 import org.jsoup.Connection.Method
 import scala.collection.JavaConverters._
-import unfiltered.request.HttpRequest
-import unfiltered.Cookie
-import unfiltered.response.{Html5, SetCookies}
+import unfiltered.response.Html5
 
 object FiksLoginService {
 

@@ -1,8 +1,11 @@
 package no.magott.fiks.data
 
-import unfiltered.request.HttpRequest
+import javax.servlet.http.HttpServletRequest
+import xml.NodeSeq
+import unfiltered.request.{Host, HttpRequest}
+import no.magott.fiks.HerokuRedirect.XForwardProto
 
-case class Pages(private val req: HttpRequest[Any]) {
+case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
 
   val snippets = Snippets(req)
   import snippets._
@@ -40,10 +43,20 @@ case class Pages(private val req: HttpRequest[Any]) {
         <p>
           Dommer-FIKS trenger ditt brukernavn og passord for fiks for å hente ut informasjon om dine kamper.
           Brukernavnet og passordet sendes kryptert fra deg til Dommer-FIKS og fra Dommer-FIKS til Fiks.
-          Dommer-FIKS ser ditt brukernavn og passord, men lagrer ikke dette på noen måte.
-          Det finnes ingen steder i Dommer-FIKS etter innlogging er fortetatt
+          Dersom du velger å benytte deg av Dommer-FIKS kalenderfunksjon for å kunne synkronisere
+          dine kamper med Outlook, iCal, Google Calendar eller lignende vil ditt passord bli kryptert
+          og lagret av Dommer-FIKS, mer informasjon om dette får du før oppretter en slik kalender. Dersom du ikke
+          oppretter kalender vil ditt brukernavn og passord ikke bli lagret av Dommer-FIKS.
         </p>
       , Some("about"))
+  }
+
+  def betaOnly = {
+    emptyPage(
+      <div class="alert alert-info">Denne funksjonen er kun tilgjengelig for beta-brukere.
+        Meld din interesse via <a href="http://www.facebook.com/dommerfiks">Facebook</a> dersom du er interessert
+      </div>
+    )
   }
 
   def reportInterestIn(availableMatch: AvailableMatch) = {
@@ -56,6 +69,43 @@ case class Pages(private val req: HttpRequest[Any]) {
 
   def availableMatches(availableMatches: List[AvailableMatch]) = {
     emptyPage(tableOfAvailableMatches(availableMatches), Some("availablematches"))
+  }
+
+  def calendarSignup(missingFields: Seq[String] = Nil) = {
+    emptyPage(
+      calendarSignupForm(missingFields)
+    )
+  }
+
+  def calendarInfo(calendarId:String) = {
+    val Host(host) = req
+    val scheme = XForwardProto.unapply(req)
+    val url = host +"/calendar?id="+ calendarId
+    val schemeAndUrl = scheme.getOrElse("http") +"://" + url
+    val googleCalUrl = "http://www.google.com/calendar/render?cid=%s".format(schemeAndUrl)
+    val appleUrl = "webcal://"+url
+    emptyPage(
+      <legend>Din kalender</legend>
+        <p>
+        Din kalender er nå konfigurert. Bruk knappene under for å importere den direkte på ditt Appleprodukt, nyere versjon av Outlook eller Google Calendar.
+        Dersom du sletter kalenderen vil dine kalendere ikke lenger få oppdateringer av ny/endrede kamper.
+        Du kan også laste ned kalenderfilen for hele kampprogrammet ditt og åpne den med din kalender, men da vil du ikke få automatiske
+        oppdateringer, men må gjenta prosessen hver gang nye kamper kommer til for å holde kalenderen oppdatert.
+
+        </p>
+      <div>
+        <div class="input-append">
+         <input type="text" value={schemeAndUrl}></input>
+           <a class="btn btn-inverse" href={schemeAndUrl}><i class="icon-refresh icon-white"></i> Generer ny adresse</a>
+           <a class="btn btn-danger" href={schemeAndUrl}><i class="icon-trash"></i> Slett kalender</a>
+        </div>
+        <div class="btn-group">
+          <a class="btn" href={schemeAndUrl}><i class="icon-download"></i> Last ned</a>
+          <a class="btn" href={appleUrl}><i class="icon-plus"></i> Abonnèr i Outlook/iCal/iPhone</a>
+          <a class="btn" href={googleCalUrl} target="_blank"><i class="icon-plus"></i> Abonnér i Google Calendar</a>
+        </div>
+      </div>
+    )
   }
 
   def notFound = emptyPage( <div class="alert alert-block">
