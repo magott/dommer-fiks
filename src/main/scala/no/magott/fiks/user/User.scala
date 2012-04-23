@@ -21,7 +21,7 @@ case class User(username: String, password: Option[String], email: String, calen
   def this(mo: MongoDBObject) = {
     this(
       mo.getAs[String]("username").get,
-      Option(mo.getAsOrElse[String]("password",null)),
+      mo.getAs[String]("password"),
       mo.getAsOrElse[String]("email", ""),
       Option(mo.getAs[String]("calid").getOrElse(null)),
       mo.getAs[Boolean]("beta").getOrElse(false)
