@@ -15,7 +15,7 @@ class CalendarService(matchscraper: MatchScraper) {
     if(cachedValue.isDefined){
       Some(cachedValue.get)
     }else{
-      val logintoken = FiksLoginService.login(user.username, user.password)
+      val logintoken = FiksLoginService.login(user.username, user.password.get)
       logintoken match{
         case(Right(x)) => {
           val matches = matchesThisYearForLogin(x._2)

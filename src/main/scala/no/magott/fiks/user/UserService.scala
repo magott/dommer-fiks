@@ -69,7 +69,11 @@ class UserService {
 
 
   private def decrypt(user:User) = {
-    user.copy(password=chiper.decrypt(user.password))
+    if(user.password.isDefined){
+      user.copy(password=Some(chiper.decrypt(user.password.get)))
+    }else{
+      user
+    }
   }
 
 

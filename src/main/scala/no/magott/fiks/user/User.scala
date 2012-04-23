@@ -2,7 +2,7 @@ package no.magott.fiks.user
 
 import com.mongodb.casbah.commons.MongoDBObject
 
-case class User(username: String, password: String, email: String, calendarId: Option[String], beta: Boolean) {
+case class User(username: String, password: Option[String], email: String, calendarId: Option[String], beta: Boolean) {
 
 
   def toMongoDbObject = {
@@ -21,8 +21,8 @@ case class User(username: String, password: String, email: String, calendarId: O
   def this(mo: MongoDBObject) = {
     this(
       mo.getAs[String]("username").get,
-      mo.getAs[String]("password").get,
-      mo.getAs[String]("email").get,
+      Option(mo.getAsOrElse[String]("password",null)),
+      mo.getAsOrElse[String]("email", ""),
       Option(mo.getAs[String]("calid").getOrElse(null)),
       mo.getAs[Boolean]("beta").getOrElse(false)
     )
