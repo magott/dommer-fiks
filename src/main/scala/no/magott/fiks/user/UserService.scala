@@ -17,6 +17,7 @@ class UserService {
   chiper.setAlgorithm("PBEWITHSHA256AND256BITAES-CBC-BC")
 
   def removeCalendarFor(username: String) {
+    db("users").update(where("username"->username), $unset("calid"))
 
   }
 

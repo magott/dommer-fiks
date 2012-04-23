@@ -82,6 +82,8 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     val scheme = XForwardProto.unapply(req)
     val url = host +"/calendar?id="+ calendarId
     val schemeAndUrl = scheme.getOrElse("http") +"://" + url
+    val deleteCalUrl = schemeAndUrl+"&action=delete"
+    val resetCalIdUrl = schemeAndUrl+"&action=reset"
     val googleCalUrl = "http://www.google.com/calendar/render?cid=%s".format(schemeAndUrl)
     val appleUrl = "webcal://"+url
     emptyPage(
@@ -96,8 +98,8 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
       <div>
         <div class="input-append">
          <input type="text" value={schemeAndUrl}></input>
-           <a class="btn btn-inverse" href={schemeAndUrl}><i class="icon-refresh icon-white"></i> Generer ny adresse</a>
-           <a class="btn btn-danger" href={schemeAndUrl}><i class="icon-trash"></i> Slett kalender</a>
+           <a class="btn btn-inverse" href={resetCalIdUrl}><i class="icon-refresh icon-white"></i> Generer ny adresse</a>
+           <a class="btn btn-danger" href={deleteCalUrl}><i class="icon-trash"></i> Slett kalender</a>
         </div>
         <div class="btn-group">
           <a class="btn" href={schemeAndUrl}><i class="icon-download"></i> Last ned</a>
