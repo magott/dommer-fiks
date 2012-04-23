@@ -68,6 +68,10 @@ class UserService {
     }
   }
 
+  def incrementPollcount(user:User) {
+    db("users").update(where("username"->user.username), $inc( "pollcount" -> 1 ))
+  }
+
 
   private def decrypt(user:User) = {
     if(user.password.isDefined){

@@ -48,7 +48,10 @@ class CalendarPlan(calendarService: CalendarService, userservice: UserService) e
       case None => BadRequest ~> ResponseString("Ugyldig kalender id")
       case Some(user) => {
         calendarService.calendarForUser(user) match {
-          case Some(matches) => Ok ~> CalendarContentType ~> ResponseString(new VCalendar(matches).feed)
+          case Some(matches) => {
+            userservice.incrementPollcount(user)
+            Ok ~> CalendarContentType ~> ResponseString(new VCalendar(matches).feed)
+          }
           case None => Unauthorized ~> ResponseString("Ugyldig brukernavn/passord, har du byttet passord? Slett kalender og opprett på nytt")
         }
       }
