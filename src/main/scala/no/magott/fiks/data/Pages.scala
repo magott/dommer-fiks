@@ -84,8 +84,8 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     val schemeAndUrl = scheme.getOrElse("http") +"://" + url
     val deleteCalUrl = schemeAndUrl+"&action=delete"
     val resetCalIdUrl = schemeAndUrl+"&action=reset"
-    val googleCalUrl = "http://www.google.com/calendar/render?cid=%s".format(schemeAndUrl)
-    val appleUrl = "webcal://"+url
+    val webcalUrl = "webcal://"+url
+    val googleCalUrl = "http://www.google.com/calendar/render?cid=%s".format(webcalUrl)
     emptyPage(
       <legend>Din kalender</legend>
         <p>
@@ -109,7 +109,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
         </div>
         <div class="btn-group">
           <a class="btn" href={schemeAndUrl}><i class="icon-download"></i> Last ned</a>
-          <a class="btn" href={appleUrl}><i class="icon-plus"></i> Abonnèr i Outlook/iCal/iPhone</a>
+          <a class="btn" href={webcalUrl}><i class="icon-plus"></i> Abonnèr i Outlook/iCal/iPhone</a>
           <a class="btn" href={googleCalUrl} target="_blank"><i class="icon-plus"></i> Abonnér i Google Calendar</a>
         </div>
       </div>
