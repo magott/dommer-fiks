@@ -37,8 +37,10 @@ class VCalendar(assignedMatches:List[AssignedMatch]) {
   private def start =
     """BEGIN:VCALENDAR
     |VERSION:2.0
-    |PRODID:-//hacksw/handcal//NONSGML v1.0//EN
-    |METHOD:PUBLISH""".stripMargin
+    |PRODID:-//dommerfiks/kampoppsett//NONSGML v1.0//EN
+    |METHOD:PUBLISH
+    |X-WR-CALNAME:Dommer-FIKS
+    |X-WR-CALDESC:Dommer-FIKS""".stripMargin
 
   private def end = "END:VCALENDAR"
 
