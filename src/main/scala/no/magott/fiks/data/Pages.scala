@@ -95,6 +95,12 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
         oppdateringer, men må gjenta prosessen hver gang nye kamper kommer til for å holde kalenderen oppdatert.
 
         </p>
+        <p>
+          <ul>
+            <li><strong>Slett kalender:</strong> Sletter din kalender, du vil ikke lenger kunne synkronisere dine kamper</li>
+            <li><strong>Generer ny kalender:</strong> Det genereres en ny adresse for kalenderen din. Du må oppdatere din kalender til å peke på den nye adressen</li>
+          </ul>
+        </p>
       <div>
         <div class="input-append">
          <input type="text" value={schemeAndUrl}></input>
