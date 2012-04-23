@@ -162,7 +162,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
             <td>
               {googleCalendarLink(m.date, m.teams, m.venue, m.referees)}
               |
-              {icsLink(m.date, m.teams, m.venue, m.referees)}
+              {icsLink(m.date, m.teams, m.venue, m.referees, m.matchId)}
             </td>
           </tr>
       }}
@@ -364,19 +364,29 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     val startTime = uriParams.getOrElse("startTime", Seq("")).head.toLong
     val details = uriParams.getOrElse("details", Seq("")).head
     val location = uriParams.getOrElse("location", Seq("")).head
+    val matchId = uriParams.getOrElse("matchId", Seq("")).head
     val start = toUTC(new LocalDateTime(startTime))
-    "BEGIN:VCALENDAR\n" +
-      "VERSION:2.0\n" +
-      "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\n" +
-      "METHOD:PUBLISH\n"+
-      "BEGIN:VEVENT\n" +
-      "LOCATION:" + location + "\n" +
-      "DTSTART:" + start.toString(calendarFormatString) + "\n" +
-      "DTEND:" + start.plusHours(2).toString(calendarFormatString) + "\n" +
-      "SUMMARY:" + heading + "\n" +
-      "DESCRIPTION:" + details + "\n" +
-      "END:VEVENT\n" +
-      "END:VCALENDAR\n"
+
+    """BEGIN:VCALENDAR
+      |VERSION:2.0
+      |PRODID:-//hacksw/handcal//NONSGML v1.0//EN" +
+      ||METHOD:PUBLISH
+      |BEGIN:VEVENT
+      |LOCATION:%s
+      |DTSTART:%s
+      |DTEND:%s
+      |TIMESTAMP:%s
+      |UID:%s
+      |SUMMARY:%s
+      |DESCRIPTION:%s
+      |END:VEVENT
+      |END:VCALENDAR""".stripMargin.format(location,
+            start.toString(calendarFormatString),
+            start.plusHours(2).toString(calendarFormatString),
+            start.toString(calendarFormatString),
+            matchId+"@fiks.herokuapp.com",
+            heading,
+            details)
   }
 
   private def santitizeURL(url: String) = {
@@ -397,8 +407,8 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     dateTime.toDateTime(DateTimeZone.forID("Europe/Oslo")).withZone(DateTimeZone.UTC).toLocalDateTime
   }
 
-  private def icsLink(start: LocalDateTime, heading: String, location: String, details: String) = {
-    val url = "/match.ics?startTime=" + start.toDate.getTime + "&heading=" + heading + "&location=" + location + "&details=" + details;
+  private def icsLink(start: LocalDateTime, heading: String, location: String, details: String, matchId:String) = {
+    val url = "/match.ics?startTime=" + start.toDate.getTime + "&heading=" + heading + "&location=" + location + "&details=" + details +"?matchId="+matchId;
     <a href={santitizeURL(url)}>Outlook/iCal</a>
   }
 

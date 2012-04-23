@@ -29,8 +29,9 @@ class VCalendar(assignedMatches:List[AssignedMatch]) {
                 start.toString(calendarFormatString),
                 m.matchId+"@fiks.herokuapp.com",
                 m.venue,
-                m.referees,
-                m.teams)
+                m.teams,
+                m.referees
+    )
   }
 
   private def start =
