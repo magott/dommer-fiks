@@ -25,7 +25,7 @@ class SecurityPlan(val matchservice:MatchService) extends Plan{
   }
 
   def handleLogin[T<:HttpServletRequest](req: HttpRequest[T], map: Map[String, Seq[String]]) = {
-    val username = map.get("username").get.head
+    val username = map.get("username").get.head.toLowerCase
     val password = map.get("password").get.head
     FiksLoginService.login(username, password) match {
       case Right(cookie) => {

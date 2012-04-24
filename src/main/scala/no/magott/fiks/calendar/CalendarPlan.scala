@@ -64,7 +64,7 @@ class CalendarPlan(calendarService: CalendarService, userservice: UserService) e
     if (!missingParams.isEmpty) {
       Html5(Pages(req).calendarSignup(missingParams))
     } else {
-      val username = params("username").head
+      val username = params("username").head.toLowerCase
       val password = params("password").head
       val email = params("email").head
       FiksLoginService.login(username, password) match {
