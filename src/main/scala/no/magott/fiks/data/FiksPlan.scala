@@ -7,6 +7,8 @@ import unfiltered.Cookie
 import no.magott.fiks.HerokuRedirect
 import javax.servlet.http.HttpServletRequest
 import no.magott.fiks.user.LoggedOnUser
+import java.util.concurrent.ExecutionException
+import java.net.SocketTimeoutException
 
 class FiksPlan(matchservice: MatchService) extends Plan {
 
@@ -53,13 +55,17 @@ class FiksPlan(matchservice: MatchService) extends Plan {
     } catch {
       //TODO: Invalidate session
       case e: SessionTimeoutException =>SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> displayReauthentication(req)
-      case e: Exception =>
+      case e: ExecutionException =>
         if (e.getCause.isInstanceOf[SessionTimeoutException]) {
           SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> displayReauthentication(req)
-        } else {
+        } else if(e.getCause.isInstanceOf[SocketTimeoutException]){
+          Html5(Pages(req).error(e.getCause.asInstanceOf[SocketTimeoutException]))
+        }else{
           println("EXCEPTION " + e.getClass + " : " + e.getMessage + "\n" + e.getStackTraceString)
           Html5(Pages(req).error(e))
         }
+      case e: Exception =>
+        Html5(Pages(req).error(e))
     }
   }
 
