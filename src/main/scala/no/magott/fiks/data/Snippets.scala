@@ -391,13 +391,14 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
   private def santitizeURL(url: String) = {
     url.replaceAllLiterally(" ", "%20")
-    url.replaceAllLiterally("-", "%2D")
+      .replaceAllLiterally("-", "%2D")
       .replaceAllLiterally("æ", "%C3%A6")
       .replaceAllLiterally("Æ", "%C3%86")
       .replaceAllLiterally("ø", "%C3%B8")
       .replaceAllLiterally("Ø", "%C3%98")
       .replaceAllLiterally("å", "%C3%A5")
       .replaceAllLiterally("Å", "%C3%85")
+      .replaceAllLiterally("&", "%26")
       .replaceAllLiterally("<br/>", "%0A")
       .replaceAllLiterally("<br>", "%0A")
       .replaceAllLiterally("</br>", "%0A")
