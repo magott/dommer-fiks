@@ -8,7 +8,7 @@ import no.magott.fiks.user.User
 
 class CalendarService(matchscraper: MatchScraper) {
 
-  val cache:Cache[String,List[AssignedMatch]] = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(12,TimeUnit.HOURS).build()
+  val cache:Cache[String,List[AssignedMatch]] = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(2,TimeUnit.HOURS).build()
 
   def calendarForUser(user:User):Option[List[AssignedMatch]] = {
     val cachedValue = Option(cache.getIfPresent(user.calendarId.get))
