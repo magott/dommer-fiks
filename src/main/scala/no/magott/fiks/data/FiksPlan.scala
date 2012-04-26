@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest
 import no.magott.fiks.user.LoggedOnUser
 import java.util.concurrent.ExecutionException
 import java.net.SocketTimeoutException
+import com.google.common.util.concurrent.UncheckedExecutionException
 
 class FiksPlan(matchservice: MatchService) extends Plan {
 
@@ -53,19 +54,21 @@ class FiksPlan(matchservice: MatchService) extends Plan {
     try {
       f
     } catch {
-      //TODO: Invalidate session
       case e: SessionTimeoutException =>SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> displayReauthentication(req)
-      case e: ExecutionException =>
-        if (e.getCause.isInstanceOf[SessionTimeoutException]) {
-          SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> displayReauthentication(req)
-        } else if(e.getCause.isInstanceOf[SocketTimeoutException]){
-          Html5(Pages(req).error(e.getCause.asInstanceOf[SocketTimeoutException]))
-        }else{
-          println("EXCEPTION " + e.getClass + " : " + e.getMessage + "\n" + e.getStackTraceString)
-          Html5(Pages(req).error(e))
-        }
-      case e: Exception =>
-        Html5(Pages(req).error(e))
+      case e: ExecutionException => handleException(e,req)
+      case e: UncheckedExecutionException => handleException(e,req)
+      case e: Exception =>  Html5(Pages(req).error(e))
+    }
+  }
+
+  def handleException[T <: HttpServletRequest](e:Exception, req: HttpRequest[T]) = {
+    if (e.getCause.isInstanceOf[SessionTimeoutException]) {
+      SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> displayReauthentication(req)
+    } else if(e.getCause.isInstanceOf[SocketTimeoutException]){
+      Html5(Pages(req).error(e.getCause.asInstanceOf[SocketTimeoutException]))
+    }else{
+      println("EXCEPTION " + e.getClass + " : " + e.getMessage + "\n" + e.getStackTraceString)
+      Html5(Pages(req).error(e))
     }
   }
 
