@@ -40,7 +40,8 @@ class VCalendar(assignedMatches:List[AssignedMatch]) {
     |PRODID:-//dommerfiks/kampoppsett//NONSGML v1.0//EN
     |METHOD:PUBLISH
     |X-WR-CALNAME:Dommer-FIKS
-    |X-WR-CALDESC:Dommer-FIKS""".stripMargin
+    |X-WR-CALDESC:Dommer-FIKS
+    |X-PUBLISHED-TTL:PT1H""".stripMargin
 
   private def end = "END:VCALENDAR"
 
