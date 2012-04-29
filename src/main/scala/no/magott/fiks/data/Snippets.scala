@@ -85,7 +85,6 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
       </head>
       <body>
 
@@ -120,7 +119,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   """}
 
         </script>
-      </body>
+       </body>
     </html>
 
   def tableOfAssignedMatches(assignedMatches: List[AssignedMatch]) = {
@@ -151,7 +150,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
               {m.tournament}
             </td>
             <td>
-              {m.teams}
+                {m.teams}
             </td>
             <td>
               {m.venue}
@@ -168,6 +167,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       }}
       </tbody>
     </table>
+
   }
 
   def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) = {
@@ -354,7 +354,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     val timeString = utcStart.toString(calendarFormatString) + "/" + utcStart.plusHours(2).toString(calendarFormatString)
     var linkString = """http://www.google.com/calendar/event?action=TEMPLATE&amp;text=""" +
       heading + """&amp;dates=""" + timeString + """&amp;details=""" + details + """&amp;location=""" + location + """&amp;trp=false&amp;sprop=&amp;sprop=name:"""
-    val xmlString = """<a href="""" + santitizeURL(linkString) + """" target="_blank">Google</a>"""
+    val xmlString = """<a href="""" + urlEscape(linkString) + """" target="_blank">Google</a>"""
     XML.loadString(xmlString)
   }
 
@@ -389,7 +389,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
             details)
   }
 
-  private def santitizeURL(url: String) = {
+  private def urlEscape(url: String) = {
     url.replaceAllLiterally(" ", "%20")
       .replaceAllLiterally("-", "%2D")
       .replaceAllLiterally("æ", "%C3%A6")
@@ -409,8 +409,8 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   }
 
   private def icsLink(start: LocalDateTime, heading: String, location: String, details: String, matchId:String) = {
-    val url = "/match.ics?startTime=" + start.toDate.getTime + "&heading=" + heading + "&location=" + location + "&details=" + details +"?matchId="+matchId;
-    <a href={santitizeURL(url)}>Outlook/iCal</a>
+    val url = "/match.ics?startTime=" + start.toDate.getTime + "&heading=" + urlEscape(heading) + "&location=" + urlEscape(location) + "&details=" + urlEscape(details) +"&matchId="+matchId;
+    <a href={url}>Outlook/iCal</a>
   }
 
 
