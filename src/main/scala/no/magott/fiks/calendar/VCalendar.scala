@@ -15,6 +15,7 @@ class VCalendar(assignedMatches:List[AssignedMatch]) {
 
   private def vevent(m:AssignedMatch) = {
     val start = toUTC(m.date)
+    val desc = """Kampnummer  %s \n%s""".format(m.matchId, m.referees.replaceAllLiterally(" (", " \\n("))
     """BEGIN:VEVENT
     |DTSTART:%s
     |DTEND:%s
@@ -30,11 +31,11 @@ class VCalendar(assignedMatches:List[AssignedMatch]) {
                 m.matchId+"@fiks.herokuapp.com",
                 m.venue,
                 m.teams,
-                m.referees
+                desc
     )
   }
 
-  private def start =
+  val start =
     """BEGIN:VCALENDAR
     |VERSION:2.0
     |PRODID:-//dommerfiks/kampoppsett//NONSGML v1.0//EN
@@ -43,7 +44,7 @@ class VCalendar(assignedMatches:List[AssignedMatch]) {
     |X-WR-CALDESC:Dommer-FIKS
     |X-PUBLISHED-TTL:PT1H""".stripMargin
 
-  private def end = "END:VCALENDAR"
+  val end = "END:VCALENDAR"
 
   private def toUTC(dateTime: LocalDateTime) = {
     dateTime.toDateTime(DateTimeZone.forID("Europe/Oslo")).withZone(DateTimeZone.UTC).toLocalDateTime

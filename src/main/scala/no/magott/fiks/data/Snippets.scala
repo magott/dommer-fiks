@@ -359,36 +359,6 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   }
 
 
-  def isc(uriParams: Map[String, Seq[String]]) = {
-    val heading = uriParams.getOrElse("heading", Seq("")).head
-    val startTime = uriParams.getOrElse("startTime", Seq("")).head.toLong
-    val details = uriParams.getOrElse("details", Seq("")).head
-    val location = uriParams.getOrElse("location", Seq("")).head
-    val matchId = uriParams.getOrElse("matchId", Seq("")).head
-    val start = toUTC(new LocalDateTime(startTime))
-
-    """BEGIN:VCALENDAR
-      |VERSION:2.0
-      |PRODID:-//hacksw/handcal//NONSGML v1.0//EN" +
-      ||METHOD:PUBLISH
-      |BEGIN:VEVENT
-      |LOCATION:%s
-      |DTSTART:%s
-      |DTEND:%s
-      |TIMESTAMP:%s
-      |UID:%s
-      |SUMMARY:%s
-      |DESCRIPTION:%s
-      |END:VEVENT
-      |END:VCALENDAR""".stripMargin.format(location,
-            start.toString(calendarFormatString),
-            start.plusHours(2).toString(calendarFormatString),
-            start.toString(calendarFormatString),
-            matchId+"@fiks.herokuapp.com",
-            heading,
-            details)
-  }
-
   private def urlEscape(url: String) = {
     url.replaceAllLiterally(" ", "%20")
       .replaceAllLiterally("-", "%2D")
@@ -409,7 +379,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   }
 
   private def icsLink(start: LocalDateTime, heading: String, location: String, details: String, matchId:String) = {
-    val url = "/match.ics?startTime=" + start.toDate.getTime + "&heading=" + urlEscape(heading) + "&location=" + urlEscape(location) + "&details=" + urlEscape(details) +"&matchId="+matchId;
+    val url = "/match.ics?matchid="+matchId;
     <a href={url}>Outlook/iCal</a>
   }
 

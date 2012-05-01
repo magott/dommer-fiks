@@ -10,6 +10,7 @@ import no.magott.fiks.user.LoggedOnUser
 import java.util.concurrent.ExecutionException
 import java.net.SocketTimeoutException
 import com.google.common.util.concurrent.UncheckedExecutionException
+import no.magott.fiks.calendar.VCalendar
 
 class FiksPlan(matchservice: MatchService) extends Plan {
 
@@ -24,7 +25,10 @@ class FiksPlan(matchservice: MatchService) extends Plan {
       val assigned = matchservice.assignedMatches((FiksLoginService.COOKIE_NAME, loginToken))
       Ok ~> Html5(Pages(r).assignedMatches(assigned))
     })
-    case r@GET(Path(Seg("match.ics" :: Nil))) & Params(p) => Ok ~> CalendarContentType ~> ResponseString(Snippets(r).isc(p))
+    case r@GET(Path(Seg("match.ics" :: Nil)))  & FiksCookie(loginToken) & Params(MatchIdParameter(matchId)) => redirectToLoginIfTimeout (r, {
+      val assigned = matchservice.assignedMatches((FiksLoginService.COOKIE_NAME, loginToken)).find(_.matchId == matchId)
+      Ok ~> CalendarContentType ~> ResponseString(new VCalendar(assigned.get).feed)
+    })
     case r@GET(Path(Seg(Nil))) & FiksCookie(_) => HerokuRedirect(r, "/fiks/mymatches")
     case r@GET(Path(Seg(Nil))) => HerokuRedirect(r, "/login")
   }
