@@ -110,7 +110,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
         </div>
         <div class="btn-group">
           <a class="btn" href={schemeAndUrl}><i class="icon-download"></i> Last ned</a>
-          <a class="btn" href={webcalUrl}><i class="icon-plus"></i> Abonnèr i Outlook/iCal/iPhone</a>
+          <a class="btn" href={webcalUrl}><i class="icon-plus"></i> Abonnér i Outlook/iCal/iPhone</a>
           <a class="btn" href={googleCalUrl} target="_blank"><i class="icon-plus"></i> Abonnér i Google Calendar</a>
         </div>
       </div>

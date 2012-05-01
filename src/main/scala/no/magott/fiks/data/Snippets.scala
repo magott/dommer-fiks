@@ -281,7 +281,8 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         I <a href="fiks/mymatches">ditt kampoppsett</a> er det mulig å eksportere hver enkelt kamp til din kalender.
         Dersom du ønsker en kalender feed som automatisk oppdaterer din kalender (f.eks Outlook, Google Calendar eller iCal)
         når nye kamper kommer til, kamper endrer tidspunkt eller faller fra trenger Dommer-FIKS å lagre ditt brukernavn og passord.
-        Dersom du ikke ønsker dette anbefales det at du bruker den manuelle eksportmuligheten under <a href="fiks/mymatches">ditt kampoppsett</a>.
+        Passordet ditt vil lagres kryptert slik at det ikke er mulig for andre å stjele ditt passord.
+        Dersom du ikke ønsker dette anbefales det at du bruker den manuelle eksportmuligheten under <a href="fiks/mymatches">mitt kampoppsett</a>.
         Hvis du ønsker å benytte deg muligheten for automatisk oppdatert kalender, må du fylle ut skjema under.
       </p>
       <form class="well" action="mycal" method="post">
