@@ -40,7 +40,7 @@ class CalendarPlan(calendarService: CalendarService, userservice: UserService) e
   }
 
   val notBeta = Intent {
-    case r@Path(Seg("calendar" :: _ :: Nil))  => Html5(Pages(r).betaOnly)
+    case r@Path(Seg("calendar" :: _ :: Nil))  => Forbidden ~> Html5(Pages(r).betaOnly)
   }
 
   def calendarFeed(calendarId: String) = {
