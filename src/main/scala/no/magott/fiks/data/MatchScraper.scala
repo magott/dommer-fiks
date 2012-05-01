@@ -78,7 +78,8 @@ class MatchScraper {
           el.child(3).getElementsByTag("a").text,
           el.child(4).text,
           el.child(5).text,
-          el.child(6).text)
+          el.child(6).text,
+          el.child(3).getElementsByTag("a").attr("href").split("=")(1))
     }.filter(f(_))
     upcomingAssignedMatches.toList
   }
