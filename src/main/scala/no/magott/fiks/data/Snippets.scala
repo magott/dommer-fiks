@@ -283,7 +283,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         når nye kamper kommer til, kamper endrer tidspunkt eller faller fra trenger Dommer-FIKS å lagre ditt brukernavn og passord.
         Passordet ditt vil lagres kryptert slik at det ikke er mulig for andre å stjele ditt passord.
         Dersom du ikke ønsker dette anbefales det at du bruker den manuelle eksportmuligheten under <a href="fiks/mymatches">mitt kampoppsett</a>.
-        Hvis du ønsker å benytte deg muligheten for automatisk oppdatert kalender, må du fylle ut skjema under.
+        Hvis du ønsker å benytte deg av muligheten for automatisk oppdatert kalender, må du fylle ut skjema under.
       </p>
       <form class="well" action="mycal" method="post">
         <div>
