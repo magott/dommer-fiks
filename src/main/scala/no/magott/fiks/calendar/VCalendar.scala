@@ -1,9 +1,12 @@
 package no.magott.fiks.calendar
 
 import no.magott.fiks.data.AssignedMatch
-import org.joda.time.{DateTimeZone, LocalDateTime}
+import org.joda.time._
+import org.joda.time.DateTimeFieldType._
 
 class VCalendar(assignedMatches:List[AssignedMatch]) {
+
+  val thisHour = LocalDateTime.now.withMillisOfSecond(0).withSecondOfMinute(0).withMinuteOfHour(0)
 
   def this(assignedMatches: AssignedMatch*) = this(assignedMatches.toList)
 
@@ -20,6 +23,7 @@ class VCalendar(assignedMatches:List[AssignedMatch]) {
     |DTSTART:%s
     |DTEND:%s
     |DTSTAMP:%s
+    |LAST-MODIFIED:%s
     |UID:%s
     |LOCATION:%s
     |SUMMARY:%s
@@ -27,7 +31,8 @@ class VCalendar(assignedMatches:List[AssignedMatch]) {
     |END:VEVENT""".stripMargin.format(
                 start.toString(calendarFormatString),
                 start.plusHours(2).toString(calendarFormatString),
-                start.toString(calendarFormatString),
+                toUTC(thisHour).toString(calendarFormatString),
+                toUTC(thisHour).toString(calendarFormatString),
                 m.matchId+"@fiks.herokuapp.com",
                 m.venue,
                 m.teams,
