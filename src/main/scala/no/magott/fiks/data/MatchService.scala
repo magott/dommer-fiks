@@ -1,12 +1,11 @@
 package no.magott.fiks.data
 
 import scala.concurrent.ops.spawn
-import Scala2GuavaConversions._
-import org.jsoup.Connection.Method
-import org.jsoup.Jsoup
+import Scala2GuavaConversions.scalaFunction2GuavaFunction
 import java.util.concurrent.{Executors, TimeUnit}
 import util.Properties
 import com.google.common.cache.{LoadingCache, Cache, CacheLoader, CacheBuilder}
+import org.joda.time.{LocalDateTime, LocalDate}
 
 class MatchService(val matchscraper:MatchScraper) {
   val assignedMatchesCache = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((loginToken: String) => matchscraper.scrapeAssignedMatches(loginToken)))
@@ -19,12 +18,16 @@ class MatchService(val matchscraper:MatchScraper) {
     println("No stats print configured")
   }
 
-  def assignedMatches(loginCookie: (String, String)): List[AssignedMatch] = {
-    assignedMatchesCache.get(loginCookie._2)
+  def assignedMatches(loginToken:String): List[AssignedMatch] = {
+    assignedMatchesCache.get(loginToken).filter(_.date.year == LocalDateTime.now.year)
   }
 
-  def availableMatches(loginCookie: (String, String)):List[AvailableMatch] = {
-    availableMatchesCache.get(loginCookie._2)
+  def upcomingAssignedMatches(loginToken:String): List[AssignedMatch] = {
+    assignedMatchesCache.get(loginToken).filter(_.date.toLocalDate.isAfter(LocalDate.now.minusDays(1)))
+  }
+
+  def availableMatches(loginToken:String):List[AvailableMatch] = {
+    availableMatchesCache.get(loginToken)
   }
 
   def reportInterest(availabilityId: String, comment:String, loginToken:String) {
@@ -33,7 +36,9 @@ class MatchService(val matchscraper:MatchScraper) {
 
   }
 
-  def matchInfo(assignmentId: String, loginToken:String) = {
+  def matchDetails(matchId:String, loginToken:String) = assignedMatches(loginToken).find(_.fiksId == matchId)
+
+  def availableMatchInfo(assignmentId: String, loginToken:String) = {
     val cached = Option(matchInfoCache.getIfPresent(assignmentId))
     cached match{
       case Some(x) => x

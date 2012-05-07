@@ -4,7 +4,7 @@ import xml.{XML, NodeSeq}
 import org.joda.time.{DateTimeZone, DateTime, LocalDateTime}
 import unfiltered.request.{Path, Seg, HttpRequest}
 import javax.servlet.http.HttpServletRequest
-
+import MatchStuff.allMatches
 case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
   val calendarFormatString = "yyyyMMdd'T'HHmmss'Z"
@@ -123,6 +123,16 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     </html>
 
   def tableOfAssignedMatches(assignedMatches: List[AssignedMatch]) = {
+    <small>
+      {
+        if(allMatches(req)){
+          <a href="mymatches">Skjul spilte kamper</a>
+        }else{
+          <a href="mymatches?all">Vis spilte kamper</a>
+        }
+      }
+      </small>
+
     <table class="table table-striped table-bordered table-condensed">
       <thead>
         <tr>

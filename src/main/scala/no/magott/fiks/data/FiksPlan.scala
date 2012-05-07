@@ -6,11 +6,11 @@ import unfiltered.filter.{Intent, Plan}
 import unfiltered.Cookie
 import no.magott.fiks.HerokuRedirect
 import javax.servlet.http.HttpServletRequest
-import no.magott.fiks.user.LoggedOnUser
 import java.util.concurrent.ExecutionException
 import java.net.SocketTimeoutException
 import com.google.common.util.concurrent.UncheckedExecutionException
 import no.magott.fiks.calendar.VCalendar
+import MatchStuff.allMatches
 
 class FiksPlan(matchservice: MatchService) extends Plan {
 
@@ -20,13 +20,17 @@ class FiksPlan(matchservice: MatchService) extends Plan {
 
   val myMatches = Intent {
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) =>
-      val req = r.asInstanceOf[HttpRequest[HttpServletRequest]]
-      redirectToLoginIfTimeout(req, {
-      val assigned = matchservice.assignedMatches((FiksLoginService.COOKIE_NAME, loginToken))
-      Ok ~> Html5(Pages(r).assignedMatches(assigned))
-    })
-    case r@GET(Path(Seg("match.ics" :: Nil)))  & FiksCookie(loginToken) & Params(MatchIdParameter(matchId)) => redirectToLoginIfTimeout (r, {
-      val assigned = matchservice.assignedMatches((FiksLoginService.COOKIE_NAME, loginToken)).find(_.matchId == matchId)
+      redirectToLoginIfTimeout(r, {
+        if (allMatches(r)) {
+          val assigned = matchservice.assignedMatches(loginToken)
+          Ok ~> Html5(Pages(r).assignedMatches(assigned))
+        } else {
+          val assigned = matchservice.upcomingAssignedMatches(loginToken)
+          Ok ~> Html5(Pages(r).assignedMatches(assigned))
+        }
+      })
+    case r@GET(Path(Seg("match.ics" :: Nil))) & FiksCookie(loginToken) & Params(MatchIdParameter(matchId)) => redirectToLoginIfTimeout(r, {
+      val assigned = matchservice.assignedMatches(loginToken).find(_.matchId == matchId)
       Ok ~> CalendarContentType ~> ResponseString(new VCalendar(assigned.get).feed)
     })
     case r@GET(Path(Seg(Nil))) & FiksCookie(_) => HerokuRedirect(r, "/fiks/mymatches")
@@ -35,11 +39,11 @@ class FiksPlan(matchservice: MatchService) extends Plan {
 
   val availableMatches = Intent {
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & Params(MatchIdParameter(matchId)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      val matchInfo = matchservice.matchInfo(matchId, loginToken)
+      val matchInfo = matchservice.availableMatchInfo(matchId, loginToken)
       Ok ~> Html5(Pages(r).reportInterestIn(matchInfo))
     })
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      val available = matchservice.availableMatches((FiksLoginService.COOKIE_NAME, loginToken))
+      val available = matchservice.availableMatches(loginToken)
       Ok ~> Html5(Pages(r).availableMatches(available))
     })
   }
@@ -54,23 +58,24 @@ class FiksPlan(matchservice: MatchService) extends Plan {
   val about = Intent {
     case r@GET(Path(Seg("fiks" :: "about" :: Nil))) => Ok ~> Html(Pages(r).about)
   }
+
   def redirectToLoginIfTimeout[T <: HttpServletRequest](req: HttpRequest[T], f: => ResponseFunction[Any]) = {
     try {
       f
     } catch {
-      case e: SessionTimeoutException =>SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> displayReauthentication(req)
-      case e: ExecutionException => handleException(e,req)
-      case e: UncheckedExecutionException => handleException(e,req)
-      case e: Exception =>  Html5(Pages(req).error(e))
+      case e: SessionTimeoutException => SetCookies(Cookie(name = "fiksToken", value = "", maxAge = Some(0))) ~> displayReauthentication(req)
+      case e: ExecutionException => handleException(e, req)
+      case e: UncheckedExecutionException => handleException(e, req)
+      case e: Exception => Html5(Pages(req).error(e))
     }
   }
 
-  def handleException[T <: HttpServletRequest](e:Exception, req: HttpRequest[T]) = {
+  def handleException[T <: HttpServletRequest](e: Exception, req: HttpRequest[T]) = {
     if (e.getCause.isInstanceOf[SessionTimeoutException]) {
-      SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> displayReauthentication(req)
-    } else if(e.getCause.isInstanceOf[SocketTimeoutException]){
+      SetCookies(Cookie(name = "fiksToken", value = "", maxAge = Some(0))) ~> displayReauthentication(req)
+    } else if (e.getCause.isInstanceOf[SocketTimeoutException]) {
       Html5(Pages(req).error(e.getCause.asInstanceOf[SocketTimeoutException]))
-    }else{
+    } else {
       println("EXCEPTION " + e.getClass + " : " + e.getMessage + "\n" + e.getStackTraceString)
       Html5(Pages(req).error(e))
     }
@@ -83,5 +88,6 @@ class FiksPlan(matchservice: MatchService) extends Plan {
   object MatchIdParameter extends Params.Extract("matchid", Params.first)
 
   object CommentParameter extends Params.Extract("comment", Params.first)
+
 
 }

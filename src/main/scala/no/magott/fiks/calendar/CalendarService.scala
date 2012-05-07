@@ -28,7 +28,7 @@ class CalendarService(matchscraper: MatchScraper) {
   }
 
   private def matchesThisYearForLogin(logintoken:String) = {
-    matchscraper.scrapeAssignedMatches(logintoken, _.date.year == LocalDateTime.now.year)
+    matchscraper.scrapeAssignedMatches(logintoken).filter(_.date.year == LocalDateTime.now.year)
   }
 
 }
