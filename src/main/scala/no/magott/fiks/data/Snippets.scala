@@ -160,7 +160,9 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
               {m.tournament}
             </td>
             <td>
+              <a href={"mymatches?matchid="+m.fiksId}>
                 {m.teams}
+              </a>
             </td>
             <td>
               {m.venue}
@@ -178,6 +180,45 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       </tbody>
     </table>
 
+  }
+
+  def assignedMatchDetailsTable(m:AssignedMatch) = {
+    <table class="table table-striped table-bordered table-condensed">
+        <tr>
+          <th>Kampnummer</th>
+          <td>{m.matchId}</td>
+        </tr>
+        <tr>
+        <th>Kamp</th>
+        <td>{m.teams}</td>
+      </tr>
+      <tr>
+        <th>Dato</th>
+        <td>{m.date.toString("dd.MM.yyyy")}</td>
+      </tr>
+      <tr>
+        <th>Tidspunkt</th>
+        <td>{m.date.toString("HH:mm")}</td>
+      </tr>
+      {
+        m.refereeTuples.map(t =>
+          <tr>
+            <th>{t._1}</th>
+            <td>{t._2}</td>
+          </tr>
+        )
+      }
+      <tr>
+        <th>Sted</th>
+        <td>{m.venue}</td>
+      </tr>
+      <tr>
+        <th></th>
+        <td>
+          <a class="btn btn-primary" href="mymatches"><i class="icon-circle-arrow-left icon-white"></i> Tilbake</a>
+        </td>
+      </tr>
+    </table>
   }
 
   def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) = {

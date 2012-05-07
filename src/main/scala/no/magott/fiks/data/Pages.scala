@@ -68,6 +68,8 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     emptyPage(tableOfAssignedMatches(assignedMatches), Some("mymatches"))
   }
 
+  def assignedMatchInfo(m:AssignedMatch) = emptyPage(assignedMatchDetailsTable(m))
+
   def availableMatches(availableMatches: List[AvailableMatch]) = {
     emptyPage(tableOfAvailableMatches(availableMatches), Some("availablematches"))
   }

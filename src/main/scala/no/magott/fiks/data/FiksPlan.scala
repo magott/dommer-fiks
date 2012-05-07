@@ -19,6 +19,12 @@ class FiksPlan(matchservice: MatchService) extends Plan {
   }
 
   val myMatches = Intent {
+    case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & Params(MatchIdParameter(matchId)) & FiksCookie(loginToken) =>{
+      matchservice.matchDetails(matchId,loginToken) match{
+        case Some(m) => Html5(Pages(r).assignedMatchInfo(m))
+        case None => Html5(Pages(r).notFound)
+      }
+    }
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) =>
       redirectToLoginIfTimeout(r, {
         if (allMatches(r)) {
