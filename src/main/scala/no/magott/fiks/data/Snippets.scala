@@ -213,6 +213,10 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <td>{m.venue}</td>
       </tr>
       <tr>
+        <th>Turnering</th>
+        <td>{m.tournament}</td>
+      </tr>
+      <tr>
         <th></th>
         <td>
           <a class="btn btn-primary" href="mymatches"><i class="icon-circle-arrow-left icon-white"></i> Tilbake</a>
