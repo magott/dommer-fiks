@@ -217,6 +217,10 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <td>{m.tournament}</td>
       </tr>
       <tr>
+        <th>Mer info</th>
+        <td><a href={"http://www.fotball.no/System-pages/Kampfakta/?matchId="+m.fiksId} target="_blank">Kampinfo fra fotball.no</a></td>
+      </tr>
+      <tr>
         <th></th>
         <td>
           <a class="btn btn-primary" href="mymatches"><i class="icon-circle-arrow-left icon-white"></i> Tilbake</a>
