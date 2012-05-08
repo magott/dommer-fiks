@@ -130,7 +130,9 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
         emptyPage(
           <div class="alert alert-error">
             <p>
-              <strong>Det tok for lang tid å hente data fra fiks:</strong> Forhåpentligvis går det bedre om du prøver på nytt. Bruk menyen over for å prøve igjen.
+              <strong>Det tok for lang tid å hente data fra fiks:</strong> Du er allerede logget inn og trenger <strong><em>ikke</em></strong> gjøre det på nytt.
+              Forhåpentligvis går det bedre om du prøver på nytt. Bruk menyen over for å prøve igjen. Eller klikk <a href="mymatches">her</a>
+              for å gå til dine kamper.
             </p>
           </div>
         )
