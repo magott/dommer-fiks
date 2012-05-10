@@ -39,5 +39,5 @@ class SecurityPlan(val matchservice:MatchService) extends Plan{
     }
   }
 
-  def handleLogout(req: HttpRequest[Any]) = SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> HerokuRedirect(req, "/")
+  def handleLogout(req: HttpRequest[Any]) = SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> HerokuRedirect(req, "/login?message=logout")
 }

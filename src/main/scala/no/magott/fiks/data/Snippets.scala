@@ -279,6 +279,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         case "loginRequired" => <div class="alert alert-info">Du må logge inn for å få tilgang til denne siden</div>
         case "loginFailed" => <div class="alert alert-error">Login feilet, prøv igjen</div>
         case "sessionTimeout" => <div class="alert alert">Sesjonen din er for gammel, du må logge inn på nytt</div>
+        case "logout" => <p><strong>Du er nå logget ut</strong></p>
         case _ =>
       }
       case None =>
