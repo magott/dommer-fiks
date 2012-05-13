@@ -5,7 +5,7 @@ import com.mongodb.casbah.commons.MongoDBObject
 case class User(username: String, password: Option[String], email: String, calendarId: Option[String], beta: Boolean) {
 
 
-  def toMongoDbObject = {
+  def toMongo = {
     val builder = MongoDBObject.newBuilder
     builder += "username" -> username
     builder += "password" -> password
@@ -18,17 +18,14 @@ case class User(username: String, password: Option[String], email: String, calen
     builder.result
   }
 
-  def this(mo: MongoDBObject) = {
-    this(
-      mo.getAs[String]("username").get,
-      mo.getAs[String]("password"),
-      mo.getAsOrElse[String]("email", ""),
-      Option(mo.getAs[String]("calid").getOrElse(null)),
-      mo.getAs[Boolean]("beta").getOrElse(false)
-    )
-  }
 
-  def unapply(mo: MongoDBObject) = toMongoDbObject
+}
 
+object User{
 
+  def fromMongo(mo: MongoDBObject) = new User(mo.getAs[String]("username").get,
+    mo.getAs[String]("password"),
+    mo.getAsOrElse[String]("email", ""),
+    Option(mo.getAs[String]("calid").getOrElse(null)),
+    mo.getAs[Boolean]("beta").getOrElse(false))
 }

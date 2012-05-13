@@ -25,7 +25,7 @@ class UserService {
     val mongoUser = db("users").findOne(where("username"->username))
     mongoUser match {
       case None => None
-      case Some(dbobj) => Some(decrypt(new User(dbobj)))
+      case Some(dbobj) => Some(decrypt(User.fromMongo(dbobj)))
     }
   }
 
@@ -33,7 +33,7 @@ class UserService {
     val mongoUser = db("users").findOne(where("calid"->calendarId))
     mongoUser match {
       case None => None
-      case Some(dbobj) => Some(decrypt(new User(dbobj)))
+      case Some(dbobj) => Some(decrypt(User.fromMongo(dbobj)))
     }
   }
 

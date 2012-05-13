@@ -10,9 +10,6 @@ case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String,
   def refereeTuples = referees.split('(').drop(1).map(s=> (s.split(')')(0) -> s.split(')')(1).trim))
 }
 
-//val refereesArray = referees.split('(').drop(1).map("("+_)
-//val refereeArrayTuples = refereesArray.map(s=> (s.split(')')(0).drop(1) -> s.split(')')(1).trim))
-
 object MatchStuff{
   def allMatches[T](req: HttpRequest[T]) = {
     val p = Params.unapply(req).get
