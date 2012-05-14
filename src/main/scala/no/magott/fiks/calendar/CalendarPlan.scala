@@ -17,8 +17,8 @@ class CalendarPlan(calendarService: CalendarService, userservice: UserService) e
   }
 
   val calendarSignup = Intent {
-    case r@POST(Path(Seg("calendar" :: "mycal" :: Nil))) & Params(p) & IsBetaUser(beta) => handleSignup(r, p)
-    case r@GET(Path(Seg("calendar" :: "mycal" :: Nil))) & LoggedOnUser(user) & IsBetaUser(betauser) => {
+    case r@POST(Path(Seg("calendar" :: "mycal" :: Nil))) & Params(p)  => handleSignup(r, p)
+    case r@GET(Path(Seg("calendar" :: "mycal" :: Nil))) & LoggedOnUser(user) => {
       user.calendarId match {
         case Some(calendarId) => Html5(Pages(r).calendarInfo(calendarId))
         case None => Html5(Pages(r).calendarSignup())
@@ -32,7 +32,7 @@ class CalendarPlan(calendarService: CalendarService, userservice: UserService) e
         case "delete" => userservice.removeCalendarFor(user.username)
         case "reset" => userservice.newCalendarId(user.username)
       }
-      HerokuRedirect(r,"calendar/mycal") //Delete or refresh add & Username(user)
+      HerokuRedirect(r,"calendar/mycal")
     }
   }
   val getFeed = Intent {

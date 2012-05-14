@@ -40,7 +40,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
              if(isLoggedIn){
                <li class={if (pages.contains("calendar")) "active" else "inactive"}>
-                 <a href="/calendar/mycal">Kalender <sup>Beta</sup></a>
+                 <a href="/calendar/mycal">Kalender</a>
                </li>
 
                <li class={"inactive"}>
