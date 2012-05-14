@@ -3,10 +3,10 @@ package no.magott.fiks.calendar
 import unfiltered.request._
 import no.magott.fiks.HerokuRedirect
 import unfiltered.response._
-import no.magott.fiks.data.{CalendarContentType, FiksLoginService, Pages}
 import unfiltered.filter.{Intent, Plan}
 import javax.servlet.http.HttpServletRequest
-import no.magott.fiks.user.{LoggedOnUser, IsBetaUser, UserService}
+import no.magott.fiks.user.{LoggedOnUser, UserService}
+import no.magott.fiks.data.{FiksCookie, CalendarContentType, FiksLoginService, Pages}
 
 class CalendarPlan(calendarService: CalendarService, userservice: UserService) extends Plan {
   val requiredParams = Vector("username", "password", "terms", "email")
@@ -18,9 +18,12 @@ class CalendarPlan(calendarService: CalendarService, userservice: UserService) e
 
   val calendarSignup = Intent {
     case r@POST(Path(Seg("calendar" :: "mycal" :: Nil))) & Params(p)  => handleSignup(r, p)
-    case r@GET(Path(Seg("calendar" :: "mycal" :: Nil))) & LoggedOnUser(user) => {
-      user.calendarId match {
-        case Some(calendarId) => Html5(Pages(r).calendarInfo(calendarId))
+    case r@GET(Path(Seg("calendar" :: "mycal" :: Nil))) & FiksCookie(token) => {
+      userservice.userForSession(token) match {
+        case Some(user) => user.calendarId match {
+          case Some(calendarId) => Html5(Pages(r).calendarInfo(calendarId))
+          case None => Html5(Pages(r).calendarSignup())
+        }
         case None => Html5(Pages(r).calendarSignup())
       }
     }
