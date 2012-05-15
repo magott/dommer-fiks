@@ -11,10 +11,10 @@ import com.mongodb.casbah.query._
 class UserService {
   val MongoSetting(db) = Properties.envOrNone("MONGOLAB_URI")
   val where = MongoDBObject
-  val chiper = new StandardPBEStringEncryptor();
-  chiper.setProvider(new BouncyCastleProvider());
-  chiper.setPassword(Properties.envOrElse("ENCRYPTION_PWD", "foo"))
-  chiper.setAlgorithm("PBEWITHSHA256AND256BITAES-CBC-BC")
+  val cipher = new StandardPBEStringEncryptor();
+  cipher.setProvider(new BouncyCastleProvider());
+  cipher.setPassword(Properties.envOrElse("ENCRYPTION_PWD", "foo"))
+  cipher.setAlgorithm("PBEWITHSHA256AND256BITAES-CBC-BC")
 
   def removeCalendarFor(username: String) {
     db("users").update(where("username"->username), $unset("calid"))
@@ -39,7 +39,7 @@ class UserService {
 
   def newUser(username: String, password: String, email:String) = {
     val calendarId = UUID.randomUUID.toString
-    db("users").update(where("username"->username), $set("calid" -> calendarId, "username" -> username, "password" -> chiper.encrypt(password), "email" -> email), true, false)
+    db("users").update(where("username"->username), $set("calid" -> calendarId, "username" -> username, "password" -> cipher.encrypt(password), "email" -> email), true, false)
     calendarId
   }
 
@@ -57,7 +57,7 @@ class UserService {
   def userSession(fiksToken:String) = {
     db("sessions").findOne(where("fiksToken" -> fiksToken)) match {
       case None => None
-      case Some(dbObj) => Some(new UserSession(dbObj))
+      case Some(dbObj) => Some(UserSession.fromMongo(dbObj))
     }
   }
 
@@ -75,7 +75,7 @@ class UserService {
 
   private def decrypt(user:User) = {
     if(user.password.isDefined){
-      user.copy(password=Some(chiper.decrypt(user.password.get)))
+      user.copy(password=Some(cipher.decrypt(user.password.get)))
     }else{
       user
     }

@@ -17,12 +17,8 @@ case class UserSession(fiksToken:String, username:String) {
     builder.result
   }
 
-  def this(mo: MongoDBObject) = {
-    this(
-      mo.getAs[String]("fiksToken").get,
-      mo.getAs[String]("username").get
-    )
-  }
+}
 
-
+object UserSession{
+  def fromMongo(mo:MongoDBObject) = new UserSession(mo.getAs[String]("fiksToken").get, mo.getAs[String]("username").get)
 }
