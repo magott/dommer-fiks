@@ -413,10 +413,8 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   (start: LocalDateTime, heading: String, location: String, details: String): NodeSeq = {
     val utcStart = toUTC(start)
     val timeString = utcStart.toString(calendarFormatString) + "/" + utcStart.plusHours(2).toString(calendarFormatString)
-    var linkString = """http://www.google.com/calendar/event?action=TEMPLATE&amp;text=""" +
-      heading + """&amp;dates=""" + timeString + """&amp;details=""" + details + """&amp;location=""" + location + """&amp;trp=false&amp;sprop=&amp;sprop=name:"""
-    val xmlString = """<a href="""" + urlEscape(linkString) + """" target="_blank">Google</a>"""
-    XML.loadString(xmlString)
+    val link = "http://www.google.com/calendar/event?action=TEMPLATE&text=%s&dates=%s&details=%s&location=%s&trp=false&sprop=&sprop=name:".format(heading,timeString,details,location)
+    <a href={link} target="_blank">Google</a>
   }
 
 
