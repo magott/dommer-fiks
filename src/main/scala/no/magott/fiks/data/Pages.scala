@@ -5,6 +5,7 @@ import xml.NodeSeq
 import unfiltered.request.{Host, HttpRequest}
 import no.magott.fiks.HerokuRedirect.XForwardProto
 import java.net.SocketTimeoutException
+import validation.InputField
 
 case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
 
@@ -70,6 +71,8 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
 
   def assignedMatchInfo(m:AssignedMatch) = emptyPage(assignedMatchDetailsTable(m))
 
+  def assignedMatchResult(r:MatchResult, inputFields: Map[String, InputField] = Map.empty) = emptyPage(assignedMatchResultForm(r, inputFields))
+
   def availableMatches(availableMatches: List[AvailableMatch]) = {
     emptyPage(tableOfAvailableMatches(availableMatches), Some("availablematches"))
   }
@@ -87,7 +90,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     val schemeAndUrl = scheme.getOrElse("http") +"://" + url
     val deleteCalUrl = schemeAndUrl+"&action=delete"
     val resetCalIdUrl = schemeAndUrl+"&action=reset"
-    val webcalUrl = "webcal://"+url
+    val webcalUrl = if(XForwardProto.unapply(req).isDefined) "webcals://"+url else "webcal://+url"
     val googleCalUrl = "http://www.google.com/calendar/render?cid=%s".format(webcalUrl)
     emptyPage(
       <legend>Din kalender</legend>
@@ -124,6 +127,11 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     Fant ikke siden du forsøkte å gå til. Bruk menyen over for å navigere. Eller gå direkte til <a href="/login">innloggingen</a>
   </div>)
 
+  def forbidden = emptyPage( <div class="alert alert-block">
+    <h4 class="alert-heading">Ingen tilgang</h4>
+    Du har ikke tilgang til denne siden
+  </div>)
+
   def error(e: Exception) = {
     e match {
       case ex: SocketTimeoutException => {
@@ -131,7 +139,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
           <div class="alert alert-error">
             <p>
               <strong>Det tok for lang tid å hente data fra fiks:</strong> Du er allerede logget inn og trenger <strong><em>ikke</em></strong> gjøre det på nytt.
-              Forhåpentligvis går det bedre om du prøver på nytt. Bruk menyen over for å prøve igjen. Eller klikk <a href="mymatches">her</a>
+              Forhåpentligvis går det bedre om du prøver på nytt. Bruk menyen over for å prøve igjen. Eller klikk <a href="/fiks/mymatches">her</a>
               for å gå til dine kamper.
             </p>
           </div>
@@ -144,6 +152,8 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
               <strong>Her skjedde det en uventet feil:</strong> Forhåpentligvis går det bedre om du prøver på nytt. Bruk menyen over for å prøve igjen.
                       Hvis ikke kan du rapportere feilen på <a href="http://www.facebook.com/dommerfiks">Facebooksidene</a>
             </p>
+            <p>{e.getMessage}</p>
+            <p>{e.getStackTraceString}</p>
           </div>
         )
       }

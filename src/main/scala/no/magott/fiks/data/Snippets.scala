@@ -5,6 +5,8 @@ import org.joda.time.{DateTimeZone, DateTime, LocalDateTime}
 import unfiltered.request.{Path, Seg, HttpRequest}
 import javax.servlet.http.HttpServletRequest
 import MatchStuff.allMatches
+import validation.InputField
+
 case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
   val calendarFormatString = "yyyyMMdd'T'HHmmss'Z"
@@ -26,14 +28,14 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
             <ul class="nav">
             {
               if (isLoggedIn) {
-                <li class={if (page.getOrElse("").contains("mymatches")) "active" else "inactive"}>
+                <li class={if (pages.contains("mymatches")) "active" else "inactive"}>
                   <a href="/fiks/mymatches">Mine oppdrag</a>
                 </li>
-                <li class={if (page.getOrElse("").contains("availablematches")) "active" else "inactive"}>
+                <li class={if (pages.contains("availablematches")) "active" else "inactive"}>
                     <a href="/fiks/availablematches">Ledige oppdrag</a>
                 </li>
               }
-            }<li class={if (page.getOrElse("").contains("about")) "active" else "inactive"}>
+            }<li class={if (pages.contains("about")) "active" else "inactive"}>
               <a href="/fiks/about">Om</a>
             </li>
             {
@@ -160,7 +162,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
               {m.tournament}
             </td>
             <td>
-              <a href={"mymatches?matchid="+m.fiksId}>
+              <a href={"mymatches/"+m.fiksId+"/"}>
                 {m.teams}
               </a>
             </td>
@@ -183,6 +185,16 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   }
 
   def assignedMatchDetailsTable(m:AssignedMatch) = {
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a href="./">Info</a>
+      </li>
+      {
+        if(m.isReferee){
+          <li class="inactive"><a href="./result">Resultat</a></li>
+        }
+      }
+    </ul>
     <table class="table table-striped table-bordered table-condensed">
         <tr>
           <th>Kampnummer</th>
@@ -227,6 +239,73 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         </td>
       </tr>
     </table>
+  }
+
+  //TODO teams and matchid can be retrieved when scraping matchresult - add to matchresult and remove assignedmatch
+  def assignedMatchResultForm(r: MatchResult, fields:Map[String, InputField] = Map.empty) = {
+    <ul class="nav nav-tabs">
+      <li class="inactive">
+        <a href="./">Info</a>
+      </li>
+      <li class="active"><a href="result">Resultat</a></li>
+    </ul>
+    <p>
+      <h3>{fields("teams").value.get} <small>{fields("matchId").value.get}</small></h3>
+    </p>
+    <div>
+    {val errorMsgs:Set[String] = fields.filter(_._2.isError).values.map(_.errorMessage.get).toSet
+     if(!errorMsgs.isEmpty){
+       <div class="alert alert-error">
+         {errorMsgs.map(s => <div>{s}</div>)}
+       </div>
+     }
+    }
+    </div>
+    <form action="result" class="form-horizontal" method="post">
+      <fieldset>
+        <div class={controlGroup(fields, "finalHomeGoals", "finalAwayGoals")}>
+          <label class="control-label" for="finalHomeGoals">Sluttresultat</label>
+          <div class="controls">
+              <input type="text" class="input-micro" id="finalHomeGoals" name="finalHomeGoals" value={fields("finalHomeGoals").value.getOrElse("")}/>
+              -
+              <input type="text" class="input-micro" id="finalAwayGoals" name="finalAwayGoals" value={fields("finalAwayGoals").value.getOrElse("")}/>
+           </div>
+        </div>
+        <div class={controlGroup(fields, "halfTimeHomeGoals", "halfTimeAwayGoals")}>
+          <label class="control-label" for="halfTimeHomeGoals">Pauseresultat</label>
+          <div class="controls">
+              <input type="text" class="input-micro" id="halfTimeHomeGoals" name="halfTimeHomeGoals" value={fields("halfTimeHomeGoals").value.getOrElse("")}/>
+            -
+              <input type="number" class="input-micro" id="halfTimeAwayGoals" name="halfTimeAwayGoals" value={fields("halfTimeAwayGoals").value.getOrElse("")}/>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="attendance">Antall tilskuere</label>
+          <div class="controls">
+              <input type="number" class="input-mini" name="attendance" id="attendance" value={fields("attendance").value.getOrElse("")}/>
+          </div>
+        </div>
+        <!--
+        <div class="control-group">
+          <label class="control-label" for="protestHome">Protest varslet</label>
+          <div class="controls">
+            <input type="checkbox" name="protestHome"/> Hjemmelag
+          </div>
+          <div class="controls">
+            <input type="checkbox" name="protestHome"/> Bortelag
+          </div>
+        </div>
+        -->
+        <div>
+          <span class="label label-warning">NB!</span>
+          Denne forenklete resultatrapporteringen er <strong>ikke egnet</strong> for cup-kamper med ekstraomganger og straffesparkkonkurranse
+        </div>
+        <div class="form-actions">
+          <a class="btn" href="./">Tilbake</a>
+          <button type="submit" class="btn btn-primary">Send inn <sup>beta</sup></button>
+        </div>
+      </fieldset>
+    </form>
   }
 
   def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) = {
@@ -383,11 +462,11 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         {
           if(validationErrors.contains("email")){
             <div class="control-group error">
-                <input type="text" name="email" id="inputError"/>
+                <input type="email" name="email" id="inputError"/>
               <span class="help-inline">E-post må fylles ut</span>
             </div>
           }else{
-              <input type="text" name="email"/>
+              <input type="email" name="email"/>
               <span class="help-inline">Brukes <strong>kun</strong> dersom Dommer-FIKS har viktige meldinger til deg om tjenesten</span>
           }
         }
@@ -440,6 +519,19 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   private def icsLink(start: LocalDateTime, heading: String, location: String, details: String, matchId:String) = {
     val url = "/match.ics?matchid="+matchId;
     <a href={url}>Outlook/iCal</a>
+  }
+
+
+
+   private def controlGroup(fields:Map[String, InputField], parameterNames:String*):String = {
+    if(fields.filterKeys(parameterNames.contains(_)).values.exists(_.isError)){
+      "control-group error"
+    }else{
+      "control-group"
+    }
+  }
+  private def errorInGroup(fields:Map[String, InputField], parameterNames:String*):Boolean = {
+    fields.filterKeys(parameterNames.contains(_)).values.exists(_.isError)
   }
 
 

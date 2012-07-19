@@ -7,10 +7,12 @@ import org.joda.time.format.DateTimeFormat
 import org.joda.time.LocalDate
 import org.jsoup.Connection.Method
 import org.jsoup.safety.Whitelist
+import unfiltered.request.POST
 
 class MatchScraper {
   val COOKIE_NAME = "ASP.NET_SessionId"
   val dateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm")
+  val matchReportUrl = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchDomarrapport.aspx?matchId=s%"
 
   def scrapeMatchInfo(assignmentId: String, loginToken:String) = {
     val cleanAssignmentId = Jsoup.clean(assignmentId, Whitelist.none)
@@ -83,20 +85,61 @@ class MatchScraper {
     upcomingAssignedMatches.toList
   }
 
+  def scrapeMatchResult(fiksId:String, loginToken:String) = {
+    val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(fiksId)
+    val matchResultDocument = Jsoup.connect(url).cookie(COOKIE_NAME, loginToken).timeout(10000).get
+    println(matchResultDocument.select("span#lblMatchRubrik"))
+    val teams = matchResultDocument.select("span#lblMatchRubrik").text
+    val matchId = matchResultDocument.select("span#lblMatchNr").text
+    val resultTable = matchResultDocument.select("div#divMainContent")
+    val finalHomeGoal = stringToOptionOfInt(resultTable.select("input#tbSlutresultatHemmalag").`val`)
+    val finalAwayGoal = stringToOptionOfInt(resultTable.select("input#tbSlutresultatBortalag").`val`)
+    val halfTimeHomeGoal = stringToOptionOfInt(resultTable.select("input#tbHalvtidHemmalag").`val`)
+    val halfTimeAwayGoal = stringToOptionOfInt(resultTable.select("input#tbHalvtidBortalag").`val`)
+    val attendance = resultTable.select("input#tbAntalAskadare").`val`.toInt;
+    val protestHome = resultTable.select("input#ChkProtestHjemme").attr("checked") == "checked"
+    val protestAway = resultTable.select("input#ChkProtestBorte").attr("checked") == "checked"
+
+     MatchResult(fiksId, teams, matchId, finalScore = (finalHomeGoal, finalAwayGoal),
+      halfTimeScore = (halfTimeHomeGoal, halfTimeAwayGoal), attendance=attendance.toInt, protestHomeTeam=protestHome, protestAwayTeam=protestAway)
+  }
+
+  def postMatchResult(matchResult: MatchResult, loginToken:String){
+    val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(matchResult.fiksId)
+    val matchResultForm = Jsoup.connect(url).cookie(COOKIE_NAME,loginToken).get
+
+    val con = Jsoup.connect(url).cookie(COOKIE_NAME, loginToken).timeout(25000)
+    matchResult.halfTimeScore._1.foreach(x => con.data("tbHalvtidHemmalag", x.toString))
+    matchResult.halfTimeScore._2.foreach(x=> con.data("tbHalvtidBortalag", x.toString))
+    matchResult.finalScore._1.foreach(x => con.data("tbSlutresultatHemmalag", x.toString))
+    matchResult.finalScore._2.foreach(x => con.data("tbSlutresultatBortalag", x.toString))
+    con.data("tbAntalAskadare",matchResult.attendance.toString)
+    .data("btnSpara","Lagre")
+    .data("__VIEWSTATE",matchResultForm.getElementById("__VIEWSTATE").attr("value"))
+    .data("__EVENTVALIDATION",matchResultForm.getElementById("__EVENTVALIDATION").attr("value"))
+    .followRedirects(false)
+    con.method(Method.POST).execute()
+  }
+
+
   def postInterestForm(availabilityId: String, comment:String, loginToken:String) {
-  val url = "https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=" + availabilityId
-  val reportInterestForm = Jsoup.connect(url).cookie(COOKIE_NAME,loginToken).get
-  val viewstate = reportInterestForm.getElementById("__VIEWSTATE").attr("value")
-  val eventvalidation = reportInterestForm.getElementById("__EVENTVALIDATION").attr("value")
-  val response = Jsoup.connect(url)
-    .method(Method.POST)
-    .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
-    .data("btnAnmal","Meld inn")
-    .data("tbKommentar",comment)
-    .data("__VIEWSTATE",viewstate)
-    .data("__EVENTVALIDATION",eventvalidation)
-    .referrer(url)
-    .cookie(COOKIE_NAME,loginToken).followRedirects(false).timeout(10000).execute()
+    val url = "https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=" + availabilityId
+    val reportInterestForm = Jsoup.connect(url).cookie(COOKIE_NAME,loginToken).get
+    val viewstate = reportInterestForm.getElementById("__VIEWSTATE").attr("value")
+    val eventvalidation = reportInterestForm.getElementById("__EVENTVALIDATION").attr("value")
+    val response = Jsoup.connect(url)
+      .method(Method.POST)
+      .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
+      .data("btnAnmal","Meld inn")
+      .data("tbKommentar",comment)
+      .data("__VIEWSTATE",viewstate)
+      .data("__EVENTVALIDATION",eventvalidation)
+      .referrer(url)
+      .cookie(COOKIE_NAME,loginToken).followRedirects(false).timeout(25000).execute()
+  }
+
+  private def stringToOptionOfInt(s:String):Option[Int] = {
+    if(s.trim.isEmpty) None else Some(s.toInt)
   }
 
 }

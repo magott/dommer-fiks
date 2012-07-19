@@ -1,13 +1,14 @@
 package no.magott.fiks.data
 
 import scala.concurrent.ops.spawn
-import Scala2GuavaConversions.scalaFunction2GuavaFunction
 import java.util.concurrent.{Executors, TimeUnit}
 import util.Properties
 import com.google.common.cache.{LoadingCache, Cache, CacheLoader, CacheBuilder}
-import org.joda.time.{LocalDateTime, LocalDate}
+import org.joda.time.{DateTimeZone, LocalDateTime, LocalDate}
 
 class MatchService(val matchscraper:MatchScraper) {
+
+  import Scala2GuavaConversions.scalaFunction2GuavaFunction
   val assignedMatchesCache = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((loginToken: String) => matchscraper.scrapeAssignedMatches(loginToken)))
   val availableMatchesCache:LoadingCache[String, List[AvailableMatch]] = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((loginToken:String) => matchscraper.scrapeAvailableMatches(loginToken)))
   val matchInfoCache:Cache[String,AvailableMatch] = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).maximumSize(50).build()
@@ -23,7 +24,7 @@ class MatchService(val matchscraper:MatchScraper) {
   }
 
   def upcomingAssignedMatches(loginToken:String): List[AssignedMatch] = {
-    assignedMatchesCache.get(loginToken).filter(_.date.toLocalDate.isAfter(LocalDate.now.minusDays(1)))
+    assignedMatchesCache.get(loginToken).filter(_.date.toLocalDate.isAfter(LocalDate.now(DateTimeZone.forID("Europe/Oslo")).minusDays(1)))
   }
 
   def availableMatches(loginToken:String):List[AvailableMatch] = {
@@ -33,7 +34,10 @@ class MatchService(val matchscraper:MatchScraper) {
   def reportInterest(availabilityId: String, comment:String, loginToken:String) {
     matchscraper.postInterestForm(availabilityId, comment, loginToken)
     updateCacheWithInterestReported(availabilityId,loginToken)
+  }
 
+  def postMatchResult(result:MatchResult, loginToken:String) {
+    matchscraper.postMatchResult(result, loginToken);
   }
 
   def matchDetails(matchId:String, loginToken:String) = assignedMatches(loginToken).find(_.fiksId == matchId)
@@ -62,6 +66,10 @@ class MatchService(val matchscraper:MatchScraper) {
     }
   }
 
+  def matchResult(matchId:String, loginToken:String):MatchResult = {
+    matchscraper.scrapeMatchResult(matchId,loginToken)
+  }
+
   private def updateCacheWithInterestReported(availabilityId: String, loginToken:String){
     val updatedCacheEntry = availableMatchesCache.get(loginToken).map(a => if(a.availabilityId == Some(availabilityId)) a.copy(availabilityId = None) else a )
     availableMatchesCache.put(loginToken, updatedCacheEntry)
@@ -85,5 +93,7 @@ class MatchService(val matchscraper:MatchScraper) {
       }
     )
   }
+
+
 
 }
