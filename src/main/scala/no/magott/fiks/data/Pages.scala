@@ -90,7 +90,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     val schemeAndUrl = scheme.getOrElse("http") +"://" + url
     val deleteCalUrl = schemeAndUrl+"&action=delete"
     val resetCalIdUrl = schemeAndUrl+"&action=reset"
-    val webcalUrl = if(XForwardProto.unapply(req).isDefined) "webcals://"+url else "webcal://+url"
+    val webcalUrl = if(XForwardProto.unapply(req).isDefined) "webcal://"+url else "webcal://+url"
     val googleCalUrl = "http://www.google.com/calendar/render?cid=%s".format(webcalUrl)
     emptyPage(
       <legend>Din kalender</legend>
