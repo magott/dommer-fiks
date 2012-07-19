@@ -230,7 +230,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       </tr>
       <tr>
         <th>Mer info</th>
-        <td><a href={"http://www.fotball.no/System-pages/Kampfakta/?matchId="+m.fiksId} target="_blank">Kampinfo fra fotball.no</a></td>
+        <td><a href={m.externalMatchInfoUrl} target="_blank">Kampinfo fra fotball.no</a></td>
       </tr>
       <tr>
         <th></th>

@@ -10,6 +10,7 @@ case class AvailableMatch(category: String, tournament: String, date: LocalDateT
 case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String, teams:String, venue:String, referees:String, fiksId:String){
   lazy val refereeTuples : Array[(String,String)] = referees.split('(').drop(1).map(s=> (s.split(')')(0) -> s.split(')')(1).trim))
   def isReferee = refereeTuples.find(_._1 == "Dommer").exists(!_._2.contains(","))
+  def externalMatchInfoUrl = "http://www.fotball.no/System-pages/Kampfakta/?matchId=%s".format(fiksId)
 }
 case class MatchResult(fiksId:String, teams:String, matchId:String, finalScore:(Option[Int],Option[Int]) = (None,None), halfTimeScore:(Option[Int],Option[Int]) = (None,None),
                        attendance:Int = 0, firstHalfAddedTime:Option[Int] = None, secondHalfAddedTime:Option[Int] = None,
