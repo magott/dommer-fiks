@@ -266,15 +266,15 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <div class={controlGroup(fields, "finalHomeGoals", "finalAwayGoals")}>
           <label class="control-label" for="finalHomeGoals">Sluttresultat</label>
           <div class="controls">
-              <input type="text" class="input-micro" id="finalHomeGoals" name="finalHomeGoals" value={fields("finalHomeGoals").value.getOrElse("")}/>
+              <input type="number" class="input-micro" id="finalHomeGoals" name="finalHomeGoals" value={fields("finalHomeGoals").value.getOrElse("")}/>
               -
-              <input type="text" class="input-micro" id="finalAwayGoals" name="finalAwayGoals" value={fields("finalAwayGoals").value.getOrElse("")}/>
+              <input type="number" class="input-micro" id="finalAwayGoals" name="finalAwayGoals" value={fields("finalAwayGoals").value.getOrElse("")}/>
            </div>
         </div>
         <div class={controlGroup(fields, "halfTimeHomeGoals", "halfTimeAwayGoals")}>
           <label class="control-label" for="halfTimeHomeGoals">Pauseresultat</label>
           <div class="controls">
-              <input type="text" class="input-micro" id="halfTimeHomeGoals" name="halfTimeHomeGoals" value={fields("halfTimeHomeGoals").value.getOrElse("")}/>
+              <input type="number" class="input-micro" id="halfTimeHomeGoals" name="halfTimeHomeGoals" value={fields("halfTimeHomeGoals").value.getOrElse("")}/>
             -
               <input type="number" class="input-micro" id="halfTimeAwayGoals" name="halfTimeAwayGoals" value={fields("halfTimeAwayGoals").value.getOrElse("")}/>
           </div>
