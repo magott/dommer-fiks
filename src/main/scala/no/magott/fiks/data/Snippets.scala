@@ -235,7 +235,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       <tr>
         <th></th>
         <td>
-          <a class="btn btn-primary" href="mymatches"><i class="icon-circle-arrow-left icon-white"></i> Tilbake</a>
+          <a class="btn btn-primary" href="/fiks/mymatches"><i class="icon-circle-arrow-left icon-white"></i> Tilbake</a>
         </td>
       </tr>
     </table>
