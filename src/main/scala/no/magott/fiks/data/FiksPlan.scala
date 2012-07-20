@@ -23,14 +23,14 @@ class FiksPlan(matchservice: MatchService) extends Plan {
   }
 
   val matchInfo = Intent {
-    case r@Path(Seg("fiks" :: "mymatches" :: matchId :: "result" :: Nil)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r,{
-      val matchOption = matchservice.assignedMatches(loginToken).find(_.fiksId == matchId)
-      if(matchOption.isEmpty){
+    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "result" :: Nil)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r,{
+      val matchOption = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId)
+      if(matchOption.isEmpty || !matchOption.get.isReferee){
         Forbidden ~> Html5(Pages(r).forbidden)
       }else{
         r match {
           case GET(_) => redirectToLoginIfTimeout(r, {
-            val matchresult = matchservice.matchResult(matchId, loginToken)
+            val matchresult = matchservice.matchResult(fiksId, loginToken)
             Html5(Pages(r).assignedMatchResult(matchresult, matchresult.inputFields))
           })
           case POST(_) & Params(params) => redirectToLoginIfTimeout(r, {
@@ -38,7 +38,7 @@ class FiksPlan(matchservice: MatchService) extends Plan {
             if(IsBetaUser.unapply(r).isEmpty){
               Forbidden ~> Html5(Pages(r).betaOnly)
             }else{
-              val matchresult = matchservice.matchResult(matchId, loginToken)
+              val matchresult = matchservice.matchResult(fiksId, loginToken)
               handleSubmitMatchResult(r, params, matchresult,loginToken)
             }
           })
