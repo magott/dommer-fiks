@@ -50,7 +50,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
           og lagret av Dommer-FIKS, mer informasjon om dette får du før oppretter en slik kalender. Dersom du ikke
           oppretter kalender vil ditt brukernavn og passord ikke bli lagret av Dommer-FIKS.
         </p>
-        <h3>Søtt siden</h3>
+        <h3>Støtt siden</h3>
         <p>
           Bruker du Dommer-FIKS flittig? Fornøyd med kalenderfunksjonaliteten? Lyst til å støtte utvikleren av siden?
           Det er ingen direkte kostnader knyttet til utviklingen av Dommer-FIKS, men funksjonalitet som kalender og resultatrapportering

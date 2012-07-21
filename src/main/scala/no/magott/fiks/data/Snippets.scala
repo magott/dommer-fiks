@@ -241,7 +241,6 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     </table>
   }
 
-  //TODO teams and matchid can be retrieved when scraping matchresult - add to matchresult and remove assignedmatch
   def assignedMatchResultForm(r: MatchResult, fields:Map[String, InputField] = Map.empty) = {
     <ul class="nav nav-tabs">
       <li class="inactive">
@@ -517,7 +516,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   }
 
   private def icsLink(start: LocalDateTime, heading: String, location: String, details: String, matchId:String) = {
-    val url = "/match.ics?matchid="+matchId;
+    val url = "/match.ics?matchid="+matchId
     <a href={url}>Outlook/iCal</a>
   }
 
