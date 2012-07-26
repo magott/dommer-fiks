@@ -37,6 +37,9 @@ class MatchService(val matchscraper:MatchScraper) {
   }
 
   def postMatchResult(result:MatchResult, loginToken:String) {
+    if(result.isDeletionRequired){
+      matchscraper.deleteMatchResult(result.fiksId, result.requiredDeletions, loginToken)
+    }
     matchscraper.postMatchResult(result, loginToken);
   }
 

@@ -1,0 +1,786 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+
+<html>
+<head>
+<title>MatchResultat</title>
+<meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1" />
+<meta name="CODE_LANGUAGE" content="C#" />
+<meta name="vs_defaultClientScript" content="JavaScript" />
+<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+<link href="../Css/layers.css" type="text/css" rel="stylesheet" />
+<link href="../Css/styles.css" type="text/css" rel="stylesheet" />
+<script language="javascript" type="text/javascript">
+
+function onKeyUp(textboxId) {
+    try {
+        var textbox = document.getElementById(textboxId);
+        var i = textbox.value.length;
+        // Kolla först om inmatat tecken ar ':'. I så fall tar vi bort det
+        if (textbox.value.substring(i - 2, 1) == ':') {
+            textbox.value = textbox.value.substring(0, i - 2)
+        }
+        else {
+            if (i == 2) {
+                textbox.value = textbox.value + ':';
+            }
+        }
+    }
+    catch (ex) {
+    }
+}
+
+//Funktionen sorterar tabellen beroende på vilken kolumn man valt.
+function toggleSortering(sorteringstyp) {
+    var sorteringsordningGammal = new String();
+    var sorteringsRiktningFallande = false;
+    sorteringsordningGammal = document.Form1.hiddenSorteringsordning.value;
+
+    // Om vi sorterar på samma kolumn som innan....
+    if (sorteringsordningGammal == sorteringstyp) {
+        //Vi har redan den här sorteringsordningen och ska byta riktning
+        if (document.Form1.hiddenSorteringsRiktningFallande.value == 'True')
+            sorteringsRiktningFallande = true;
+        // Byt riktnig
+        sorteringsRiktningFallande = !sorteringsRiktningFallande;
+    }
+    else {
+        // Vi har inte haft någon explicit sortering på denna
+        // sorteringsordning innan.
+        // Default: Stigande
+        sorteringsRiktningFallande = false;
+    }
+
+    // Skicka den nya sorteringen till servern. Bind först till
+    // de gömda fälten.
+    document.Form1.hiddenSorteringsordning.value = sorteringstyp;
+    if (sorteringsRiktningFallande) {
+        document.Form1.hiddenSorteringsRiktningFallande.value = 'True';
+    }
+    else {
+        document.Form1.hiddenSorteringsRiktningFallande.value = 'False';
+    }
+    document.Form1.submit();
+}
+
+//Funktion för att radera ett resultat
+function RaderaResultat() {
+    if (confirm('Vil du slette de markerte resultatene?')) {
+        //Sparar funktion i fältet hiddenFunktion
+        document.getElementById('hiddenFunktion').value = 'radera';
+        //Laddar om sidan
+        document.Form1.submit();
+    }
+}
+
+//Funktion som nollställer och disablar alla textboxar
+function enablaTextboxar(kontroll) {
+    //Hämtar kontrollerna
+    var uppskjutenKontroll = document.getElementById('cbUppskjuten');
+    var woKontroll = document.getElementById('cbWO');
+    var owKontroll = document.getElementById('cbOW');
+    var wwKontroll = document.getElementById('cbWW');
+    var hiddenFalt = document.getElementById('hiddenResultatTyp');
+
+    // Om man klickar på Uppskjuten
+    if (kontroll == 'cbUppskjuten') {
+        // Om någon av de andra knapparna är ibockade, bocka av dem
+        if (woKontroll.checked || owKontroll.checked || wwKontroll.checked) {
+            woKontroll.checked = '';
+            owKontroll.checked = '';
+            wwKontroll.checked = '';
+        }
+    }
+
+    //Om man klickar på WO
+    if (kontroll == 'cbWO') {
+        //Om någon av de övriga radioknapparna än rbWO är markerade avmarkeras dem. Annars vet man
+        //att man vill avmarkera rbWO
+        if (owKontroll.checked || wwKontroll.checked || uppskjutenKontroll.checked) {
+            //Avmarkera rbOW
+            owKontroll.checked = '';
+            //Avmarkera rbWW
+            wwKontroll.checked = '';
+            // Avmarkera uppskjuten
+            uppskjutenKontroll.checked = '';
+        }
+        else {
+            //Om hiddenfältet innehåller denna checkbox namn vet vi att den var ikryssad sedan tidigare och ska kryssas ur ny
+            if (hiddenFalt.value == 'cbWO') {
+                //Avmarkera rbWO
+                woKontroll.checked = '';
+                //Töm kontroll så att inte värdet sätts i hiddenfältet
+                kontroll = '';
+            }
+            else {
+                //Markera rbWO
+                woKontroll.checked = true;
+            }
+        }
+    }
+
+    //Om man klickar på OW
+    if (kontroll == 'cbOW') {
+        //Om någon av de övriga radioknapparna än rbOW är markerade avmarkeras dem. Annars vet man
+        //att man vill avmarkera rbOW
+        if (woKontroll.checked || wwKontroll.checked || uppskjutenKontroll.checked) {
+            //Avmarkera rbOW
+            woKontroll.checked = '';
+            //Avmarkera rbWW
+            wwKontroll.checked = '';
+            // Avmarkera uppskjuten
+            uppskjutenKontroll.checked = '';
+        }
+        else {
+            //Om hiddenfältet innehåller denna checkbox namn vet vi att den var ikryssad sedan tidigare och ska kryssas ur ny
+            if (hiddenFalt.value == 'cbOW') {
+                //Avmarkera rbOW
+                owKontroll.checked = '';
+                //Töm kontroll så att inte värdet sätts i hiddenfältet
+                kontroll = '';
+            }
+            else {
+                //Markera rbOW
+                owKontroll.checked = true;
+            }
+        }
+    }
+
+    //Om man klickar på WW
+    if (kontroll == 'cbWW') {
+        //Om någon av de övriga radioknapparna än rbWW är markerade avmarkeras dem. Annars vet man
+        //att man vill avmarkera rbWW
+        if (woKontroll.checked || owKontroll.checked || uppskjutenKontroll.checked) {
+            //Avmarkera rbOW
+            owKontroll.checked = '';
+            //Avmarkera rbWO
+            woKontroll.checked = '';
+            // Avmarkera uppskjuten
+            uppskjutenKontroll.checked = '';
+        }
+        else {
+            //Om hiddenfältet innehåller denna checkbox namn vet vi att den var ikryssad sedan tidigare och ska kryssas ur ny
+            if (hiddenFalt.value == 'cbWW') {
+                //Avmarkera rbWW
+                wwKontroll.checked = '';
+                //Töm kontroll så att inte värdet sätts i hiddenfältet
+                kontroll = '';
+            }
+            else {
+                //Markera rbWW
+                wwKontroll.checked = true;
+            }
+        }
+    }
+
+    //Sätter kontrollens namn i hiddenResultatTyp
+    hiddenFalt.value = kontroll;
+
+
+
+    //Nollställ och disabla alla kontroller om någon av wwKontroll, owKontroll eller woKontroll är markerade
+    if (woKontroll.checked || owKontroll.checked || wwKontroll.checked || uppskjutenKontroll.checked) {
+        if (woKontroll.checked) {
+            document.getElementById('tbSlutresultatHemmalag').innerText = '3';
+            document.getElementById('tbSlutresultatBortalag').innerText = '0';
+        }
+
+        if (owKontroll.checked) {
+            document.getElementById('tbSlutresultatHemmalag').innerText = '0';
+            document.getElementById('tbSlutresultatBortalag').innerText = '3';
+        }
+
+        if (wwKontroll.checked) {
+            document.getElementById('tbSlutresultatHemmalag').innerText = '0';
+            document.getElementById('tbSlutresultatBortalag').innerText = '0';
+        }
+
+        if (uppskjutenKontroll.checked) {
+            document.getElementById('tbSlutresultatHemmalag').innerText = '';
+            document.getElementById('tbSlutresultatBortalag').innerText = '';
+        }
+
+        document.getElementById('tbHalvtidHemmalag').innerText = '';
+        document.getElementById('tbHalvtidBortalag').innerText = '';
+        document.getElementById('tbFulltidHemmalag').innerText = '';
+        document.getElementById('tbFulltidBortalag').innerText = '';
+        document.getElementById('tbForlangningHemmalag').innerText = '';
+        document.getElementById('tbForlangningBortalag').innerText = '';
+        document.getElementById('tbStraffarHemmalag').innerText = '';
+        document.getElementById('tbStraffarBortalag').innerText = '';
+        document.getElementById('tbAntalAskadare').innerText = '';
+
+        document.getElementById('tbSlutresultatHemmalag').disabled = 'disabled';
+        document.getElementById('tbSlutresultatBortalag').disabled = 'disabled';
+        document.getElementById('tbHalvtidHemmalag').disabled = 'disabled';
+        document.getElementById('tbHalvtidBortalag').disabled = 'disabled';
+        document.getElementById('tbFulltidHemmalag').disabled = 'disabled';
+        document.getElementById('tbFulltidBortalag').disabled = 'disabled';
+        document.getElementById('tbForlangningHemmalag').disabled = 'disabled';
+        document.getElementById('tbForlangningBortalag').disabled = 'disabled';
+        document.getElementById('tbStraffarHemmalag').disabled = 'disabled';
+        document.getElementById('tbStraffarBortalag').disabled = 'disabled';
+        document.getElementById('tbAntalAskadare').disabled = 'disabled';
+
+        document.getElementById('tbAvsparkKl').disabled = 'disabled';
+        document.getElementById('tbPause').disabled = 'disabled';
+        document.getElementById('tbKampslutt').disabled = 'disabled';
+        document.getElementById('tbTillegg1Omgang').disabled = 'disabled';
+        document.getElementById('tbTillegg2Omgang').disabled = 'disabled';
+    }
+    else {
+        document.getElementById('tbSlutresultatHemmalag').disabled = '';
+        document.getElementById('tbSlutresultatBortalag').disabled = '';
+        document.getElementById('tbHalvtidHemmalag').disabled = '';
+        document.getElementById('tbHalvtidBortalag').disabled = '';
+        document.getElementById('tbFulltidHemmalag').disabled = '';
+        document.getElementById('tbFulltidBortalag').disabled = '';
+        document.getElementById('tbForlangningHemmalag').disabled = '';
+        document.getElementById('tbForlangningBortalag').disabled = '';
+        document.getElementById('tbStraffarHemmalag').disabled = '';
+        document.getElementById('tbStraffarBortalag').disabled = '';
+
+        document.getElementById('tbAvsparkKl').disabled = '';
+        document.getElementById('tbPause').disabled = '';
+        document.getElementById('tbKampslutt').disabled = '';
+        document.getElementById('tbTillegg1Omgang').disabled = '';
+        document.getElementById('tbTillegg2Omgang').disabled = '';
+
+    }
+}
+
+//Funktion som kontrollerar om alla eller ingen checkbox är ikryssad.
+function kontrolleraMarkeradeResultat(tabellNamn, cbNamn) {
+    //Hämtar tabellen som innehåller repeatern med checkboxarna
+    var table = document.getElementById(tabellNamn);
+    //Får en lista med alla input-taggar
+    var cbs = table.getElementsByTagName("input");
+    //Kontrollerar antalet input-taggar
+    var l = cbs.length;
+    //Skapar variabel
+    var n = 1;
+    //Loopar igenom listan med input-taggar
+    for (var i = 0; i < l; i++) {
+        //Om det inte är checkboxen som markerar alla
+        if (cbs[i].id != cbNamn) {
+            var namnPaCheckbox = cbs[i].id;
+
+            //Kontrollerar om checkboxens namn startar med texten "cbMatchresultatVal"
+            // eftersom det bara är de som ska påverkas
+            if (namnPaCheckbox.substring(0, 18) == 'cbMatchresultatVal') {
+                //Kollar om checkboxen är true
+                if (cbs[i].checked == true) {
+                    //Räknar upp variablen n med 1 för varje checkbox som är checkad
+                    n += 1;
+                }
+            }
+        }
+    }
+
+    //Om det finns lika många checkboxar som är icheckade som det finns checkboxar i listan ska "cbMarkeraAlla" kryssas i.
+    if (n == l) {
+        document.getElementById(cbNamn).checked = true;
+    }
+    //Om inte alla checkboxar som finns i listan är icheckade ska "cbMarkeraAlla" INTE kryssas i.
+    else {
+        document.getElementById(cbNamn).checked = false;
+    }
+}
+
+//Funktion som markerar alla resultat men inte övriga checkboxar
+function markeraAllaResultat(tabellNamn, cbNamn) {
+    //Hämtar tabellen som innehåller repeatern med checkboxarna
+    var table = document.getElementById(tabellNamn);
+    //Får en lista med alla input-taggar
+    var cbs = table.getElementsByTagName("input");
+    //Kontrollerar antalet input-taggar
+    var l = cbs.length;
+
+    //Kontrollerar om cbNamn är checkad eller inte. Om den är det ska alla checkboxar markeras
+    if (document.getElementById(cbNamn).checked == true) {
+        //Loopar igenom listan med input-taggar
+        for (var i = 0; i < l; i++) {
+            //Om det inte är checkboxen som markerar alla
+            if (cbs[i].id != cbNamn) {
+                var namnPaCheckbox = cbs[i].id;
+
+                // Kontrollerar om checkboxens namn startar med texten "cbMatchresultatVal"
+                // eftersom det bara är de som ska påverkas
+                if (namnPaCheckbox.substring(0, 18) == 'cbMatchresultatVal') {
+                    //Kollar om checkboxen är false
+                    if (cbs[i].checked == false) {
+                        //Om checkboxen inte är disablad
+                        if (cbs[i].disabled == false) {
+                            //Sätt checkboxen till checked=true
+                            var c = cbs[i];
+                            c.checked = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    //...annars ska alla checkboxar markeras
+    if (document.getElementById(cbNamn).checked == false) {
+        //Loopar igenom listan med input-taggar
+        for (var i = 0; i < l; i++) {
+            //Om det inte är checkboxen som markerar alla
+            if (cbs[i].id != cbNamn) {
+                var namnPaCheckbox = cbs[i].id;
+
+                //Kontrollerar om checkboxens namn startar med texten "cbMatchresultatVal"
+                // eftersom det bara är de som ska påverkas
+                if (namnPaCheckbox.substring(0, 18) == 'cbMatchresultatVal') {
+                    //Kollar om checkboxen är true
+                    if (cbs[i].checked == true) {
+                        //Sätt checkboxen till checked=false
+                        var c = cbs[i];
+                        c.checked = false;
+                    }
+                }
+            }
+        }
+    }
+}
+
+</script>
+<!--Ger möjlighet att anropa generella javascriptfunktioner som finns i "../JS/generellaFunktioner.js"-->
+<script language="javascript" type="text/javascript" src="../JS/generellaFunktioner.js">
+    //Funktioner från detta formulär som används där är:
+    //visaOchDoljVanstermenyFranCookie();
+    //visaOchDoljVanstermeny();
+    //visaHjalp();
+</script>
+</head>
+<body>
+<form name="Form1" method="post" action="MatchResultat.aspx?matchId=5486728&amp;sparaflik=1&amp;valjejflik=1" onsubmit="javascript:return WebForm_OnSubmit();" id="Form1">
+<div>
+    <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+    <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+    <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTY5MDI4ODAyOQ9kFgJmD2QWGgIBDw8WAh4EVGV4dAULMDMxMTkzMDEwMzRkZAICDw8WAh8ABR3DmHZyZXZvbGwgSG9zbGUgMiAtIELDpnJ1bSAzIGRkAgMPZBYKZg8WAh4Hb25jbGljawVsZG9jdW1lbnQubG9jYXRpb24uaHJlZj0nLi4vTWF0Y2gvTWF0Y2hVcHBnaWZ0ZXIuYXNweD9tYXRjaElkPTU0ODY3Mjgmc3BhcmFmbGlrPTEmdmFsamVqZmxpaz0xJzsgcmV0dXJuIGZhbHNlFgICAQ8PFgIeC05hdmlnYXRlVXJsBUUuLi9NYXRjaC9NYXRjaFVwcGdpZnRlci5hc3B4P21hdGNoSWQ9NTQ4NjcyOCZzcGFyYWZsaWs9MSZ2YWxqZWpmbGlrPTFkZAICDxYCHwEFaWRvY3VtZW50LmxvY2F0aW9uLmhyZWY9Jy4uL01hdGNoL01hdGNoRG9tYXJlLmFzcHg/bWF0Y2hJZD01NDg2NzI4JnNwYXJhZmxpaz0xJnZhbGplamZsaWs9MSc7IHJldHVybiBmYWxzZRYCAgEPDxYCHwIFQi4uL01hdGNoL01hdGNoRG9tYXJlLmFzcHg/bWF0Y2hJZD01NDg2NzI4JnNwYXJhZmxpaz0xJnZhbGplamZsaWs9MWRkAgQPFgIfAQVrZG9jdW1lbnQubG9jYXRpb24uaHJlZj0nLi4vTWF0Y2gvTWF0Y2hSZXN1bHRhdC5hc3B4P21hdGNoSWQ9NTQ4NjcyOCZzcGFyYWZsaWs9MSZ2YWxqZWpmbGlrPTEnOyByZXR1cm4gZmFsc2UWAgIBDw8WAh8CBUQuLi9NYXRjaC9NYXRjaFJlc3VsdGF0LmFzcHg/bWF0Y2hJZD01NDg2NzI4JnNwYXJhZmxpaz0xJnZhbGplamZsaWs9MWRkAgYPFgIeB1Zpc2libGVoFgICAQ8PFgIfA2hkZAIIDxYCHwNoFgICAQ8PFgIfA2hkZAIEDxYCHgdjaGVja2VkZGQCBQ8WAh4IZGlzYWJsZWQFCGRpc2FibGVkZAIGDxYCHwUFCGRpc2FibGVkZAIHDxYCHwUFCGRpc2FibGVkZAIIDw8WAh4HRW5hYmxlZGdkZAIJDw8WAh8GZ2RkAgoPDxYCHwZnZGQCCw8PFgIfBmdkZAIfDxYCHgVjbGFzcwUNYWt0aXZTdGlnYW5kZWQCIg8WAh4LXyFJdGVtQ291bnQCAhYEZg9kFgJmDxUSBzIzMjUzNzYHMjMyNTM3Ng1QYXVzZXJlc3VsdGF0ATQBMQcyMzI1Mzc2BzIzMjUzNzYABzIzMjUzNzYHMjMyNTM3NgAHMjMyNTM3NgcyMzI1Mzc2ABFTdmVycmUgTGllIE5vcmRieRtodHRwOi8vd3d3Lmd1bGVzaWRlci5uby8/cT0AAGQCAQ9kFgJmDxUSBzIzMjUzNzUHMjMyNTM3NQ1TbHV0dHJlc3VsdGF0ATcBMgcyMzI1Mzc1BzIzMjUzNzUABzIzMjUzNzUHMjMyNTM3NQAHMjMyNTM3NQcyMzI1Mzc1ABFTdmVycmUgTGllIE5vcmRieRtodHRwOi8vd3d3Lmd1bGVzaWRlci5uby8/cT0AAGQYAQUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgIFEENoa1Byb3Rlc3RIamVtbWUFD0Noa1Byb3Rlc3RCb3J0ZRZxsqFwPPeG7eI1ofCHsEvmibxD" />
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+    var theForm = document.forms['Form1'];
+    if (!theForm) {
+        theForm = document.Form1;
+    }
+    function __doPostBack(eventTarget, eventArgument) {
+        if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+            theForm.__EVENTTARGET.value = eventTarget;
+            theForm.__EVENTARGUMENT.value = eventArgument;
+            theForm.submit();
+        }
+    }
+    //]]>
+</script>
+
+
+<script src="/FOGISDOMARKLIENT/WebResource.axd?d=ZfVH3hXJnXkDn-tDkjrYlzFi9pNVshczvTtHaGYlp8Ul9DOWTRkZZozdDVufkzqREpnvuG20X838guKJpOvSc9aeM7c1&amp;t=634623371508826588" type="text/javascript"></script>
+
+<script language="javascript" type="text/javascript" src="../JS/tabSelect.js"></script>
+<script src="/FOGISDOMARKLIENT/WebResource.axd?d=32kKF_EPvFlNK_tWWnSeGrh94IHf1ROfapTx9ou7wvAfPFuJinI_dsKb3re34SWC9BEZVX1s_cpo1ugxkXGSbTPX79g1&amp;t=634623371508826588" type="text/javascript"></script>
+<script type="text/javascript">
+    //<![CDATA[
+    function WebForm_OnSubmit() {
+        if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+        return true;
+    }
+    //]]>
+</script>
+
+<div>
+
+    <input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWHQKq3u3xAgKGp4C7AwL0mvv+CALM5IkCAvSam9gOAs30koUJAoCxmcYNAofWrPMHAsSM5a0JAuqymqUKAq2JkpADAumksc8HAo7x2vIIArOyt+0EAs706/0IAu32tZwDAs/imp8GAqTdlpILAtaZ880BAp2t1xoCna3DFQL8i74BAu+Gy6YDAuyO5PkLApf5oqAOAq7X9b0IAojU/IUIAteEge0CAsvGs84P83xefNgAlm+FURbqx8nlXKiGutY=" />
+</div>
+<div id="divPageContainer" class="divPageContainerClass">
+<div id="divMain" class="divMainClass">
+<div id="divError">
+    <span id="lblError"></span>
+</div>
+<h1>Kamp  - <span id="lblMatchNr">03119301034</span> -  <span id="lblMatchRubrik">Øvrevoll Hosle 2 - Bærum 3 </span></h1>
+<div id="divHorisontalMenu">
+    <div id="divHorisontalMenuContainer" class="divHorisontalMenuContainerClass">
+        <div id="MatchMeny1_divMatchUppgifterTab" class="tabAktiv90" onclick="document.location.href='../Match/MatchUppgifter.aspx?matchId=5486728&amp;sparaflik=1&amp;valjejflik=1'; return false">
+            <a id="MatchMeny1_linkMatchUppgifter" class="tabMenyLank" href="MatchUppgifter.aspx?matchId=5486728&amp;sparaflik=1&amp;valjejflik=1">Opplysninger</a>
+        </div>
+        <div id="MatchMeny1_divMatchDomareTab" class="tabInaktiv80" onclick="document.location.href='../Match/MatchDomare.aspx?matchId=5486728&amp;sparaflik=1&amp;valjejflik=1'; return false">
+            <a id="MatchMeny1_linkMatchDomare" class="tabMenyLank" href="MatchDomare.aspx?matchId=5486728&amp;sparaflik=1&amp;valjejflik=1">Dommer</a>
+        </div>
+        <div id="MatchMeny1_divMatchResultatTab" class="tabInaktiv90" onclick="document.location.href='../Match/MatchResultat.aspx?matchId=5486728&amp;sparaflik=1&amp;valjejflik=1'; return false">
+            <a id="MatchMeny1_linkMatchResultat" class="tabMenyLank" href="MatchResultat.aspx?matchId=5486728&amp;sparaflik=1&amp;valjejflik=1">Resultat</a>
+        </div>
+
+
+        <div class="menySlut"></div>
+
+    </div>
+</div>
+<div id="divMainContent" class="divMainContentClass">
+
+<table>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            Utsatt
+        </th>
+        <td>
+            <input name="cbUppskjuten" type="checkbox" id="cbUppskjuten" class="checkbox" onclick="enablaTextboxar('cbUppskjuten');" disabled="disabled" />
+        </td>
+    </tr>
+    <tr height="10px">
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            WO
+        </th>
+        <td>
+            <input name="cbWO" type="checkbox" id="cbWO" class="checkbox" onclick="enablaTextboxar('cbWO');" disabled="disabled" />
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            OW
+        </th>
+        <td>
+            <input name="cbOW" type="checkbox" id="cbOW" class="checkbox" onclick="enablaTextboxar('cbOW');" disabled="disabled" />
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            WW
+        </th>
+        <td>
+            <input name="cbWW" type="checkbox" id="cbWW" class="checkbox" onclick="enablaTextboxar('cbWW');" disabled="disabled" />
+        </td>
+    </tr>
+    <tr height="10px">
+        <td>
+        </td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            Sluttres.
+        </th>
+        <td>
+            <input name="tbSlutresultatHemmalag" type="text" value="7" id="tbSlutresultatHemmalag" class="textbox2tecken" />&nbsp;-&nbsp;<input name="tbSlutresultatBortalag" type="text" value="2" id="tbSlutresultatBortalag" class="textbox2tecken" />
+        </td>
+    </tr>
+    <tr height="10px">
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            Pauseresultat
+        </th>
+        <td>
+            <input name="tbHalvtidHemmalag" type="text" value="4" id="tbHalvtidHemmalag" class="textbox2tecken" />&nbsp;-&nbsp;<input name="tbHalvtidBortalag" type="text" value="1" id="tbHalvtidBortalag" class="textbox2tecken" />
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            Resultat etter full tid
+        </th>
+        <td>
+            <input name="tbFulltidHemmalag" type="text" id="tbFulltidHemmalag" class="textbox2tecken" />&nbsp;-&nbsp;<input name="tbFulltidBortalag" type="text" id="tbFulltidBortalag" class="textbox2tecken" />
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            Res. e.e.o
+        </th>
+        <td>
+            <input name="tbForlangningHemmalag" type="text" id="tbForlangningHemmalag" class="textbox2tecken" />&nbsp;-&nbsp;<input name="tbForlangningBortalag" type="text" id="tbForlangningBortalag" class="textbox2tecken" />
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            Resultat etter straffer
+        </th>
+        <td>
+            <input name="tbStraffarHemmalag" type="text" id="tbStraffarHemmalag" class="textbox2tecken" />&nbsp;-&nbsp;<input name="tbStraffarBortalag" type="text" id="tbStraffarBortalag" class="textbox2tecken" />
+        </td>
+    </tr>
+    <tr class="trAntalAskadare">
+        <th class="horisontalPlaceradEtikett">
+            Antall tilskuere
+        </th>
+        <td>
+            <input name="tbAntalAskadare" type="text" value="3" id="tbAntalAskadare" class="textboxAskadare" />
+            <span id="compValAntalAskadare" style="color:Red;display:none;">*</span>
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            Avspark kl:
+        </th>
+        <td>
+            <input name="tbAvsparkKl" type="text" id="tbAvsparkKl" class="textboxTid" />
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            Pausens varighet:
+        </th>
+        <td>
+            <input name="tbPause" type="text" value="0" id="tbPause" class="textboxTid" />
+            <span id="RangeValidator1" style="color:Red;display:none;">*</span>
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            Kampslutt kl:
+        </th>
+        <td>
+            <input name="tbKampslutt" type="text" id="tbKampslutt" class="textboxTid" />
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            Tilleggstid 1. omgang
+        </th>
+        <td>
+            <input name="tbTillegg1Omgang" type="text" value="0" id="tbTillegg1Omgang" class="textboxTid" />
+            <span id="RangeValidator2" style="color:Red;display:none;">*</span>
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            Tilleggstid 2. omgang
+        </th>
+        <td>
+            <input name="tbTillegg2Omgang" type="text" value="0" id="tbTillegg2Omgang" class="textboxTid" />
+            <span id="RangeValidator3" style="color:Red;display:none;">*</span>
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            Protest varslet fra hjemmelaget
+        </th>
+        <td>
+            <input id="ChkProtestHjemme" type="checkbox" name="ChkProtestHjemme" />
+        </td>
+    </tr>
+    <tr>
+        <th class="horisontalPlaceradEtikett">
+            Protest varslet fra bortelaget
+        </th>
+        <td>
+            <input id="ChkProtestBorte" type="checkbox" name="ChkProtestBorte" />
+        </td>
+    </tr>
+</table>
+<input type="submit" name="btnSpara" value="Lagre" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;btnSpara&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="btnSpara" class="buttonUtanMargin" />
+<p>
+</p>
+<table id="fogisInfoTable" class="fogisInfoTable">
+    <tr>
+        <th class="inaktiv">
+            <input type="checkbox" id="cbMarkeraAlla" name="cbMarkeraAlla" class="checkbox" onclick="markeraAllaResultat('fogisInfoTable', 'cbMarkeraAlla');" />
+        </th>
+        <th id="thResultattyp" class="aktivStigande" onclick="toggleSortering('Resultattyp'); return false">
+            Resultattype</th>
+
+        <th id="thHemmalag" class="inaktiv" onclick="toggleSortering('Hemmalag'); return false">
+            Hjemmemål</th>
+
+        <th id="thBortalag" class="inaktiv" onclick="toggleSortering('Bortalag'); return false">
+            Bortemål</th>
+
+        <th class="inaktivEjKlickbar">
+            WO
+        </th>
+        <th class="inaktivEjKlickbar">
+            OW
+        </th>
+        <th class="inaktivEjKlickbar">
+            WW
+        </th>
+        <th class="inaktivEjKlickbar">
+            Opprettet av
+        </th>
+        <th class="inaktivEjKlickbar">
+            Mobilnr
+        </th>
+        <th class="inaktivEjKlickbar">
+            Notering
+        </th>
+    </tr>
+
+    <tr>
+        <td>
+            <input type="checkbox" id="cbMatchresultatVal2325376"
+                   name="cbMatchresultatVal2325376"
+                   class="checkbox" onclick="kontrolleraMarkeradeResultat('fogisInfoTable', 'cbMarkeraAlla');">
+        </td>
+        <td>
+            Pauseresultat
+        </td>
+        <td class="mittenJusterad">
+            4
+        </td>
+        <td class="mittenJusterad">
+            1
+        </td>
+        <td>
+            <input disabled type="checkbox" class="checkbox" id="cbMatchresultatWO2325376"
+                   name="cbMatchresultatWO2325376"
+                    >
+        </td>
+        <td>
+            <input disabled type="checkbox" class="checkbox" id="cbMatchresultatOW2325376"
+                   name="cbMatchresultatOW2325376"
+                    >
+        </td>
+        <td>
+            <input disabled type="checkbox" class="checkbox" id="cbMatchresultatWW2325376"
+                   name="cbMatchresultatWW2325376"
+                    >
+        </td>
+        <td>
+            Sverre Lie Nordby
+        </td>
+        <td>
+            <a title="Hvem har dette telefonnummeret?" href="http://www.gulesider.no/?q="
+               target="_blank">
+            </a>
+        </td>
+        <td>
+
+        </td>
+    </tr>
+
+    <tr class="alternate">
+        <td>
+            <input type="checkbox" id="cbMatchresultatVal2325375"
+                   name="cbMatchresultatVal2325375"
+                   class="checkbox" onclick="kontrolleraMarkeradeResultat('fogisInfoTable', 'cbMarkeraAlla');">
+        </td>
+        <td>
+            Sluttresultat
+        </td>
+        <td class="mittenJusterad">
+            7
+        </td>
+        <td class="mittenJusterad">
+            2
+        </td>
+        <td>
+            <input disabled type="checkbox" class="checkbox" id="cbMatchresultatWO2325375"
+                   name="cbMatchresultatWO2325375"
+                    >
+        </td>
+        <td>
+            <input disabled type="checkbox" class="checkbox" id="cbMatchresultatOW2325375"
+                   name="cbMatchresultatOW2325375"
+                    >
+        </td>
+        <td>
+            <input disabled type="checkbox" class="checkbox" id="cbMatchresultatWW2325375"
+                   name="cbMatchresultatWW2325375"
+                    >
+        </td>
+        <td>
+            Sverre Lie Nordby
+        </td>
+        <td>
+            <a title="Hvem har dette telefonnummeret?" href="http://www.gulesider.no/?q="
+               target="_blank">
+            </a>
+        </td>
+        <td>
+
+        </td>
+    </tr>
+
+</table>
+<input name="hiddenFunktion" type="hidden" id="hiddenFunktion" />
+<input name="hiddenSorteringsordning" type="hidden" id="hiddenSorteringsordning" value="Resultattyp" />
+<input name="hiddenSorteringsRiktningFallande" type="hidden" id="hiddenSorteringsRiktningFallande" value="False" />
+<input name="hiddenResultatTyp" type="hidden" id="hiddenResultatTyp" />
+</div>
+<div id="divMainFooter" class="divMainFooterClass">
+    <div id="ValidationSummary1" class="error" style="color:Red;display:none;">
+
+    </div>
+    <input name="btnRadera" type="button" id="btnRadera" value="Slett" class="button" onclick="RaderaResultat();" />
+</div>
+
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+    var Page_ValidationSummaries =  new Array(document.getElementById("ValidationSummary1"));
+    var Page_Validators =  new Array(document.getElementById("compValAntalAskadare"), document.getElementById("RangeValidator1"), document.getElementById("RangeValidator2"), document.getElementById("RangeValidator3"));
+    //]]>
+</script>
+
+<script type="text/javascript">
+    //<![CDATA[
+    var compValAntalAskadare = document.all ? document.all["compValAntalAskadare"] : document.getElementById("compValAntalAskadare");
+    compValAntalAskadare.controltovalidate = "tbAntalAskadare";
+    compValAntalAskadare.errormessage = "Antal åskådare måste vara ett icke-negativt heltal";
+    compValAntalAskadare.display = "Dynamic";
+    compValAntalAskadare.type = "Integer";
+    compValAntalAskadare.evaluationfunction = "CompareValidatorEvaluateIsValid";
+    compValAntalAskadare.valuetocompare = "0";
+    compValAntalAskadare.operator = "GreaterThanEqual";
+    var RangeValidator1 = document.all ? document.all["RangeValidator1"] : document.getElementById("RangeValidator1");
+    RangeValidator1.controltovalidate = "tbPause";
+    RangeValidator1.errormessage = "Angi en verdi mellom 0 og 120 minutter";
+    RangeValidator1.display = "Dynamic";
+    RangeValidator1.type = "Integer";
+    RangeValidator1.evaluationfunction = "RangeValidatorEvaluateIsValid";
+    RangeValidator1.maximumvalue = "120";
+    RangeValidator1.minimumvalue = "0";
+    var RangeValidator2 = document.all ? document.all["RangeValidator2"] : document.getElementById("RangeValidator2");
+    RangeValidator2.controltovalidate = "tbTillegg1Omgang";
+    RangeValidator2.errormessage = "Angi en verdi mellom 0 og 120 minutter";
+    RangeValidator2.display = "Dynamic";
+    RangeValidator2.type = "Integer";
+    RangeValidator2.evaluationfunction = "RangeValidatorEvaluateIsValid";
+    RangeValidator2.maximumvalue = "120";
+    RangeValidator2.minimumvalue = "0";
+    var RangeValidator3 = document.all ? document.all["RangeValidator3"] : document.getElementById("RangeValidator3");
+    RangeValidator3.controltovalidate = "tbTillegg2Omgang";
+    RangeValidator3.errormessage = "Angi en verdi mellom 0 og 120 minutter";
+    RangeValidator3.display = "Dynamic";
+    RangeValidator3.type = "Integer";
+    RangeValidator3.evaluationfunction = "RangeValidatorEvaluateIsValid";
+    RangeValidator3.maximumvalue = "120";
+    RangeValidator3.minimumvalue = "0";
+    //]]>
+</script>
+
+<script language='javascript' src='../JS/generellaFunktioner.js'></script><script language='javascript'>hideMsgDiv();</script><script language="javascript" type="text/javascript">
+    setLinks(3);
+</script>
+<script type="text/javascript">
+    //<![CDATA[
+
+    var Page_ValidationActive = false;
+    if (typeof(ValidatorOnLoad) == "function") {
+        ValidatorOnLoad();
+    }
+
+    function ValidatorOnSubmit() {
+        if (Page_ValidationActive) {
+            return ValidatorCommonOnSubmit();
+        }
+        else {
+            return true;
+        }
+    }
+    //]]>
+</script>
+</form>
+</body>
+</html>

@@ -5,7 +5,7 @@ import org.joda.time.{DateTimeZone, DateTime, LocalDateTime}
 import unfiltered.request.{Path, Seg, HttpRequest}
 import javax.servlet.http.HttpServletRequest
 import MatchStuff.allMatches
-import validation.InputField
+import validation.FormField
 
 case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
@@ -241,7 +241,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     </table>
   }
 
-  def assignedMatchResultForm(r: MatchResult, fields:Map[String, InputField] = Map.empty) = {
+  def assignedMatchResultForm(r: MatchResult, fields:Map[String, FormField] = Map.empty) = {
     <ul class="nav nav-tabs">
       <li class="inactive">
         <a href="./">Info</a>
@@ -305,6 +305,23 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         </div>
       </fieldset>
     </form>
+    <div>
+      {
+      if(!r.resultReports.isEmpty){
+        <h4>Historikk</h4>
+          <table class="table table-striped table-bordered table-condensed">
+            <thead>
+              <tr><th>Resultattype</th><th>Resultat</th><th>Rapportert av</th></tr>
+            </thead>
+            <tbody>
+              {
+              r.resultReports.map{res => <tr><td>{res.resultType}</td><td>{res.score.toLiteral}</td><td>{res.reporter}</td></tr>}
+              }
+            </tbody>
+          </table>
+      }
+      }
+    </div>
   }
 
   def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) = {
@@ -522,14 +539,14 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
 
 
-   private def controlGroup(fields:Map[String, InputField], parameterNames:String*):String = {
+   private def controlGroup(fields:Map[String, FormField], parameterNames:String*):String = {
     if(fields.filterKeys(parameterNames.contains(_)).values.exists(_.isError)){
       "control-group error"
     }else{
       "control-group"
     }
   }
-  private def errorInGroup(fields:Map[String, InputField], parameterNames:String*):Boolean = {
+  private def errorInGroup(fields:Map[String, FormField], parameterNames:String*):Boolean = {
     fields.filterKeys(parameterNames.contains(_)).values.exists(_.isError)
   }
 

@@ -5,7 +5,7 @@ import xml.NodeSeq
 import unfiltered.request.{Host, HttpRequest}
 import no.magott.fiks.HerokuRedirect.XForwardProto
 import java.net.SocketTimeoutException
-import validation.InputField
+import validation.FormField
 
 case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
 
@@ -84,7 +84,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
 
   def assignedMatchInfo(m:AssignedMatch) = emptyPage(assignedMatchDetailsTable(m))
 
-  def assignedMatchResult(r:MatchResult, inputFields: Map[String, InputField] = Map.empty) = emptyPage(assignedMatchResultForm(r, inputFields))
+  def assignedMatchResult(r:MatchResult, inputFields: Map[String, FormField] = Map.empty) = emptyPage(assignedMatchResultForm(r, inputFields))
 
   def availableMatches(availableMatches: List[AvailableMatch]) = {
     emptyPage(tableOfAvailableMatches(availableMatches), Some("availablematches"))
@@ -122,7 +122,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
         </p>
       <div>
         <div class="input-append">
-         <input type="text" value={schemeAndUrl}></input>
+         <input type="text" value={schemeAndUrl} class="input-xxlarge"></input>
            <a class="btn btn-inverse" href={resetCalIdUrl}><i class="icon-refresh icon-white"></i> Generer ny adresse</a>
            <a class="btn btn-danger" href={deleteCalUrl}><i class="icon-trash"></i> Slett kalender</a>
         </div>

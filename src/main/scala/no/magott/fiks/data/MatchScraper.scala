@@ -1,7 +1,7 @@
 package no.magott.fiks.data
 
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
+import org.jsoup.nodes.{Document, Element}
 import scala.collection.JavaConverters._
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.LocalDate
@@ -88,7 +88,10 @@ class MatchScraper {
   def scrapeMatchResult(fiksId:String, loginToken:String) = {
     val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(fiksId)
     val matchResultDocument = Jsoup.connect(url).cookie(COOKIE_NAME, loginToken).timeout(10000).get
-    println(matchResultDocument.select("span#lblMatchRubrik"))
+    parseMatchResultDocument(fiksId:String, matchResultDocument)
+  }
+
+  def parseMatchResultDocument(fiksId:String, matchResultDocument:Document) = {
     val teams = matchResultDocument.select("span#lblMatchRubrik").text
     val matchId = matchResultDocument.select("span#lblMatchNr").text
     val resultTable = matchResultDocument.select("div#divMainContent")
@@ -100,8 +103,32 @@ class MatchScraper {
     val protestHome = resultTable.select("input#ChkProtestHjemme").attr("checked") == "checked"
     val protestAway = resultTable.select("input#ChkProtestBorte").attr("checked") == "checked"
 
-     MatchResult(fiksId, teams, matchId, finalScore = (finalHomeGoal, finalAwayGoal),
-      halfTimeScore = (halfTimeHomeGoal, halfTimeAwayGoal), attendance=attendance.toInt, protestHomeTeam=protestHome, protestAwayTeam=protestAway)
+    val reportHistoryTable = matchResultDocument.select("table.fogisInfoTable > tbody > tr").asScala.drop(1)
+    val resultReports = reportHistoryTable.map{
+      el: Element => ResultReport(
+        resultType(el.child(1).text),
+        Score(stringToOptionOfInt(el.child(2).text), stringToOptionOfInt(el.child(3).text)),
+        el.child(0).child(0).attr("name") ,
+        el.child(7).text
+        )
+      }
+
+    MatchResult(fiksId, teams, matchId, finalScore = Score(finalHomeGoal, finalAwayGoal),
+      halfTimeScore = Score(halfTimeHomeGoal, halfTimeAwayGoal), attendance=attendance,
+      protestHomeTeam=protestHome, protestAwayTeam=protestAway, resultReports=resultReports.toSet)
+  }
+
+  def deleteMatchResult(fiksId:String, deletions:Set[ResultReport], loginToken:String){
+    val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(fiksId)
+    val matchResultForm = Jsoup.connect(url).cookie(COOKIE_NAME,loginToken).get
+    val con = Jsoup.connect(url).cookie(COOKIE_NAME, loginToken).timeout(15000)
+    deletions.foreach(r => con.data(r.reportId,"on"))
+    con.data("hiddenFunktion","radera")
+      .data("btnSpara","Lagre")
+      .data("__VIEWSTATE",matchResultForm.getElementById("__VIEWSTATE").attr("value"))
+      .data("__EVENTVALIDATION",matchResultForm.getElementById("__EVENTVALIDATION").attr("value"))
+      .followRedirects(false)
+    con.method(Method.POST).execute()
   }
 
   def postMatchResult(matchResult: MatchResult, loginToken:String){
@@ -109,10 +136,10 @@ class MatchScraper {
     val matchResultForm = Jsoup.connect(url).cookie(COOKIE_NAME,loginToken).get
 
     val con = Jsoup.connect(url).cookie(COOKIE_NAME, loginToken).timeout(25000)
-    matchResult.halfTimeScore._1.foreach(x => con.data("tbHalvtidHemmalag", x.toString))
-    matchResult.halfTimeScore._2.foreach(x=> con.data("tbHalvtidBortalag", x.toString))
-    matchResult.finalScore._1.foreach(x => con.data("tbSlutresultatHemmalag", x.toString))
-    matchResult.finalScore._2.foreach(x => con.data("tbSlutresultatBortalag", x.toString))
+    matchResult.halfTimeScore.home.foreach(x => con.data("tbHalvtidHemmalag", x.toString))
+    matchResult.halfTimeScore.away.foreach(x=> con.data("tbHalvtidBortalag", x.toString))
+    matchResult.finalScore.home.foreach(x => con.data("tbSlutresultatHemmalag", x.toString))
+    matchResult.finalScore.away.foreach(x => con.data("tbSlutresultatBortalag", x.toString))
     con.data("tbAntalAskadare",matchResult.attendance.toString)
     .data("btnSpara","Lagre")
     .data("__VIEWSTATE",matchResultForm.getElementById("__VIEWSTATE").attr("value"))
@@ -140,6 +167,15 @@ class MatchScraper {
 
   private def stringToOptionOfInt(s:String):Option[Int] = {
     if(s.trim.isEmpty) None else Some(s.toInt)
+  }
+
+  import ResultType._
+  private def resultType(scrapedString:String):ResultType = {
+    scrapedString match{
+      case "Pauseresultat" => HalfTime
+      case "Sluttresultat" => FinalResult
+      case _ => Undefined
+    }
   }
 
 }

@@ -13,7 +13,7 @@ import com.google.common.util.concurrent.UncheckedExecutionException
 import java.net.SocketTimeoutException
 import QParams._
 import validation.Validators._
-import validation.InputField
+import validation.FormField
 import no.magott.fiks.user.IsBetaUser
 
 class FiksPlan(matchservice: MatchService) extends Plan {
@@ -31,7 +31,7 @@ class FiksPlan(matchservice: MatchService) extends Plan {
         r match {
           case GET(_) => redirectToLoginIfTimeout(r, {
             val matchresult = matchservice.matchResult(fiksId, loginToken)
-            Html5(Pages(r).assignedMatchResult(matchresult, matchresult.inputFields))
+            Html5(Pages(r).assignedMatchResult(matchresult, matchresult.asInputFields))
           })
           case POST(_) & Params(params) => redirectToLoginIfTimeout(r, {
             //Beta match
@@ -127,8 +127,8 @@ class FiksPlan(matchservice: MatchService) extends Plan {
     val finalAwayGoals = isBlankOrInt("finalAwayGoals",params("finalAwayGoals").head,"Sluttresultat er ugyldig")
     val halfTimeHomeGoals = isBlankOrInt("halfTimeHomeGoals", params("halfTimeHomeGoals").head, "Pauseresultat er ugyldig")
     val halfTimeAwayGoals = isBlankOrInt("halfTimeAwayGoals", params("halfTimeAwayGoals").head, "Pauseresultat er ugyldig")
-    val attendance:InputField = isBlankOrInt("attendance", params("attendance").head, "Tilskuertall er ugyldig")
-    val fields:Map[String,InputField] = matchResult.inputFields
+    val attendance:FormField = isBlankOrInt("attendance", params("attendance").head, "Tilskuertall er ugyldig")
+    val fields:Map[String,FormField] = matchResult.asInputFields
       .+ (attendance.toTuple)
       .+ (isBlankOrInt("finalHomeGoals",params("finalHomeGoals").head,"Sluttresultat er ugyldig").toTuple)
       .+ (halfTimeHomeGoals.toTuple)
@@ -137,8 +137,7 @@ class FiksPlan(matchservice: MatchService) extends Plan {
       .++(halfTimeHomeGoals.and(halfTimeAwayGoals)(bothSetOrUnset("Pauseresultat er ugyldig")))
 
     if(fields.values.forall(_.isValid)){
-//      val m = matchResult.applyInputFields(fields)
-      matchservice.postMatchResult(matchResult.applyInputFields(fields), loginToken)
+      matchservice.postMatchResult(matchResult.applyFormFields(fields), loginToken)
       HerokuRedirect(req, "fiks/mymatches/"+ matchResult.fiksId +"/result")
     }else{
       BadRequest ~> Html5(Pages(req).assignedMatchResult(matchResult, fields))
