@@ -29,6 +29,10 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
             <input type="password" name="password"/>
           <button type="submit" class="btn btn-primary">Logg inn</button>
         </form>
+        <div class="well">
+          Har Dommer-FIKS gjort hverdagen din enklere? Hva med å vise din takknemlighet med en liten donasjon via PayPal?
+          {donateButton}
+        </div>
     )
   }
 
@@ -56,12 +60,8 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
           Det er ingen direkte kostnader knyttet til utviklingen av Dommer-FIKS, men funksjonalitet som kalender og resultatrapportering
           tar tid å utvikle. Nå kan du gi et lite bidrag, for å vise at du setter pris på siden, dette kan gjøres via PayPal. Klikk 'donate'
 
-          <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-            <input type="hidden" name="cmd" value="_s-xclick" />
-            <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----MIIHRwYJKoZIhvcNAQcEoIIHODCCBzQCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYBfe3/UR4IheRWTEGITvY/HF9YMLDc11991VgOCpIY41O2xJh1Bahfz2DdNQh5EZLlKMyVdfSs4kO2ml22iytI24iM/DKmS2tqVU+kA3r7msNaqXnwIdTcsvElhDcgV6nwX2m2spGOEDwBDS6gEvlm6nBzP8Wp14A2PoO6Pne/tNzELMAkGBSsOAwIaBQAwgcQGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQIm09BvKuP7SqAgaA0f8Pz+iYvHiP4SEq+AsKjPSS47nlP9aSwgLuUfIAZDqXxX8mmd4LEnpqwetWm5mvkp/cn7uypCvlPBSu4evPU5UvtP45oIHeA86OzrLYFDnN/pRVjRWGpWkHLX5Mu+LrWStVMSwj0uYBL7Ihy3kOEc7f3gUclqh8oMGIMpzYJU5XmkNyZJI7VY+PEuEPm/yhF60OtizF0roYZFKsJzapFoIIDhzCCA4MwggLsoAMCAQICAQAwDQYJKoZIhvcNAQEFBQAwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tMB4XDTA0MDIxMzEwMTMxNVoXDTM1MDIxMzEwMTMxNVowgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDBR07d/ETMS1ycjtkpkvjXZe9k+6CieLuLsPumsJ7QC1odNz3sJiCbs2wC0nLE0uLGaEtXynIgRqIddYCHx88pb5HTXv4SZeuv0Rqq4+axW9PLAAATU8w04qqjaSXgbGLP3NmohqM6bV9kZZwZLR/klDaQGo1u9uDb9lr4Yn+rBQIDAQABo4HuMIHrMB0GA1UdDgQWBBSWn3y7xm8XvVk/UtcKG+wQ1mSUazCBuwYDVR0jBIGzMIGwgBSWn3y7xm8XvVk/UtcKG+wQ1mSUa6GBlKSBkTCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb22CAQAwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOBgQCBXzpWmoBa5e9fo6ujionW1hUhPkOBakTr3YCDjbYfvJEiv/2P+IobhOGJr85+XHhN0v4gUkEDI8r2/rNk1m0GA8HKddvTjyGw/XqXa+LSTlDYkqI8OwR8GEYj4efEtcRpRYBxV8KxAW93YDWzFGvruKnnLbDAF6VR5w/cCMn5hzGCAZowggGWAgEBMIGUMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbQIBADAJBgUrDgMCGgUAoF0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTIwNTMxMDkwNjM3WjAjBgkqhkiG9w0BCQQxFgQUJybUn7sFsa0YZUTb1PmlscWv2bYwDQYJKoZIhvcNAQEBBQAEgYCcARjBqrDIiVQR/vtfbAAFsi8GYV0rRkgJ0DCd/KTB90RXTaQoqcdja6ctXtgbWPQ6ZVfQ8U5VBz2GtzMRPCd2seFiX0OVukBRnACTNHeAVWxfwRoim8LGbrJ/n7c53tHy+RrLvYtn9MiUQqDGfyk37tUedwvRhWn9sycqB0t1TA==-----END PKCS7-----"/>
-            <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
-            <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" />
-          </form>
+          {donateButton}
+
         </p>
     )
   }
