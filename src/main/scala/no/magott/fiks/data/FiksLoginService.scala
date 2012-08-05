@@ -22,7 +22,7 @@ object FiksLoginService {
       .cookie(COOKIE_NAME, sessionId)
       .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
       .followRedirects(false)
-      .timeout(10000)
+      .timeout(150000)
       .execute()
 
     if (response.statusCode == 302) {
@@ -45,7 +45,7 @@ object FiksLoginService {
       .cookie(COOKIE_NAME, sessionId)
       .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
       .followRedirects(false)
-      .timeout(10000)
+      .timeout(15000)
       .execute()
 
     if (response.statusCode == 302) {
