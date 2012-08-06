@@ -95,10 +95,10 @@ class MatchScraper {
     val teams = matchResultDocument.select("span#lblMatchRubrik").text
     val matchId = matchResultDocument.select("span#lblMatchNr").text
     val resultTable = matchResultDocument.select("div#divMainContent")
-    val finalHomeGoal = stringToOptionOfInt(resultTable.select("input#tbSlutresultatHemmalag").`val`)
-    val finalAwayGoal = stringToOptionOfInt(resultTable.select("input#tbSlutresultatBortalag").`val`)
-    val halfTimeHomeGoal = stringToOptionOfInt(resultTable.select("input#tbHalvtidHemmalag").`val`)
-    val halfTimeAwayGoal = stringToOptionOfInt(resultTable.select("input#tbHalvtidBortalag").`val`)
+    val finalHomeGoal = resultTable.select("input#tbSlutresultatHemmalag").`val`
+    val finalAwayGoal = resultTable.select("input#tbSlutresultatBortalag").`val`
+    val halfTimeHomeGoal = resultTable.select("input#tbHalvtidHemmalag").`val`
+    val halfTimeAwayGoal = resultTable.select("input#tbHalvtidBortalag").`val`
     val attendance = resultTable.select("input#tbAntalAskadare").`val`.toInt;
     val protestHome = resultTable.select("input#ChkProtestHjemme").attr("checked") == "checked"
     val protestAway = resultTable.select("input#ChkProtestBorte").attr("checked") == "checked"
@@ -107,14 +107,14 @@ class MatchScraper {
     val resultReports = reportHistoryTable.map{
       el: Element => ResultReport(
         resultType(el.child(1).text),
-        Score(stringToOptionOfInt(el.child(2).text), stringToOptionOfInt(el.child(3).text)),
+        Score(el.child(2).text, el.child(3).text),
         el.child(0).child(0).attr("name") ,
         el.child(7).text
         )
       }
 
-    MatchResult(fiksId, teams, matchId, finalScore = Score(finalHomeGoal, finalAwayGoal),
-      halfTimeScore = Score(halfTimeHomeGoal, halfTimeAwayGoal), attendance=attendance,
+    MatchResult(fiksId, teams, matchId, finalScore = Score.toOption(finalHomeGoal, finalAwayGoal),
+      halfTimeScore = Score.toOption(halfTimeHomeGoal, halfTimeAwayGoal), attendance=attendance,
       protestHomeTeam=protestHome, protestAwayTeam=protestAway, resultReports=resultReports.toSet)
   }
 
@@ -136,10 +136,10 @@ class MatchScraper {
     val matchResultForm = Jsoup.connect(url).cookie(COOKIE_NAME,loginToken).get
 
     val con = Jsoup.connect(url).cookie(COOKIE_NAME, loginToken).timeout(25000)
-    matchResult.halfTimeScore.home.foreach(x => con.data("tbHalvtidHemmalag", x.toString))
-    matchResult.halfTimeScore.away.foreach(x=> con.data("tbHalvtidBortalag", x.toString))
-    matchResult.finalScore.home.foreach(x => con.data("tbSlutresultatHemmalag", x.toString))
-    matchResult.finalScore.away.foreach(x => con.data("tbSlutresultatBortalag", x.toString))
+    matchResult.halfTimeScore.foreach(x => con.data("tbHalvtidHemmalag", x.home.toString)) //XXX: Fixit!!
+    matchResult.halfTimeScore.foreach(x=> con.data("tbHalvtidBortalag", x.away.toString))
+    matchResult.finalScore.foreach(x => con.data("tbSlutresultatHemmalag", x.home.toString))
+    matchResult.finalScore.foreach(x => con.data("tbSlutresultatBortalag", x.away.toString))
     con.data("tbAntalAskadare",matchResult.attendance.toString)
     .data("btnSpara","Lagre")
     .data("__VIEWSTATE",matchResultForm.getElementById("__VIEWSTATE").attr("value"))

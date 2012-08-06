@@ -22,7 +22,7 @@ case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String,
   def isReferee = refereeTuples.find(_._1 == "Dommer").exists(!_._2.contains(","))
   def externalMatchInfoUrl = "http://www.fotball.no/System-pages/Kampfakta/?matchId=%s".format(fiksId)
 }
-case class MatchResult(fiksId:String, teams:String, matchId:String, finalScore:Score = Score.unset, halfTimeScore:Score = Score.unset,
+case class MatchResult(fiksId:String, teams:String, matchId:String, finalScore:Option[Score] = None, halfTimeScore:Option[Score] = None,
                        attendance:Int = 0, firstHalfAddedTime:Option[Int] = None, secondHalfAddedTime:Option[Int] = None,
                        protestHomeTeam:Boolean = false, protestAwayTeam:Boolean = false, resultReports:Set[ResultReport] = Set.empty){
 
@@ -30,10 +30,10 @@ case class MatchResult(fiksId:String, teams:String, matchId:String, finalScore:S
     Map(
       InputOk("teams",Some(teams)).toTuple,
       InputOk("matchId",Some(matchId)).toTuple,
-      InputOk("finalHomeGoals", finalScore.home.map(_.toString)).toTuple,
-      InputOk("finalAwayGoals", finalScore.away.map(_.toString)).toTuple,
-      InputOk("halfTimeHomeGoals", halfTimeScore.home.map(_.toString)).toTuple,
-      InputOk("halfTimeAwayGoals", halfTimeScore.away.map(_.toString)).toTuple,
+      InputOk("finalHomeGoals", finalScore.map(_.home.toString)).toTuple,
+      InputOk("finalAwayGoals", finalScore.map(_.away.toString)).toTuple,//XXX: Getter on inner option!!
+      InputOk("halfTimeHomeGoals", halfTimeScore.map(_.home.toString)).toTuple,
+      InputOk("halfTimeAwayGoals", halfTimeScore.map(_.away.toString)).toTuple,
       InputOk("attendance", Some(attendance.toString)).toTuple,
       InputOk("firstHalfAddedTime", firstHalfAddedTime.map(_.toString)).toTuple,
       InputOk("secondHalfAddedTime", secondHalfAddedTime.map(_.toString)).toTuple
@@ -44,8 +44,8 @@ case class MatchResult(fiksId:String, teams:String, matchId:String, finalScore:S
     this.copy(
       teams = fields("teams").value.get,
       matchId = fields("matchId").value.get,
-      finalScore = Score.stringScore(fields("finalHomeGoals").value, fields("finalAwayGoals").value),
-      halfTimeScore = Score.stringScore(fields("halfTimeHomeGoals").value, fields("halfTimeAwayGoals").value),
+      finalScore = Score.stringScoreToOption(fields("finalHomeGoals").value, fields("finalAwayGoals").value),
+      halfTimeScore = Score.stringScoreToOption(fields("halfTimeHomeGoals").value, fields("halfTimeAwayGoals").value),
       attendance = fields("attendance").value.get.toInt
     )
   }
@@ -55,8 +55,8 @@ case class MatchResult(fiksId:String, teams:String, matchId:String, finalScore:S
   lazy val requiredDeletions = {
     resultReports.filter(
     p => p.resultType match {
-      case HalfTime => !(p.score == halfTimeScore)
-      case FinalResult => !(p.score == finalScore)
+      case HalfTime => halfTimeScore.forall(_ != p.score)
+      case FinalResult => finalScore.forall(_ != p.score)
       case _ => false
     }
     )
@@ -66,19 +66,18 @@ case class MatchResult(fiksId:String, teams:String, matchId:String, finalScore:S
 
 }
 
-case class Score(home:Option[Int], away:Option[Int]){
-  assert((home.isDefined && away.isDefined) || (home.isEmpty && away.isEmpty))
-  def isSet = home.isDefined && away.isDefined
-  def toLiteral = home.getOrElse("") + " - " + away.getOrElse("")
+case class Score(home:Int, away:Int){
+  def toLiteral = home + " - " + away
 }
 
 object Score{
-  def apply(home:Int, away:Int): Score = Score(Some(home), Some(away))
-  def stringScore(home:Option[String], away:Option[String]): Score = Score(home.map(_.toInt), away.map(_.toInt))
-  def unset = Score(None,None)
+  def apply(home:String, away:String):Score = Score(home.toInt, away.toInt)
+  def toOption(home:String, away:String) = if(isValidSingleScore(home) && isValidSingleScore(away)) Some(Score(home.toInt,away.toInt)) else None
+  def stringScoreToOption(home:Option[String], away:Option[String]):Option[Score] = if(home.isDefined && away.isDefined) Score.toOption(home.get,away.get) else None
+  def isValidSingleScore(s:String) = !s.trim.isEmpty && s.forall(_.isDigit)
 }
-
 case class ResultReport(resultType:ResultType, score:Score, reportId:String, reporter:String)
+
 
 
 object MatchStuff{
@@ -86,5 +85,8 @@ object MatchStuff{
     val p = Params.unapply(req).get
     p.contains("all")
   }
+
+
 }
+
 
