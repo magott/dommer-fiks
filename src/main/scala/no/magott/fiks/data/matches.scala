@@ -2,7 +2,7 @@ package no.magott.fiks.data
 
 import unfiltered.request.{HttpRequest, Params}
 import org.joda.time.{LocalTime, LocalDateTime}
-import validation.{Label, FormField, InputOk}
+import validation.{FormField, InputOk}
 
 
 object ResultType extends Enumeration{
@@ -71,7 +71,7 @@ case class Score(home:Int, away:Int){
 }
 
 object Score{
-  def apply(home:String, away:String):Score = Score(home.toInt, away.toInt)
+  def fromString(home:String, away:String):Score = Score(home.toInt, away.toInt)
   def toOption(home:String, away:String) = if(isValidSingleScore(home) && isValidSingleScore(away)) Some(Score(home.toInt,away.toInt)) else None
   def stringScoreToOption(home:Option[String], away:Option[String]):Option[Score] = if(home.isDefined && away.isDefined) Score.toOption(home.get,away.get) else None
   def isValidSingleScore(s:String) = !s.trim.isEmpty && s.forall(_.isDigit)

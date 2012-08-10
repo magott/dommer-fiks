@@ -107,7 +107,7 @@ class MatchScraper {
     val resultReports = reportHistoryTable.map{
       el: Element => ResultReport(
         resultType(el.child(1).text),
-        Score(el.child(2).text, el.child(3).text),
+        Score.fromString(el.child(2).text, el.child(3).text),
         el.child(0).child(0).attr("name") ,
         el.child(7).text
         )

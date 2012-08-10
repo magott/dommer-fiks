@@ -21,11 +21,6 @@ case class InputOk(fieldName:String, value:Option[String]) extends FormField{
   def errorMessage = None
 }
 
-case class Label(fieldName:String, value:Option[String]) extends FormField{
-  def isValid = true
-  def errorMessage = None
-}
-
 object Validators {
   def isNonEmpty(fieldName:String, value:String, errorMessage:String):FormField = {
     if(value.isEmpty) InputFail(fieldName,Some(value),errorMessage) else InputOk(fieldName,Some(value))
@@ -50,7 +45,4 @@ object Validators {
 
   def intLiteralToOption(s:String) = if(s.trim.isEmpty) None else Some(s.trim.toInt)
 
-  def bothSetOrUnset(first:Option[String]) (second:String) = {
-    (first.isDefined && !first.get.isEmpty && !second.trim.isEmpty) || (first.isDefined && first.get.isEmpty && second.trim.isEmpty)
-  }
 }

@@ -47,13 +47,10 @@ class MatchService(val matchscraper:MatchScraper) {
 
   def availableMatchInfo(assignmentId: String, loginToken:String) = {
     val cached = Option(matchInfoCache.getIfPresent(assignmentId))
-    cached match{
-      case Some(x) => x
-      case None => {
-        val matchInfo = matchscraper.scrapeMatchInfo(assignmentId, loginToken)
-        matchInfoCache.put(assignmentId,matchInfo)
-        matchInfo
-      }
+    cached.getOrElse{
+      val matchInfo = matchscraper.scrapeMatchInfo(assignmentId, loginToken)
+      matchInfoCache.put(assignmentId,matchInfo)
+      matchInfo
     }
   }
 
