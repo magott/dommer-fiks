@@ -2,11 +2,9 @@ import com.typesafe.startscript.StartScriptPlugin
 
 seq(StartScriptPlugin.startScriptForClassesSettings: _*)
 
-name:="ofk-fiks"
+name:="dommer-fiks"
 
-organization := "no.magott"
-
-resolvers += "terracotta-releases" at "http://www.terracotta.org/download/reflector/releases"
+organization := "com.andersen-gott"
 
 libraryDependencies ++=
   Seq(
