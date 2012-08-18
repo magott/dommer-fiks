@@ -63,6 +63,10 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
           {donateButton}
 
         </p>
+        <h3>Kildekode</h3>
+        <p>
+          Dommer-FIKS er tilgjengelig som åpen kildekode. Kildekoden finner du på <a href="github.com/magott/dommer-fiks">GitHub</a>
+        </p>
     )
   }
 
