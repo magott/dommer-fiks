@@ -24,7 +24,11 @@ class MatchService(val matchscraper:MatchScraper) {
   }
 
   def upcomingAssignedMatches(loginToken:String): List[AssignedMatch] = {
-    assignedMatchesCache.get(loginToken).filter(_.date.toLocalDate.isAfter(LocalDate.now(DateTimeZone.forID("Europe/Oslo")).minusDays(1)))
+    assignedMatchesCache.get(loginToken).filter(upcomingFilter)
+  }
+
+  def cachedUpcomingAssignedMatches(loginToken:String) : Option[List[AssignedMatch]] = {
+    Option(assignedMatchesCache.getIfPresent(loginToken)).map(_.filter(upcomingFilter))
   }
 
   def availableMatches(loginToken:String):List[AvailableMatch] = {
@@ -69,6 +73,9 @@ class MatchService(val matchscraper:MatchScraper) {
   def matchResult(matchId:String, loginToken:String):MatchResult = {
     matchscraper.scrapeMatchResult(matchId,loginToken)
   }
+
+  private def upcomingFilter(m:AssignedMatch)  =
+    m.date.toLocalDate.isAfter(LocalDate.now(DateTimeZone.forID("Europe/Oslo")).minusDays(1))
 
   private def updateCacheWithInterestReported(availabilityId: String, loginToken:String){
     val updatedCacheEntry = availableMatchesCache.get(loginToken).map(a => if(a.availabilityId == Some(availabilityId)) a.copy(availabilityId = None) else a )
