@@ -14,7 +14,6 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   val pages = Path(req)
 
   def navbar(page: Option[String]) = {
-    println("Pages: "+pages)
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
