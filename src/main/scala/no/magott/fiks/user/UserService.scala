@@ -6,7 +6,7 @@ import util.Properties
 import com.mongodb.casbah.commons.MongoDBObject
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor
 import org.bouncycastle.jce.provider.BouncyCastleProvider
-import com.mongodb.casbah.query._
+import com.mongodb.casbah.query.Imports._
 
 class UserService {
   val MongoSetting(db) = Properties.envOrNone("MONGOLAB_URI")
@@ -17,8 +17,7 @@ class UserService {
   cipher.setAlgorithm("PBEWITHSHA256AND256BITAES-CBC-BC")
 
   def removeCalendarFor(username: String) {
-    db("users").update(where("username"->username), $unset("calid"))
-
+    db("users").update(where("username"->username), $unset(Seq("calid")))
   }
 
   def byUsername(username:String) = {
@@ -39,14 +38,14 @@ class UserService {
 
   def newUser(username: String, password: String, email:String) = {
     val calendarId = UUID.randomUUID.toString
-    db("users").update(where("username"->username), $set("calid" -> calendarId, "username" -> username, "password" -> cipher.encrypt(password), "email" -> email), true, false)
+    db("users").update(where("username"->username), $set(Seq("calid" -> calendarId, "username" -> username, "password" -> cipher.encrypt(password), "email" -> email)), true, false)
     calendarId
   }
 
   def newCalendarId(username:String) = {
     val newCalendarId = UUID.randomUUID.toString
     val users = db("users")
-    users.findAndModify(where("username"->username), $set("calid" -> newCalendarId ))
+    users.findAndModify(where("username"->username), $set(Seq("calid" -> newCalendarId )))
     newCalendarId
   }
 

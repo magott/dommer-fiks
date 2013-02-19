@@ -1,12 +1,7 @@
-resolvers += "sbt-idea-repo" at "http://mpeltonen.github.com/maven/"
+resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
-addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.0.0")
+resolvers += Classpaths.typesafeResolver
 
-// Release plugin
-resolvers += "gseitz@github" at "http://gseitz.github.com/maven/"
+addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.3.0-SNAPSHOT")
 
-addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.4")
-
-//Web plugin
-
-libraryDependencies <+= sbtVersion(v => "com.github.siasia" %% "xsbt-web-plugin" % (v+"-0.2.10"))
+addSbtPlugin("com.typesafe.startscript" % "xsbt-start-script-plugin" % "0.5.3")
