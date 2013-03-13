@@ -14,9 +14,9 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   val pages = Path(req)
 
   def navbar(page: Option[String]) = {
-    <div class="navbar navbar-fixed-top">
+    <div class="navbar navbar-fixed-top navbar-inverse">
       <div class="navbar-inner">
-        <div class="container">
+        <div class="container-fluid">
           <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -73,13 +73,21 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
           <link rel="shortcut icon" href="/favicon.ico" />
 
         <!-- Le styles -->
-          <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+          <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet"/>
         <style type="text/css">
-          {"""body
-        {padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */}
-        """}
+          {
+          {"""
+          body{
+            padding-top: 60px;
+            padding-bottom: 40px;
+          }
+          .sidebar-nav{
+          padding: 9 px 0;
+          }
+           """}
+          }
         </style>
-          <link href="/css/bootstrap-responsive.min.css" rel="stylesheet"/>
+          <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet"/>
           <link href="/css/fiks.css" rel="stylesheet"/>
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -89,24 +97,25 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       </head>
       <body>
 
-        {navbar(page)}<div class="container">
+        {navbar(page)}
+      <div class="container-fluid">
 
         {body}
 
-      </div> <!-- /container -->
         <footer class="footer">
           <p>
             <a href="http:///www.andersen-gott.com">Morten Andersen-Gott</a>
-            (c) 2012</p>
+            (c) 2013</p>
           <p>
             <a href="http://www.facebook.com/dommerfiks">Foreslå forbedringer eller rapportér feil</a>
           </p>
         </footer>
+      </div> <!-- /container -->
 
 
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="/js/jquery.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
         <script type="text/javascript">
           {"""
           var _gaq = _gaq || [];
