@@ -65,7 +65,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
         </p>
         <h3>Kildekode</h3>
         <p>
-          Dommer-FIKS er tilgjengelig som åpen kildekode. Kildekoden finner du på <a href="github.com/magott/dommer-fiks">GitHub</a>
+          Dommer-FIKS er tilgjengelig som åpen kildekode. Kildekoden finner du på <a href="http://github.com/magott/dommer-fiks">GitHub</a>
         </p>
     )
   }
