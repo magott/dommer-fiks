@@ -425,11 +425,11 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <tr>
           <th>Kommentarer</th>
           <td>
-              <textarea name="comment" id="comment"/>
+              <textarea name="comment" id="comment"></textarea>
           </td>
         </tr>
         <tr>
-            <td/>
+          <td></td>
           <td>
             <button type="submit" class="btn btn-primary">Meld interesse</button>
           </td>
