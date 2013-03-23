@@ -34,13 +34,8 @@ class FiksPlan(matchservice: MatchService) extends Plan {
             Html5(Pages(r).assignedMatchResult(matchresult, matchresult.asInputFields))
           })
           case POST(_) & Params(params) => redirectToLoginIfTimeout(r, {
-            //Beta match
-            if(IsBetaUser.unapply(r).isEmpty){
-              Forbidden ~> Html5(Pages(r).betaOnly)
-            }else{
               val matchresult = matchservice.matchResult(fiksId, loginToken)
               handleSubmitMatchResult(r, params, matchresult,loginToken)
-            }
           })
           case _ => MethodNotAllowed ~> Html5(Pages(r).notFound)
         }

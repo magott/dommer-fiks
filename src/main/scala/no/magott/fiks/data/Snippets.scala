@@ -309,7 +309,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         </div>
         <div class="form-actions">
           <a class="btn" href="./">Tilbake</a>
-          <button type="submit" class="btn btn-primary">Send inn <sup>beta</sup></button>
+          <button type="submit" class="btn btn-primary">Send inn</button>
         </div>
       </fieldset>
     </form>
