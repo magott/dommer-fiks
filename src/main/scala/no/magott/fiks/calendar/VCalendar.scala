@@ -20,15 +20,16 @@ class VCalendar(assignedMatches:List[AssignedMatch]) {
     val start = toUTC(m.date)
     val desc = """Kampnummer:  %s\nTurnering: %s\n%s \nKampinfo: %s""".format(m.matchId, m.tournament ,m.referees.replaceAllLiterally(" (", " \\n("),m.externalMatchInfoUrl)
     """BEGIN:VEVENT
-    |DTSTART:%s
-    |DTEND:%s
-    |DTSTAMP:%s
-    |LAST-MODIFIED:%s
-    |UID:%s
-    |LOCATION:%s
-    |SUMMARY:%s
-    |DESCRIPTION:%s
-    |END:VEVENT""".stripMargin.format(
+      |DTSTART:%s
+      |DTEND:%s
+      |DTSTAMP:%s
+      |LAST-MODIFIED:%s
+      |UID:%s
+      |LOCATION:%s
+      |SUMMARY:%s
+      |DESCRIPTION:%s
+      |URL;VALUE=URI:%s
+      |END:VEVENT""".stripMargin.format(
                 start.toString(calendarFormatString),
                 start.plusHours(2).toString(calendarFormatString),
                 toUTC(thisHour).toString(calendarFormatString),
@@ -36,7 +37,8 @@ class VCalendar(assignedMatches:List[AssignedMatch]) {
                 m.matchId+"@fiks.herokuapp.com",
                 m.venue,
                 m.teams,
-                desc
+                desc,
+                m.externalMatchInfoUrl
     )
   }
 
