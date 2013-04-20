@@ -7,6 +7,7 @@ import unfiltered.filter.{Intent, Plan}
 import javax.servlet.http.HttpServletRequest
 import no.magott.fiks.user.{LoggedOnUser, UserService}
 import no.magott.fiks.data.{FiksCookie, CalendarContentType, FiksLoginService, Pages}
+import scala.concurrent.ops.spawn
 
 class CalendarPlan(calendarService: CalendarService, userservice: UserService) extends Plan {
   val requiredParams = Vector("username", "password", "terms", "email")
@@ -39,20 +40,25 @@ class CalendarPlan(calendarService: CalendarService, userservice: UserService) e
     }
   }
   val getFeed = Intent {
-    case r@GET(Path(Seg("calendar" :: Nil))) & Params(FeedIdParameter(feedId)) => calendarFeed(feedId)
+    case r@GET(Path(Seg("calendar" :: Nil))) & Params(FeedIdParameter(feedId)) => calendarFeed(feedId, r)
   }
 
   val notBeta = Intent {
     case r@Path(Seg("calendar" :: _ :: Nil))  => Forbidden ~> Html5(Pages(r).betaOnly)
   }
 
-  def calendarFeed(calendarId: String) = {
+  def calendarFeed(calendarId: String, r:HttpRequest[_]) = {
     userservice.byCalendarId(calendarId) match {
       case None => BadRequest ~> ResponseString("Ugyldig kalender id")
       case Some(user) => {
         calendarService.calendarForUser(user) match {
           case Some(matches) => {
-            userservice.incrementPollcount(user)
+            spawn{
+              userservice.incrementPollcount(user)
+              val UserAgent(ua) = r
+              println(ua)
+
+            }
             Ok ~> CalendarContentType ~> ResponseString(new VCalendar(matches).feed)
           }
           case None => Unauthorized ~> ResponseString("Ugyldig brukernavn/passord, har du byttet passord? Slett kalender og opprett på nytt")

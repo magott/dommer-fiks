@@ -4,7 +4,7 @@ import unfiltered.filter.Plan
 import unfiltered.request._
 import collection.immutable.Map
 import unfiltered.Cookie
-import unfiltered.response.{Html5, SetCookies}
+import unfiltered.response.{Pass, Html5, SetCookies}
 import no.magott.fiks.HerokuRedirect
 import no.magott.fiks.HerokuRedirect.XForwardProto
 import javax.servlet.http.HttpServletRequest
@@ -15,7 +15,12 @@ class SecurityPlan(val matchservice:MatchService) extends Plan{
   val userservice = new UserService
 
   def intent = {
-    case r@GET(_) & XForwardProto("http") => HerokuRedirect(r,r.uri)
+    case r@GET(_) & XForwardProto("http") => {
+      r match {
+        case r@GET(Path(Seg("calendar" :: Nil))) & Params(FeedIdParameter(feedId)) => Pass
+        case _ => HerokuRedirect(r,r.uri)
+      }
+    }
     case r@GET(Path(Seg("login" :: Nil))) & Params(p)=> {
       SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~>
         Html5(Pages(r).loginForm(p))
@@ -40,4 +45,7 @@ class SecurityPlan(val matchservice:MatchService) extends Plan{
   }
 
   def handleLogout(req: HttpRequest[Any]) = SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~> HerokuRedirect(req, "/login?message=logout")
+
+  object FeedIdParameter extends Params.Extract("id", Params.first)
+
 }

@@ -14,8 +14,8 @@ class FallbackPlan extends Plan {
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) => HerokuRedirect(r, "/login?message=loginRequired")
     case r@GET(Path(Seg("calendar" :: _ :: Nil))) => HerokuRedirect(r, "/login?message=loginRequired")
     case Path(Seg("img" :: _ :: Nil)) | Path(Seg("css" :: _ :: Nil))
-         | Path(Seg("js" :: _ :: Nil)) | Path(Seg("favicon.ico" :: Nil))
-         | Path(Seg("robots.txt" :: Nil)) => Pass
+         | Path(Seg("js" :: _ :: Nil)) | Path(Seg("favicon.ico" :: Nil)) => Pass
+//         | Path(Seg("robots.txt" :: Nil)) => Pass
     case r@GET(_) => NotFound ~> Html5(Pages(r).notFound)
   }
 }
