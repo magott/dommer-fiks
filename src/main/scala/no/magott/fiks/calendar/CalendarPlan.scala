@@ -56,7 +56,7 @@ class CalendarPlan(calendarService: CalendarService, userservice: UserService) e
             spawn{
               userservice.incrementPollcount(user)
               val UserAgent(ua) = r
-              println(ua)
+              println("Fetching calendar username %s for agent %s".format(user.username,ua))
 
             }
             Ok ~> CalendarContentType ~> ResponseString(new VCalendar(matches).feed)
