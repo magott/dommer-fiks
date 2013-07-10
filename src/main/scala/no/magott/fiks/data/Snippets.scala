@@ -240,6 +240,12 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <th>Mer info</th>
         <td><a href={m.externalMatchInfoUrl} target="_blank">Kampinfo fra fotball.no</a></td>
       </tr>
+      {if(m.displayDismissalReportLink)
+      <tr>
+        <th>Utvisningsrapport</th>
+        <td><a href={m.dismissalUrl} target="_blank">Send inn utvisningsrapport</a></td>
+      </tr>
+      }
       <tr>
         <th></th>
         <td>

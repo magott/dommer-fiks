@@ -1,8 +1,10 @@
 package no.magott.fiks.data
 
+import fix.UriString
 import unfiltered.request.{HttpRequest, Params}
 import org.joda.time.{LocalTime, LocalDateTime}
 import validation.{FormField, InputOk}
+import fix.UriString._
 
 
 object ResultType extends Enumeration{
@@ -19,8 +21,25 @@ case class AvailableMatch(category: String, tournament: String, date: LocalDateT
 
 case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String, teams:String, venue:String, referees:String, fiksId:String){
   lazy val refereeTuples : Array[(String,String)] = referees.split('(').drop(1).map(s=> (s.split(')')(0) -> s.split(')')(1).trim))
-  def isReferee = refereeTuples.find(_._1 == "Dommer").exists(!_._2.contains(","))
+  def isReferee = refereeTuples.find(findReferee).exists(!_._2.contains(","))
   def externalMatchInfoUrl = "http://www.fotball.no/System-pages/Kampfakta/?matchId=%s".format(fiksId)
+  def displayDismissalReportLink = date.isBefore(LocalDateTime.now) && isReferee
+  def refereeLastName = {
+    val last = refereeTuples.find(findReferee).get._2.split(" ").takeRight(1).mkString
+    if(last.endsWith("\u00A0")) last.dropRight(1) else last
+  }
+  def refereeFirstName = refereeTuples.find(findReferee).get._2.split(" ").dropRight(1).mkString(" ").trim
+  def first2DigitsMatchId = matchId.take(2)
+  private def last9DigitsMatchId = matchId.drop(2)
+  private def month3Letters = date.toString("MMM")
+  private def day2Digits = date.toString("dd")
+  private def year4Digits = date.toString("yyyy")
+  private def homeTeam = teams.split("\u00A0-\u00A0")(0)
+  private def awayTeam  = teams.split("\u00A0-\u00A0")(1)
+  private def findReferee(refTuple:(String,String)) = refTuple._1 == "Dommer"
+
+  def dismissalUrl = uri"http://www.formstack.com/forms?form=1351154&viewkey=N8yMtQ9qxb&field17868550=Offisiell%20kamp%20(serie/cup%20i%20regi%20av%20krets/NFF%20-%20kamp%20har%20kampnr.)&field17868644=$first2DigitsMatchId&field17868658=$last9DigitsMatchId&field17869114=$homeTeam&field17869126=$awayTeam&field17950255-first=$refereeFirstName&field17950255-last=$refereeLastName&field17950248M=$month3Letters&field17950248D=$day2Digits&field17950248Y=$year4Digits"
+
 }
 case class MatchResult(fiksId:String, teams:String, matchId:String, finalScore:Option[Score] = None, halfTimeScore:Option[Score] = None,
                        attendance:Int = 0, firstHalfAddedTime:Option[Int] = None, secondHalfAddedTime:Option[Int] = None,
