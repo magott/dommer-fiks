@@ -61,7 +61,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     </div>
   }
 
-  def emptyPage(body: NodeSeq, page: Option[String] = None): NodeSeq =
+  def emptyPage(body: NodeSeq, page: Option[String] = None, scripts:Option[NodeSeq] = None): NodeSeq =
     <html lang="en">
       <head>
           <meta charset="utf-8"/>
@@ -129,6 +129,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   """}
 
         </script>
+        {if(scripts.isDefined) scripts.get}
        </body>
     </html>
 
@@ -230,7 +231,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       }
       <tr>
         <th>Sted</th>
-        <td>{m.venue}</td>
+        <td id="venue">{m.venue}<span id="location" class="beta"></span></td>
       </tr>
       <tr>
         <th>Turnering</th>
@@ -247,12 +248,29 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       </tr>
       }
       <tr>
+        <th>Værmelding</th>
+        <td>
+          <div class="forecast-table" id="weather"> <!-- -->
+
+          </div>
+          <div id="spinner"></div>
+        </td>
+      </tr>
+      <tr>
         <th></th>
         <td>
           <a class="btn btn-primary" href="/fiks/mymatches"><i class="icon-circle-arrow-left icon-white"></i> Tilbake</a>
         </td>
       </tr>
     </table>
+  }
+
+  def forecasts(w: Seq[MatchForecast]) = {
+    <div class="table">
+      <div class="forecasts">
+        {w.map(_.asHtml)}
+      </div>
+    </div>
   }
 
   def assignedMatchResultForm(r: MatchResult, fields:Map[String, FormField] = Map.empty) = {

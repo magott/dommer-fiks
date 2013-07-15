@@ -15,14 +15,35 @@ import QParams._
 import validation.Validators._
 import validation.FormField
 import no.magott.fiks.user.IsBetaUser
+import org.joda.time.Interval
 
-class FiksPlan(matchservice: MatchService) extends Plan {
+class FiksPlan(matchservice: MatchService, stadiumService:StadiumService) extends Plan {
+
+  val weatherServie = new WeatherService
 
   def intent = {
     matchInfo orElse myMatches orElse availableMatches orElse about orElse reportInterest
   }
 
   val matchInfo = Intent {
+    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "forecast" :: Nil)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r,{
+      val matchOption = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId)
+      if(matchOption.isEmpty) Forbidden ~> Html5(<div>Feil</div>)
+      else{
+        val m = matchOption.get
+        val stadiumOpt = stadiumService.findStadium(m.venue)
+        if(stadiumOpt.isEmpty){
+          NotFound ~> Html5(<div>{"Fant ikke arenaen %s".format(m.venue)}</div>)
+        }else{
+          val forecast = weatherServie.findForecast(m.date, m.date.plus(m.playingTime.toDuration), stadiumOpt.get.latLongPosition)
+          if(forecast.isEmpty){
+            NotFound ~> Html5(<div>Fant ikke værmelding for denne datoen</div>)
+          }else{
+            Ok ~> Html5(Snippets(r).forecasts(forecast))
+          }
+        }
+      }
+    })
     case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "result" :: Nil)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r,{
       val matchOption = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId)
       if(matchOption.isEmpty || !matchOption.get.isReferee){
@@ -140,6 +161,7 @@ class FiksPlan(matchservice: MatchService) extends Plan {
   }
 
 
+}
   object MatchIdParameter extends Params.Extract("matchid", Params.first)
 
   object ResultParameter extends Params.Extract("result", Params.first)
@@ -147,4 +169,3 @@ class FiksPlan(matchservice: MatchService) extends Plan {
   object CommentParameter extends Params.Extract("comment", Params.first)
 
 
-}

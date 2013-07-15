@@ -2,7 +2,7 @@ package no.magott.fiks.data
 
 import fix.UriString
 import unfiltered.request.{HttpRequest, Params}
-import org.joda.time.{LocalTime, LocalDateTime}
+import org.joda.time.{Interval, LocalTime, LocalDateTime}
 import validation.{FormField, InputOk}
 import fix.UriString._
 
@@ -24,6 +24,7 @@ case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String,
   def isReferee = refereeTuples.find(findReferee).exists(!_._2.contains(","))
   def externalMatchInfoUrl = "http://www.fotball.no/System-pages/Kampfakta/?matchId=%s".format(fiksId)
   def displayDismissalReportLink = date.isBefore(LocalDateTime.now) && isReferee
+  def playingTime = new Interval(date.toDateTime, date.toDateTime.plusHours(2))
   def refereeLastName = {
     val last = refereeTuples.find(findReferee).get._2.split(" ").takeRight(1).mkString
     if(last.endsWith("\u00A0")) last.dropRight(1) else last

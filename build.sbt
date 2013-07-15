@@ -23,5 +23,7 @@ libraryDependencies ++=
     "org.mongodb" %% "casbah" % "2.5.0",
     "org.mongodb" % "mongo-java-driver" % "2.10.1",
     "bouncycastle" % "bcprov-jdk16" % "140",
-    "org.jasypt" % "jasypt" % "1.9.0"
+    "org.jasypt" % "jasypt" % "1.9.0",
+    "no.arktekk" %% "uri-template" % "1.0.1",
+    "net.databinder.dispatch" %% "dispatch-core" % "0.10.1"
   )

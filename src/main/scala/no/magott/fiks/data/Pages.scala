@@ -89,7 +89,19 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     emptyPage(tableOfAssignedMatches(assignedMatches), Some("mymatches"))
   }
 
-  def assignedMatchInfo(m:AssignedMatch) = emptyPage(assignedMatchDetailsTable(m))
+  def assignedMatchInfo(m:AssignedMatch) = emptyPage(assignedMatchDetailsTable(m),None,
+  Some(
+    <script src="/js/fiks.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/spin.js/1.2.7/spin.min.js"></script>
+      <script type="text/javascript">
+        { """
+          $(document).ready(fetchForecast);
+          $(document).ready(fetchStadiumLink);
+
+          """}
+      </script>
+  )
+  )
 
   def assignedMatchResult(r:MatchResult, inputFields: Map[String, FormField] = Map.empty) = emptyPage(assignedMatchResultForm(r, inputFields))
 
@@ -156,7 +168,11 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     Du har ikke tilgang til denne siden
   </div>)
 
+  def error(n:NodeSeq) = emptyPage(
+    <div class="alert alert-error">{n}</div>)
+
   def error(e: Exception) = {
+    e.printStackTrace()
     e match {
       case ex: SocketTimeoutException => {
         emptyPage(
@@ -184,4 +200,47 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     }
   }
 
+  def submitStadium(stadiumName:String, fiksMatchId:String) = {
+    emptyPage(
+      <legend>Hvor ligger {stadiumName}?</legend>
+      <p>
+        Hjelp Dommer-FIKS med å plassere de forskjellige banene i Norge.
+        Det er tatt utgangspunkt i regjerningens liste over forskjellige idrettsannlegg i Norge, men det kommer stadig
+        nye baner i Norge, de skifter navn, eller det brukes andre navn i FIKS enn i listen til regjerningen. Derfor trenger
+        Dommer-FIKS hjelp av deg for å legge inn baners plassering. Dette gjør at vi kan gi et kart og værmelding for banen.
+      </p>
+      <p>
+        Fyll inn skjema med så mye informasjon som mulig om banen. Etter informasjonen er mottatt kan det ta noen dager før Dommer-FIKS er
+        oppdatert med informasjonen.
+      </p>
+      <form class="form-horizontal" action={req.uri} method="POST">
+        <div class="control-group">
+          <label class="control-label">Banenavn</label>
+          <div class="controls">
+            <span class="input-large uneditable-input">{stadiumName}</span>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputEmail">Email</label>
+          <div class="controls">
+            <input type="email" name="email" id="inputEmail" placeholder="Email" required="required"/>
+            <span class="help-inline">Dersom Dommer-FIKS trenger å kontakte deg for mer informasjon</span>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputPassword">Beskrivelse av banen</label>
+          <div class="controls">
+            <textarea rows="3" placeholder="Beskrivelse av banens plassering (adresse etc)" name="description" required="required"></textarea>
+            <span class="help-block">Beskriv så godt som mulig hvor banen ligger.
+              Bruk gjerne gataadresse om du har det. Du kan også legge inn linker til Google maps eller lignende.</span>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <button type="submit" class="btn">Send inn</button>
+          </div>
+        </div>
+      </form>
+    )
+  }
 }

@@ -3,7 +3,7 @@ object UriString {
 
   private val unreserved = {
     val alphanum = (('a' to 'z') ++ ('A' to 'Z') ++ ('0' to '9')).toSet
-    val mark     = Set('-', '_', '.', '!', '~', '*', '\'', '(', ')')
+    val mark     = Set('-', '_', '.', '!', '~', '*', '\'', '(', ')',':')
     alphanum ++ mark
   }
 

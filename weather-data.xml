@@ -1,0 +1,2449 @@
+<weatherdata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://api.met.no/weatherapi/locationforecast/1.8/schema" created="2013-06-25T15:06:55Z">
+   <meta>
+      <model name="YR" termin="2013-06-25T00:00:00Z" runended="2013-06-25T04:36:14Z" nextrun="2013-06-25T18:00:00Z" from="2013-06-25T16:00:00Z" to="2013-06-27T18:00:00Z" />
+      <model name="EPS" termin="2013-06-25T00:00:00Z" runended="2013-06-25T09:23:20Z" nextrun="2013-06-25T21:45:00Z" from="2013-06-28T00:00:00Z" to="2013-07-04T18:00:00Z" />
+      </meta>
+   <product class="pointData">
+      <time datatype="forecast" from="2013-06-25T16:00:00Z" to="2013-06-25T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="17.0"/>
+            <windDirection id="dd" deg="224.2" name="SW"/>
+            <windSpeed id="ff" mps="1.2" beaufort="1" name="Flau vind"/>
+            <humidity value="48.3" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1016.3"/>
+            <cloudiness id="NN" percent="58.3"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="20.7"/>
+            <mediumClouds id="MEDIUM" percent="9.3"/>
+            <highClouds id="HIGH" percent="25.9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T15:00:00Z" to="2013-06-25T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="1.5"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T14:00:00Z" to="2013-06-25T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.9"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T13:00:00Z" to="2013-06-25T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.9"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T10:00:00Z" to="2013-06-25T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.9"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T17:00:00Z" to="2013-06-25T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="16.6"/>
+            <windDirection id="dd" deg="243.9" name="SW"/>
+            <windSpeed id="ff" mps="1.5" beaufort="1" name="Flau vind"/>
+            <humidity value="51.4" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1016.2"/>
+            <cloudiness id="NN" percent="92.6"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="0.0"/>
+            <mediumClouds id="MEDIUM" percent="81.3"/>
+            <highClouds id="HIGH" percent="29.7"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T16:00:00Z" to="2013-06-25T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.7"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T15:00:00Z" to="2013-06-25T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.9"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T14:00:00Z" to="2013-06-25T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.0" maxvalue="1.1"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T11:00:00Z" to="2013-06-25T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.0" maxvalue="1.1"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T18:00:00Z" to="2013-06-25T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="16.4"/>
+            <windDirection id="dd" deg="255.7" name="W"/>
+            <windSpeed id="ff" mps="1.0" beaufort="1" name="Flau vind"/>
+            <humidity value="57.2" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1016.3"/>
+            <cloudiness id="NN" percent="98.7"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="54.2"/>
+            <mediumClouds id="MEDIUM" percent="93.6"/>
+            <highClouds id="HIGH" percent="66.0"/>
+            <temperatureProbability unit="probabilitycode" value="0"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T17:00:00Z" to="2013-06-25T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.3"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T16:00:00Z" to="2013-06-25T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.4"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T15:00:00Z" to="2013-06-25T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="1.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T12:00:00Z" to="2013-06-25T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.0" maxvalue="1.2"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T19:00:00Z" to="2013-06-25T19:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="16.2"/>
+            <windDirection id="dd" deg="286.4" name="W"/>
+            <windSpeed id="ff" mps="1.0" beaufort="1" name="Flau vind"/>
+            <humidity value="60.6" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1016.5"/>
+            <cloudiness id="NN" percent="85.2"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="12.1"/>
+            <mediumClouds id="MEDIUM" percent="15.5"/>
+            <highClouds id="HIGH" percent="69.7"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T18:00:00Z" to="2013-06-25T19:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T17:00:00Z" to="2013-06-25T19:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.1"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T16:00:00Z" to="2013-06-25T19:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.4"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T13:00:00Z" to="2013-06-25T19:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.0" maxvalue="1.2"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T20:00:00Z" to="2013-06-25T20:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="15.9"/>
+            <windDirection id="dd" deg="304.5" name="NW"/>
+            <windSpeed id="ff" mps="1.0" beaufort="1" name="Flau vind"/>
+            <humidity value="69.6" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1016.8"/>
+            <cloudiness id="NN" percent="93.9"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="19.4"/>
+            <mediumClouds id="MEDIUM" percent="22.1"/>
+            <highClouds id="HIGH" percent="77.6"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T19:00:00Z" to="2013-06-25T20:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T18:00:00Z" to="2013-06-25T20:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T17:00:00Z" to="2013-06-25T20:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.1"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T14:00:00Z" to="2013-06-25T20:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.0" maxvalue="1.2"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T21:00:00Z" to="2013-06-25T21:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="15.6"/>
+            <windDirection id="dd" deg="318.3" name="NW"/>
+            <windSpeed id="ff" mps="1.5" beaufort="1" name="Flau vind"/>
+            <humidity value="74.1" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1017.2"/>
+            <cloudiness id="NN" percent="98.9"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="37.8"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="75.5"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T20:00:00Z" to="2013-06-25T21:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T19:00:00Z" to="2013-06-25T21:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T18:00:00Z" to="2013-06-25T21:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T15:00:00Z" to="2013-06-25T21:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="1.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T22:00:00Z" to="2013-06-25T22:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="14.6"/>
+            <windDirection id="dd" deg="324.7" name="NW"/>
+            <windSpeed id="ff" mps="2.8" beaufort="2" name="Svak vind"/>
+            <humidity value="69.8" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1017.4"/>
+            <cloudiness id="NN" percent="93.8"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="13.7"/>
+            <mediumClouds id="MEDIUM" percent="20.4"/>
+            <highClouds id="HIGH" percent="76.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T21:00:00Z" to="2013-06-25T22:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T20:00:00Z" to="2013-06-25T22:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T19:00:00Z" to="2013-06-25T22:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T16:00:00Z" to="2013-06-25T22:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.4"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T23:00:00Z" to="2013-06-25T23:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="13.6"/>
+            <windDirection id="dd" deg="330.0" name="NW"/>
+            <windSpeed id="ff" mps="3.3" beaufort="2" name="Svak vind"/>
+            <humidity value="64.9" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1017.4"/>
+            <cloudiness id="NN" percent="92.3"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="18.3"/>
+            <mediumClouds id="MEDIUM" percent="28.2"/>
+            <highClouds id="HIGH" percent="73.3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T22:00:00Z" to="2013-06-25T23:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T21:00:00Z" to="2013-06-25T23:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T20:00:00Z" to="2013-06-25T23:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T17:00:00Z" to="2013-06-25T23:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.1"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T00:00:00Z" to="2013-06-26T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="13.2"/>
+            <windDirection id="dd" deg="329.2" name="NW"/>
+            <windSpeed id="ff" mps="3.2" beaufort="2" name="Svak vind"/>
+            <humidity value="63.2" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1017.6"/>
+            <cloudiness id="NN" percent="61.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="7.8"/>
+            <mediumClouds id="MEDIUM" percent="5.6"/>
+            <highClouds id="HIGH" percent="43.5"/>
+            <temperatureProbability unit="probabilitycode" value="0"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T23:00:00Z" to="2013-06-26T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T22:00:00Z" to="2013-06-26T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T21:00:00Z" to="2013-06-26T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T18:00:00Z" to="2013-06-26T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T01:00:00Z" to="2013-06-26T01:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.8"/>
+            <windDirection id="dd" deg="324.4" name="NW"/>
+            <windSpeed id="ff" mps="3.0" beaufort="2" name="Svak vind"/>
+            <humidity value="65.6" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1017.9"/>
+            <cloudiness id="NN" percent="79.9"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="9.9"/>
+            <mediumClouds id="MEDIUM" percent="2.4"/>
+            <highClouds id="HIGH" percent="65.3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T00:00:00Z" to="2013-06-26T01:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T23:00:00Z" to="2013-06-26T01:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T22:00:00Z" to="2013-06-26T01:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T19:00:00Z" to="2013-06-26T01:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T02:00:00Z" to="2013-06-26T02:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.5"/>
+            <windDirection id="dd" deg="326.3" name="NW"/>
+            <windSpeed id="ff" mps="2.9" beaufort="2" name="Svak vind"/>
+            <humidity value="69.0" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1017.9"/>
+            <cloudiness id="NN" percent="75.3"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="17.4"/>
+            <mediumClouds id="MEDIUM" percent="27.9"/>
+            <highClouds id="HIGH" percent="49.8"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T01:00:00Z" to="2013-06-26T02:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T00:00:00Z" to="2013-06-26T02:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T23:00:00Z" to="2013-06-26T02:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T20:00:00Z" to="2013-06-26T02:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T03:00:00Z" to="2013-06-26T03:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.2"/>
+            <windDirection id="dd" deg="332.6" name="NW"/>
+            <windSpeed id="ff" mps="2.6" beaufort="2" name="Svak vind"/>
+            <humidity value="73.3" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1018.0"/>
+            <cloudiness id="NN" percent="85.5"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="27.1"/>
+            <mediumClouds id="MEDIUM" percent="64.2"/>
+            <highClouds id="HIGH" percent="54.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T02:00:00Z" to="2013-06-26T03:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T01:00:00Z" to="2013-06-26T03:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T00:00:00Z" to="2013-06-26T03:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T21:00:00Z" to="2013-06-26T03:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T04:00:00Z" to="2013-06-26T04:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.4"/>
+            <windDirection id="dd" deg="341.9" name="N"/>
+            <windSpeed id="ff" mps="2.8" beaufort="2" name="Svak vind"/>
+            <humidity value="74.3" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1018.2"/>
+            <cloudiness id="NN" percent="80.3"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="26.6"/>
+            <mediumClouds id="MEDIUM" percent="53.2"/>
+            <highClouds id="HIGH" percent="43.8"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T03:00:00Z" to="2013-06-26T04:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T02:00:00Z" to="2013-06-26T04:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T01:00:00Z" to="2013-06-26T04:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T22:00:00Z" to="2013-06-26T04:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T05:00:00Z" to="2013-06-26T05:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.9"/>
+            <windDirection id="dd" deg="3.7" name="N"/>
+            <windSpeed id="ff" mps="2.8" beaufort="2" name="Svak vind"/>
+            <humidity value="70.8" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1018.4"/>
+            <cloudiness id="NN" percent="71.8"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="20.7"/>
+            <mediumClouds id="MEDIUM" percent="36.5"/>
+            <highClouds id="HIGH" percent="48.3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T04:00:00Z" to="2013-06-26T05:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T03:00:00Z" to="2013-06-26T05:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T02:00:00Z" to="2013-06-26T05:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-25T23:00:00Z" to="2013-06-26T05:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T06:00:00Z" to="2013-06-26T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="13.5"/>
+            <windDirection id="dd" deg="27.3" name="NE"/>
+            <windSpeed id="ff" mps="3.4" beaufort="2" name="Svak vind"/>
+            <humidity value="66.0" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1018.5"/>
+            <cloudiness id="NN" percent="80.9"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="18.4"/>
+            <mediumClouds id="MEDIUM" percent="32.5"/>
+            <highClouds id="HIGH" percent="65.0"/>
+            <temperatureProbability unit="probabilitycode" value="0"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T05:00:00Z" to="2013-06-26T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T04:00:00Z" to="2013-06-26T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T03:00:00Z" to="2013-06-26T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T00:00:00Z" to="2013-06-26T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T07:00:00Z" to="2013-06-26T07:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="14.4"/>
+            <windDirection id="dd" deg="29.0" name="NE"/>
+            <windSpeed id="ff" mps="4.4" beaufort="3" name="Lett bris"/>
+            <humidity value="58.6" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1018.5"/>
+            <cloudiness id="NN" percent="80.7"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="24.9"/>
+            <mediumClouds id="MEDIUM" percent="37.8"/>
+            <highClouds id="HIGH" percent="65.2"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T06:00:00Z" to="2013-06-26T07:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T05:00:00Z" to="2013-06-26T07:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T04:00:00Z" to="2013-06-26T07:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T01:00:00Z" to="2013-06-26T07:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T08:00:00Z" to="2013-06-26T08:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="14.2"/>
+            <windDirection id="dd" deg="36.8" name="NE"/>
+            <windSpeed id="ff" mps="4.4" beaufort="3" name="Lett bris"/>
+            <humidity value="62.3" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1018.6"/>
+            <cloudiness id="NN" percent="99.7"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="33.6"/>
+            <mediumClouds id="MEDIUM" percent="98.7"/>
+            <highClouds id="HIGH" percent="68.1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T07:00:00Z" to="2013-06-26T08:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T06:00:00Z" to="2013-06-26T08:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T05:00:00Z" to="2013-06-26T08:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T02:00:00Z" to="2013-06-26T08:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T09:00:00Z" to="2013-06-26T09:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="13.2"/>
+            <windDirection id="dd" deg="23.9" name="NE"/>
+            <windSpeed id="ff" mps="3.2" beaufort="2" name="Svak vind"/>
+            <humidity value="74.5" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1018.8"/>
+            <cloudiness id="NN" percent="99.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="44.8"/>
+            <mediumClouds id="MEDIUM" percent="95.0"/>
+            <highClouds id="HIGH" percent="68.6"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T08:00:00Z" to="2013-06-26T09:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T07:00:00Z" to="2013-06-26T09:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T06:00:00Z" to="2013-06-26T09:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T03:00:00Z" to="2013-06-26T09:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T10:00:00Z" to="2013-06-26T10:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="13.5"/>
+            <windDirection id="dd" deg="28.7" name="NE"/>
+            <windSpeed id="ff" mps="3.1" beaufort="2" name="Svak vind"/>
+            <humidity value="75.6" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1019.0"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="75.4"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="67.4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T09:00:00Z" to="2013-06-26T10:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.1"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T08:00:00Z" to="2013-06-26T10:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.1"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T07:00:00Z" to="2013-06-26T10:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.1"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T04:00:00Z" to="2013-06-26T10:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.1"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T11:00:00Z" to="2013-06-26T11:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.9"/>
+            <windDirection id="dd" deg="22.6" name="NE"/>
+            <windSpeed id="ff" mps="2.3" beaufort="2" name="Svak vind"/>
+            <humidity value="87.2" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1019.1"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="83.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="82.7"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T10:00:00Z" to="2013-06-26T11:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.1" maxvalue="0.3"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T09:00:00Z" to="2013-06-26T11:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.1" maxvalue="0.2"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T08:00:00Z" to="2013-06-26T11:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.1" maxvalue="0.3"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T05:00:00Z" to="2013-06-26T11:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.1" maxvalue="0.3"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T12:00:00Z" to="2013-06-26T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="13.3"/>
+            <windDirection id="dd" deg="44.1" name="NE"/>
+            <windSpeed id="ff" mps="3.6" beaufort="3" name="Lett bris"/>
+            <humidity value="85.3" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1019.3"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="98.1"/>
+            <temperatureProbability unit="probabilitycode" value="0"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T11:00:00Z" to="2013-06-26T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.6" minvalue="0.3" maxvalue="1.0"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T10:00:00Z" to="2013-06-26T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.7" minvalue="0.4" maxvalue="1.0"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T09:00:00Z" to="2013-06-26T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.7" minvalue="0.4" maxvalue="1.1"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T06:00:00Z" to="2013-06-26T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.7" minvalue="0.4" maxvalue="1.1"/>
+<symbol id="LIGHTRAIN" number="9"/>
+<symbolProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T13:00:00Z" to="2013-06-26T13:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.4"/>
+            <windDirection id="dd" deg="34.3" name="NE"/>
+            <windSpeed id="ff" mps="3.9" beaufort="3" name="Lett bris"/>
+            <humidity value="87.7" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1019.3"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="91.5"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T12:00:00Z" to="2013-06-26T13:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.0" minvalue="0.8" maxvalue="1.4"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T11:00:00Z" to="2013-06-26T13:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.6" minvalue="1.2" maxvalue="2.0"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T10:00:00Z" to="2013-06-26T13:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.7" minvalue="1.2" maxvalue="2.2"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T07:00:00Z" to="2013-06-26T13:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.7" minvalue="1.2" maxvalue="2.3"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T14:00:00Z" to="2013-06-26T14:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.8"/>
+            <windDirection id="dd" deg="21.4" name="N"/>
+            <windSpeed id="ff" mps="4.2" beaufort="3" name="Lett bris"/>
+            <humidity value="83.5" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1019.1"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="97.6"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T13:00:00Z" to="2013-06-26T14:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.2" minvalue="1.0" maxvalue="1.8"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T12:00:00Z" to="2013-06-26T14:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.3" minvalue="1.8" maxvalue="2.8"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T11:00:00Z" to="2013-06-26T14:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.9" minvalue="2.1" maxvalue="3.6"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T08:00:00Z" to="2013-06-26T14:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="3.0" minvalue="2.1" maxvalue="3.8"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T15:00:00Z" to="2013-06-26T15:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.1"/>
+            <windDirection id="dd" deg="15.8" name="N"/>
+            <windSpeed id="ff" mps="3.9" beaufort="3" name="Lett bris"/>
+            <humidity value="89.1" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1019.0"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="82.4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T14:00:00Z" to="2013-06-26T15:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.3" minvalue="1.0" maxvalue="1.8"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T13:00:00Z" to="2013-06-26T15:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.5" minvalue="2.0" maxvalue="3.1"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T12:00:00Z" to="2013-06-26T15:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="3.5" minvalue="2.8" maxvalue="4.3"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T09:00:00Z" to="2013-06-26T15:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="4.2" minvalue="3.1" maxvalue="5.4"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T16:00:00Z" to="2013-06-26T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.0"/>
+            <windDirection id="dd" deg="5.4" name="N"/>
+            <windSpeed id="ff" mps="4.1" beaufort="3" name="Lett bris"/>
+            <humidity value="89.3" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1018.5"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="88.2"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="46.6"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T15:00:00Z" to="2013-06-26T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.7" minvalue="0.4" maxvalue="1.4"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T14:00:00Z" to="2013-06-26T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.0" minvalue="1.4" maxvalue="2.6"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T13:00:00Z" to="2013-06-26T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="3.2" minvalue="2.4" maxvalue="4.1"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T10:00:00Z" to="2013-06-26T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="4.9" minvalue="3.5" maxvalue="6.4"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T17:00:00Z" to="2013-06-26T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.2"/>
+            <windDirection id="dd" deg="0.0" name="N"/>
+            <windSpeed id="ff" mps="4.2" beaufort="3" name="Lett bris"/>
+            <humidity value="87.5" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1018.2"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="97.5"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T16:00:00Z" to="2013-06-26T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.9" minvalue="0.7" maxvalue="1.2"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T15:00:00Z" to="2013-06-26T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.6" minvalue="1.1" maxvalue="2.2"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T14:00:00Z" to="2013-06-26T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.9" minvalue="2.1" maxvalue="3.7"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T11:00:00Z" to="2013-06-26T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="5.7" minvalue="4.1" maxvalue="7.5"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T18:00:00Z" to="2013-06-26T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="11.9"/>
+            <windDirection id="dd" deg="346.8" name="N"/>
+            <windSpeed id="ff" mps="4.5" beaufort="3" name="Lett bris"/>
+            <humidity value="87.1" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1017.7"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="45.9"/>
+            <temperatureProbability unit="probabilitycode" value="0"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T17:00:00Z" to="2013-06-26T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.4" minvalue="1.1" maxvalue="1.8"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T16:00:00Z" to="2013-06-26T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.3" minvalue="1.8" maxvalue="2.8"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T15:00:00Z" to="2013-06-26T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="3.0" minvalue="2.2" maxvalue="3.8"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T12:00:00Z" to="2013-06-26T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="6.6" minvalue="4.9" maxvalue="8.4"/>
+<symbol id="RAIN" number="10"/>
+<symbolProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T19:00:00Z" to="2013-06-26T19:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="11.5"/>
+            <windDirection id="dd" deg="345.1" name="N"/>
+            <windSpeed id="ff" mps="5.1" beaufort="3" name="Lett bris"/>
+            <humidity value="86.9" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1017.2"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="99.5"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="55.8"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T18:00:00Z" to="2013-06-26T19:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.6" minvalue="1.3" maxvalue="1.9"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T17:00:00Z" to="2013-06-26T19:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="3.0" minvalue="2.5" maxvalue="3.5"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T16:00:00Z" to="2013-06-26T19:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="3.9" minvalue="3.2" maxvalue="4.6"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T13:00:00Z" to="2013-06-26T19:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="7.1" minvalue="5.4" maxvalue="8.9"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T20:00:00Z" to="2013-06-26T20:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="11.1"/>
+            <windDirection id="dd" deg="347.9" name="N"/>
+            <windSpeed id="ff" mps="5.2" beaufort="3" name="Lett bris"/>
+            <humidity value="86.1" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1016.5"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="93.5"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="100.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T19:00:00Z" to="2013-06-26T20:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.7" minvalue="1.4" maxvalue="2.3"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T18:00:00Z" to="2013-06-26T20:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="3.3" minvalue="2.7" maxvalue="3.9"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T17:00:00Z" to="2013-06-26T20:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="4.7" minvalue="3.9" maxvalue="5.5"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T14:00:00Z" to="2013-06-26T20:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="7.6" minvalue="5.8" maxvalue="9.4"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T21:00:00Z" to="2013-06-26T21:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="10.7"/>
+            <windDirection id="dd" deg="349.7" name="N"/>
+            <windSpeed id="ff" mps="5.1" beaufort="3" name="Lett bris"/>
+            <humidity value="85.8" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1016.2"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="84.9"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="0.3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T20:00:00Z" to="2013-06-26T21:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.1" minvalue="1.7" maxvalue="2.8"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T19:00:00Z" to="2013-06-26T21:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="3.8" minvalue="3.1" maxvalue="4.5"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T18:00:00Z" to="2013-06-26T21:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="5.4" minvalue="4.5" maxvalue="6.3"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T15:00:00Z" to="2013-06-26T21:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="8.4" minvalue="6.5" maxvalue="10.4"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T22:00:00Z" to="2013-06-26T22:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="10.5"/>
+            <windDirection id="dd" deg="356.8" name="N"/>
+            <windSpeed id="ff" mps="4.8" beaufort="3" name="Lett bris"/>
+            <humidity value="85.8" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1015.9"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="99.4"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="0.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T21:00:00Z" to="2013-06-26T22:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.3" minvalue="1.8" maxvalue="3.7"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T20:00:00Z" to="2013-06-26T22:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="4.4" minvalue="3.4" maxvalue="5.6"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T19:00:00Z" to="2013-06-26T22:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="6.1" minvalue="4.8" maxvalue="7.6"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T16:00:00Z" to="2013-06-26T22:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="10.0" minvalue="7.8" maxvalue="12.4"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T23:00:00Z" to="2013-06-26T23:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="10.4"/>
+            <windDirection id="dd" deg="357.4" name="N"/>
+            <windSpeed id="ff" mps="4.6" beaufort="3" name="Lett bris"/>
+            <humidity value="87.2" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1015.2"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="0.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T22:00:00Z" to="2013-06-26T23:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.6" minvalue="1.1" maxvalue="2.1"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T21:00:00Z" to="2013-06-26T23:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="3.9" minvalue="2.9" maxvalue="5.1"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T20:00:00Z" to="2013-06-26T23:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="6.0" minvalue="4.5" maxvalue="7.5"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T17:00:00Z" to="2013-06-26T23:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="10.7" minvalue="8.2" maxvalue="13.3"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T00:00:00Z" to="2013-06-27T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="10.3"/>
+            <windDirection id="dd" deg="354.1" name="N"/>
+            <windSpeed id="ff" mps="4.2" beaufort="3" name="Lett bris"/>
+            <humidity value="88.5" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1015.2"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="98.6"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="68.2"/>
+            <temperatureProbability unit="probabilitycode" value="0"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T23:00:00Z" to="2013-06-27T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.2" minvalue="1.1" maxvalue="3.7"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T22:00:00Z" to="2013-06-27T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="3.8" minvalue="2.4" maxvalue="5.2"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T21:00:00Z" to="2013-06-27T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="6.1" minvalue="4.2" maxvalue="8.0"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T18:00:00Z" to="2013-06-27T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="11.5" minvalue="8.4" maxvalue="14.5"/>
+<symbol id="RAIN" number="10"/>
+<symbolProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T01:00:00Z" to="2013-06-27T01:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="10.3"/>
+            <windDirection id="dd" deg="8.2" name="N"/>
+            <windSpeed id="ff" mps="2.4" beaufort="2" name="Svak vind"/>
+            <humidity value="89.6" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1015.1"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="0.2"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T00:00:00Z" to="2013-06-27T01:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.8" minvalue="1.4" maxvalue="2.6"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T23:00:00Z" to="2013-06-27T01:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="4.0" minvalue="2.6" maxvalue="5.5"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T22:00:00Z" to="2013-06-27T01:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="5.6" minvalue="3.9" maxvalue="7.4"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T19:00:00Z" to="2013-06-27T01:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="11.8" minvalue="8.5" maxvalue="15.1"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T02:00:00Z" to="2013-06-27T02:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="10.5"/>
+            <windDirection id="dd" deg="7.3" name="N"/>
+            <windSpeed id="ff" mps="3.3" beaufort="2" name="Svak vind"/>
+            <humidity value="91.1" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1014.5"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="1.3"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T01:00:00Z" to="2013-06-27T02:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.0" minvalue="0.6" maxvalue="1.7"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T00:00:00Z" to="2013-06-27T02:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.8" minvalue="2.0" maxvalue="3.6"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T23:00:00Z" to="2013-06-27T02:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="5.0" minvalue="3.2" maxvalue="6.8"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T20:00:00Z" to="2013-06-27T02:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="11.0" minvalue="7.7" maxvalue="14.4"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T03:00:00Z" to="2013-06-27T03:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="10.7"/>
+            <windDirection id="dd" deg="358.0" name="N"/>
+            <windSpeed id="ff" mps="4.0" beaufort="3" name="Lett bris"/>
+            <humidity value="92.1" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1014.2"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="0.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T02:00:00Z" to="2013-06-27T03:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.5" minvalue="0.2" maxvalue="1.9"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T01:00:00Z" to="2013-06-27T03:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.5" minvalue="0.8" maxvalue="2.5"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T00:00:00Z" to="2013-06-27T03:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="3.3" minvalue="2.2" maxvalue="4.7"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T21:00:00Z" to="2013-06-27T03:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="9.4" minvalue="6.2" maxvalue="13.0"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T04:00:00Z" to="2013-06-27T04:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="10.9"/>
+            <windDirection id="dd" deg="10.6" name="N"/>
+            <windSpeed id="ff" mps="3.9" beaufort="3" name="Lett bris"/>
+            <humidity value="92.8" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1014.2"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="0.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T03:00:00Z" to="2013-06-27T04:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.2" minvalue="0.0" maxvalue="1.1"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T02:00:00Z" to="2013-06-27T04:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.7" minvalue="0.2" maxvalue="1.7"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T01:00:00Z" to="2013-06-27T04:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.7" minvalue="0.9" maxvalue="3.0"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T22:00:00Z" to="2013-06-27T04:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="7.3" minvalue="4.5" maxvalue="10.7"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T05:00:00Z" to="2013-06-27T05:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="11.2"/>
+            <windDirection id="dd" deg="13.4" name="N"/>
+            <windSpeed id="ff" mps="4.1" beaufort="3" name="Lett bris"/>
+            <humidity value="92.5" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1014.1"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="88.4"/>
+            <highClouds id="HIGH" percent="0.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T04:00:00Z" to="2013-06-27T05:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.2" minvalue="0.0" maxvalue="1.3"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T03:00:00Z" to="2013-06-27T05:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.4" minvalue="0.1" maxvalue="1.2"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T02:00:00Z" to="2013-06-27T05:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.9" minvalue="0.3" maxvalue="2.2"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-26T23:00:00Z" to="2013-06-27T05:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="5.9" minvalue="3.4" maxvalue="9.3"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T06:00:00Z" to="2013-06-27T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="11.6"/>
+            <windDirection id="dd" deg="10.6" name="N"/>
+            <windSpeed id="ff" mps="3.4" beaufort="2" name="Svak vind"/>
+            <humidity value="92.2" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1014.3"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="75.1"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="100.0"/>
+            <temperatureProbability unit="probabilitycode" value="0"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T05:00:00Z" to="2013-06-27T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.3" minvalue="0.8" maxvalue="6.0"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T04:00:00Z" to="2013-06-27T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.5" minvalue="0.8" maxvalue="5.3"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T03:00:00Z" to="2013-06-27T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.7" minvalue="0.9" maxvalue="5.9"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T00:00:00Z" to="2013-06-27T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="6.0" minvalue="3.1" maxvalue="10.8"/>
+<symbol id="RAIN" number="10"/>
+<symbolProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T07:00:00Z" to="2013-06-27T07:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="11.8"/>
+            <windDirection id="dd" deg="13.1" name="N"/>
+            <windSpeed id="ff" mps="3.3" beaufort="2" name="Svak vind"/>
+            <humidity value="92.6" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1014.3"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="73.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="99.9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T06:00:00Z" to="2013-06-27T07:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="5.2" minvalue="3.0" maxvalue="8.1"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T05:00:00Z" to="2013-06-27T07:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="7.5" minvalue="4.1" maxvalue="11.0"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T04:00:00Z" to="2013-06-27T07:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="7.7" minvalue="3.9" maxvalue="11.5"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T01:00:00Z" to="2013-06-27T07:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="9.4" minvalue="4.7" maxvalue="14.9"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T08:00:00Z" to="2013-06-27T08:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.1"/>
+            <windDirection id="dd" deg="9.7" name="N"/>
+            <windSpeed id="ff" mps="3.3" beaufort="2" name="Svak vind"/>
+            <humidity value="91.6" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1014.3"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="38.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="8.1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T07:00:00Z" to="2013-06-27T08:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="5.6" minvalue="3.8" maxvalue="8.8"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T06:00:00Z" to="2013-06-27T08:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="10.8" minvalue="7.4" maxvalue="14.2"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T05:00:00Z" to="2013-06-27T08:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="13.1" minvalue="8.2" maxvalue="18.1"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T02:00:00Z" to="2013-06-27T08:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="14.0" minvalue="8.0" maxvalue="20.8"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T09:00:00Z" to="2013-06-27T09:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.1"/>
+            <windDirection id="dd" deg="14.9" name="N"/>
+            <windSpeed id="ff" mps="2.9" beaufort="2" name="Svak vind"/>
+            <humidity value="93.0" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1014.1"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="95.1"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="100.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T08:00:00Z" to="2013-06-27T09:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="4.1" minvalue="2.3" maxvalue="7.8"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T07:00:00Z" to="2013-06-27T09:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="9.8" minvalue="6.2" maxvalue="13.3"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T06:00:00Z" to="2013-06-27T09:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="14.9" minvalue="9.8" maxvalue="20.1"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T03:00:00Z" to="2013-06-27T09:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="17.7" minvalue="10.1" maxvalue="26.2"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T10:00:00Z" to="2013-06-27T10:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.4"/>
+            <windDirection id="dd" deg="5.7" name="N"/>
+            <windSpeed id="ff" mps="2.9" beaufort="2" name="Svak vind"/>
+            <humidity value="91.9" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1014.0"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="0.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T09:00:00Z" to="2013-06-27T10:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="3.8" minvalue="2.3" maxvalue="6.1"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T08:00:00Z" to="2013-06-27T10:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="7.9" minvalue="4.6" maxvalue="11.3"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T07:00:00Z" to="2013-06-27T10:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="13.5" minvalue="8.8" maxvalue="18.3"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T04:00:00Z" to="2013-06-27T10:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="21.2" minvalue="12.3" maxvalue="30.4"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T11:00:00Z" to="2013-06-27T11:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.8"/>
+            <windDirection id="dd" deg="9.9" name="N"/>
+            <windSpeed id="ff" mps="3.0" beaufort="2" name="Svak vind"/>
+            <humidity value="91.8" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1014.1"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="0.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T10:00:00Z" to="2013-06-27T11:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.1" minvalue="1.0" maxvalue="3.0"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T09:00:00Z" to="2013-06-27T11:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="5.8" minvalue="3.6" maxvalue="8.1"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T08:00:00Z" to="2013-06-27T11:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="10.0" minvalue="6.0" maxvalue="14.0"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T05:00:00Z" to="2013-06-27T11:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="23.1" minvalue="13.4" maxvalue="32.9"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T12:00:00Z" to="2013-06-27T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="13.1"/>
+            <windDirection id="dd" deg="14.9" name="N"/>
+            <windSpeed id="ff" mps="3.0" beaufort="2" name="Svak vind"/>
+            <humidity value="93.0" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1014.1"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="0.0"/>
+            <temperatureProbability unit="probabilitycode" value="0"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T11:00:00Z" to="2013-06-27T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.5" minvalue="0.2" maxvalue="2.1"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T10:00:00Z" to="2013-06-27T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.5" minvalue="1.2" maxvalue="3.9"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T09:00:00Z" to="2013-06-27T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="6.3" minvalue="3.5" maxvalue="9.2"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T06:00:00Z" to="2013-06-27T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="21.3" minvalue="12.6" maxvalue="30.0"/>
+<symbol id="RAIN" number="10"/>
+<symbolProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T13:00:00Z" to="2013-06-27T13:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="13.3"/>
+            <windDirection id="dd" deg="12.1" name="N"/>
+            <windSpeed id="ff" mps="3.0" beaufort="2" name="Svak vind"/>
+            <humidity value="93.2" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1013.9"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="96.9"/>
+            <highClouds id="HIGH" percent="0.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T12:00:00Z" to="2013-06-27T13:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.0" maxvalue="0.3"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T11:00:00Z" to="2013-06-27T13:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.6" minvalue="0.2" maxvalue="1.6"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T10:00:00Z" to="2013-06-27T13:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.6" minvalue="1.2" maxvalue="4.1"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T07:00:00Z" to="2013-06-27T13:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="16.2" minvalue="9.9" maxvalue="22.5"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T14:00:00Z" to="2013-06-27T14:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="13.6"/>
+            <windDirection id="dd" deg="13.0" name="N"/>
+            <windSpeed id="ff" mps="3.0" beaufort="2" name="Svak vind"/>
+            <humidity value="93.1" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1013.5"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="74.8"/>
+            <highClouds id="HIGH" percent="0.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T13:00:00Z" to="2013-06-27T14:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.0" maxvalue="0.2"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T12:00:00Z" to="2013-06-27T14:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.2" minvalue="0.0" maxvalue="0.3"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T11:00:00Z" to="2013-06-27T14:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.6" minvalue="0.2" maxvalue="1.7"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T08:00:00Z" to="2013-06-27T14:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="10.6" minvalue="5.8" maxvalue="15.7"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T15:00:00Z" to="2013-06-27T15:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="13.7"/>
+            <windDirection id="dd" deg="13.4" name="N"/>
+            <windSpeed id="ff" mps="3.2" beaufort="2" name="Svak vind"/>
+            <humidity value="93.6" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1013.4"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="100.0"/>
+            <mediumClouds id="MEDIUM" percent="90.6"/>
+            <highClouds id="HIGH" percent="0.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T14:00:00Z" to="2013-06-27T15:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.2"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T13:00:00Z" to="2013-06-27T15:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.0" maxvalue="0.2"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T12:00:00Z" to="2013-06-27T15:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.2" minvalue="0.1" maxvalue="0.4"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T09:00:00Z" to="2013-06-27T15:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="6.5" minvalue="3.5" maxvalue="9.7"/>
+<symbol id="RAIN" number="10"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T16:00:00Z" to="2013-06-27T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="14.0"/>
+            <windDirection id="dd" deg="9.8" name="N"/>
+            <windSpeed id="ff" mps="2.7" beaufort="2" name="Svak vind"/>
+            <humidity value="93.1" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1012.8"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="56.1"/>
+            <mediumClouds id="MEDIUM" percent="0.7"/>
+            <highClouds id="HIGH" percent="100.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T15:00:00Z" to="2013-06-27T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.0"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T14:00:00Z" to="2013-06-27T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.0" maxvalue="0.2"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T13:00:00Z" to="2013-06-27T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.0" maxvalue="0.3"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T10:00:00Z" to="2013-06-27T16:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.8" minvalue="1.2" maxvalue="4.3"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T17:00:00Z" to="2013-06-27T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="14.2"/>
+            <windDirection id="dd" deg="10.9" name="N"/>
+            <windSpeed id="ff" mps="3.0" beaufort="2" name="Svak vind"/>
+            <humidity value="92.7" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1012.8"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="53.6"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="100.0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T16:00:00Z" to="2013-06-27T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.4"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T15:00:00Z" to="2013-06-27T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0" minvalue="0.0" maxvalue="0.2"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T14:00:00Z" to="2013-06-27T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.1" minvalue="0.0" maxvalue="0.3"/>
+<symbol id="CLOUD" number="4"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T11:00:00Z" to="2013-06-27T17:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.7" minvalue="0.3" maxvalue="2.0"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T18:00:00Z" to="2013-06-27T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="14.6"/>
+            <windDirection id="dd" deg="7.5" name="N"/>
+            <windSpeed id="ff" mps="3.4" beaufort="2" name="Svak vind"/>
+            <humidity value="93.2" unit="percent"/>
+            <pressure id="pr" unit="hPa" value="1012.8"/>
+            <cloudiness id="NN" percent="100.0"/>
+            <fog id="FOG" percent="0.0"/>
+            <lowClouds id="LOW" percent="8.0"/>
+            <mediumClouds id="MEDIUM" percent="100.0"/>
+            <highClouds id="HIGH" percent="100.0"/>
+            <temperatureProbability unit="probabilitycode" value="0"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T17:00:00Z" to="2013-06-27T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.4" minvalue="0.1" maxvalue="4.2"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T16:00:00Z" to="2013-06-27T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.4" minvalue="0.1" maxvalue="2.5"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T15:00:00Z" to="2013-06-27T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.4" minvalue="0.1" maxvalue="2.5"/>
+<symbol id="LIGHTRAIN" number="9"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T12:00:00Z" to="2013-06-27T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.6" minvalue="0.2" maxvalue="3.0"/>
+<symbol id="CLOUD" number="4"/>
+<symbolProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-28T00:00:00Z" to="2013-06-28T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.0"/>
+            <windDirection id="dd" deg="332.8" name="NW"/>
+            <windSpeed id="ff" mps="1.7" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1012.9"/>
+            <temperatureProbability unit="probabilitycode" value="0"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-27T18:00:00Z" to="2013-06-28T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="2.9"/>
+<symbol id="LIGHTRAIN" number="9"/>
+<symbolProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-28T06:00:00Z" to="2013-06-28T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.3"/>
+            <windDirection id="dd" deg="21.0" name="N"/>
+            <windSpeed id="ff" mps="1.4" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1012.0"/>
+            <temperatureProbability unit="probabilitycode" value="0"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-28T00:00:00Z" to="2013-06-28T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.6"/>
+<symbol id="LIGHTRAIN" number="9"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-28T12:00:00Z" to="2013-06-28T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="13.8"/>
+            <windDirection id="dd" deg="150.5" name="SE"/>
+            <windSpeed id="ff" mps="3.4" beaufort="2" name="Svak vind"/>
+            <pressure id="pr" unit="hPa" value="1010.7"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-28T06:00:00Z" to="2013-06-28T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="1.8"/>
+<symbol id="LIGHTRAIN" number="9"/>
+<symbolProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-28T18:00:00Z" to="2013-06-28T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="13.6"/>
+            <windDirection id="dd" deg="182.6" name="S"/>
+            <windSpeed id="ff" mps="3.1" beaufort="2" name="Svak vind"/>
+            <pressure id="pr" unit="hPa" value="1013.2"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-28T12:00:00Z" to="2013-06-28T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.9"/>
+<symbol id="LIGHTRAIN" number="9"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-29T00:00:00Z" to="2013-06-29T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="11.1"/>
+            <windDirection id="dd" deg="170.1" name="S"/>
+            <windSpeed id="ff" mps="1.4" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1010.1"/>
+            <temperatureProbability unit="probabilitycode" value="0"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-28T18:00:00Z" to="2013-06-29T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="CLOUD" number="4"/>
+<symbolProbability unit="probabilitycode" value="2"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-29T06:00:00Z" to="2013-06-29T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="11.7"/>
+            <windDirection id="dd" deg="198.7" name="S"/>
+            <windSpeed id="ff" mps="1.6" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1011.1"/>
+            <temperatureProbability unit="probabilitycode" value="0"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-29T00:00:00Z" to="2013-06-29T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.8"/>
+<symbol id="LIGHTRAIN" number="9"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-29T12:00:00Z" to="2013-06-29T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="14.4"/>
+            <windDirection id="dd" deg="290.1" name="W"/>
+            <windSpeed id="ff" mps="2.3" beaufort="2" name="Svak vind"/>
+            <pressure id="pr" unit="hPa" value="1012.9"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-29T06:00:00Z" to="2013-06-29T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.9"/>
+<symbol id="LIGHTRAIN" number="9"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-29T18:00:00Z" to="2013-06-29T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="14.6"/>
+            <windDirection id="dd" deg="176.3" name="S"/>
+            <windSpeed id="ff" mps="2.6" beaufort="2" name="Svak vind"/>
+            <pressure id="pr" unit="hPa" value="1012.9"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-29T12:00:00Z" to="2013-06-29T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="2"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-30T00:00:00Z" to="2013-06-30T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="10.6"/>
+            <windDirection id="dd" deg="237.3" name="SW"/>
+            <windSpeed id="ff" mps="1.6" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1014.9"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-29T18:00:00Z" to="2013-06-30T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-30T06:00:00Z" to="2013-06-30T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="11.8"/>
+            <windDirection id="dd" deg="334.5" name="NW"/>
+            <windSpeed id="ff" mps="1.8" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1013.8"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-30T00:00:00Z" to="2013-06-30T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-30T12:00:00Z" to="2013-06-30T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="15.7"/>
+            <windDirection id="dd" deg="167.7" name="S"/>
+            <windSpeed id="ff" mps="1.5" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1014.0"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-30T06:00:00Z" to="2013-06-30T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-30T18:00:00Z" to="2013-06-30T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="15.1"/>
+            <windDirection id="dd" deg="108.9" name="E"/>
+            <windSpeed id="ff" mps="1.7" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1013.9"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-30T12:00:00Z" to="2013-06-30T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="CLOUD" number="4"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-01T00:00:00Z" to="2013-07-01T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="11.1"/>
+            <windDirection id="dd" deg="315.2" name="NW"/>
+            <windSpeed id="ff" mps="1.7" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1013.7"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-06-30T18:00:00Z" to="2013-07-01T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-01T06:00:00Z" to="2013-07-01T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.9"/>
+            <windDirection id="dd" deg="4.6" name="N"/>
+            <windSpeed id="ff" mps="1.2" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1013.5"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-01T00:00:00Z" to="2013-07-01T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="SUN" number="1"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-01T12:00:00Z" to="2013-07-01T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="16.9"/>
+            <windDirection id="dd" deg="161.2" name="S"/>
+            <windSpeed id="ff" mps="2.1" beaufort="2" name="Svak vind"/>
+            <pressure id="pr" unit="hPa" value="1012.0"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-01T06:00:00Z" to="2013-07-01T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-01T18:00:00Z" to="2013-07-01T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="16.2"/>
+            <windDirection id="dd" deg="176.2" name="S"/>
+            <windSpeed id="ff" mps="2.2" beaufort="2" name="Svak vind"/>
+            <pressure id="pr" unit="hPa" value="1011.3"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-01T12:00:00Z" to="2013-07-01T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="CLOUD" number="4"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-02T00:00:00Z" to="2013-07-02T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="11.3"/>
+            <windDirection id="dd" deg="161.9" name="S"/>
+            <windSpeed id="ff" mps="1.8" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1012.5"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-01T18:00:00Z" to="2013-07-02T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="SUN" number="1"/>
+<symbolProbability unit="probabilitycode" value="2"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-02T06:00:00Z" to="2013-07-02T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.7"/>
+            <windDirection id="dd" deg="320.8" name="NW"/>
+            <windSpeed id="ff" mps="1.5" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1013.4"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-02T00:00:00Z" to="2013-07-02T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="SUN" number="1"/>
+<symbolProbability unit="probabilitycode" value="2"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-02T12:00:00Z" to="2013-07-02T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="16.8"/>
+            <windDirection id="dd" deg="198.9" name="S"/>
+            <windSpeed id="ff" mps="2.4" beaufort="2" name="Svak vind"/>
+            <pressure id="pr" unit="hPa" value="1011.4"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-02T06:00:00Z" to="2013-07-02T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="2"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-02T18:00:00Z" to="2013-07-02T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="15.4"/>
+            <windDirection id="dd" deg="165.5" name="S"/>
+            <windSpeed id="ff" mps="2.5" beaufort="2" name="Svak vind"/>
+            <pressure id="pr" unit="hPa" value="1010.6"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-02T12:00:00Z" to="2013-07-02T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-03T00:00:00Z" to="2013-07-03T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="11.4"/>
+            <windDirection id="dd" deg="150.5" name="SE"/>
+            <windSpeed id="ff" mps="1.7" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1012.5"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-02T18:00:00Z" to="2013-07-03T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-03T06:00:00Z" to="2013-07-03T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.6"/>
+            <windDirection id="dd" deg="313.2" name="NW"/>
+            <windSpeed id="ff" mps="1.0" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1013.3"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-03T00:00:00Z" to="2013-07-03T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="SUN" number="1"/>
+<symbolProbability unit="probabilitycode" value="2"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-03T12:00:00Z" to="2013-07-03T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="16.2"/>
+            <windDirection id="dd" deg="150.3" name="SE"/>
+            <windSpeed id="ff" mps="2.8" beaufort="2" name="Svak vind"/>
+            <pressure id="pr" unit="hPa" value="1012.3"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-03T06:00:00Z" to="2013-07-03T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="SUN" number="1"/>
+<symbolProbability unit="probabilitycode" value="2"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-03T18:00:00Z" to="2013-07-03T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="15.9"/>
+            <windDirection id="dd" deg="138.0" name="SE"/>
+            <windSpeed id="ff" mps="2.8" beaufort="2" name="Svak vind"/>
+            <pressure id="pr" unit="hPa" value="1012.4"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-03T12:00:00Z" to="2013-07-03T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="2"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-04T00:00:00Z" to="2013-07-04T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="11.8"/>
+            <windDirection id="dd" deg="174.7" name="S"/>
+            <windSpeed id="ff" mps="1.5" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1014.1"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-03T18:00:00Z" to="2013-07-04T00:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-04T06:00:00Z" to="2013-07-04T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="12.5"/>
+            <windDirection id="dd" deg="137.0" name="SE"/>
+            <windSpeed id="ff" mps="1.3" beaufort="1" name="Flau vind"/>
+            <pressure id="pr" unit="hPa" value="1014.8"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-04T00:00:00Z" to="2013-07-04T06:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="SUN" number="1"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-04T12:00:00Z" to="2013-07-04T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="16.9"/>
+            <windDirection id="dd" deg="174.7" name="S"/>
+            <windSpeed id="ff" mps="2.8" beaufort="2" name="Svak vind"/>
+            <pressure id="pr" unit="hPa" value="1014.7"/>
+            <temperatureProbability unit="probabilitycode" value="1"/>
+            <windProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-04T06:00:00Z" to="2013-07-04T12:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="2"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-04T18:00:00Z" to="2013-07-04T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <temperature id="TTT" unit="celcius" value="15.6"/>
+            <windDirection id="dd" deg="0.0" name="N"/>
+            <windSpeed id="ff" mps="2.7" beaufort="2" name="Svak vind"/>
+            <pressure id="pr" unit="hPa" value="1014.1"/>
+            <temperatureProbability unit="probabilitycode" value="2"/>
+            <windProbability unit="probabilitycode" value="0"/>
+         </location>
+      </time>
+      <time datatype="forecast" from="2013-07-04T12:00:00Z" to="2013-07-04T18:00:00Z">
+         <location altitude="485" latitude="60.1000" longitude="9.5800">
+            <precipitation unit="mm" value="0.0"/>
+<symbol id="PARTLYCLOUD" number="3"/>
+<symbolProbability unit="probabilitycode" value="1"/>
+         </location>
+      </time>
+   </product>
+</weatherdata> 

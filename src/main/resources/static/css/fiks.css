@@ -8,3 +8,20 @@
 .input-micro {
     width: 30px;
 }
+
+.forecast {
+    display: table-cell;
+}
+
+.forecasts {
+    display: table-row;
+}
+
+.forecast-table {
+    display: table;
+}
+
+.beta {
+    font-size: smaller;
+    vertical-align: super;
+}
