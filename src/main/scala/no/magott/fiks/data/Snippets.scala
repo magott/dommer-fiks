@@ -266,11 +266,9 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   }
 
   def forecasts(w: Seq[MatchForecast]) = {
-    <div class="table">
       <div class="forecasts">
         {w.map(_.asHtml)}
       </div>
-    </div>
   }
 
   def assignedMatchResultForm(r: MatchResult, fields:Map[String, FormField] = Map.empty) = {

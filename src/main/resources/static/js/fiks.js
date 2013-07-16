@@ -10,7 +10,11 @@ function fetchForecast(){
             $("#weather").html(data)
         },
         error: function(error){
-            $("#weather").html(error.responseText)
+            if(error.status == 404){
+                $("#weather").html(error.responseText);
+            }else{
+                $("#weather").html("<div>Problemer med værmeldingstjenesten</div>");
+            }
         },
         complete: function(){
             spinner.stop();

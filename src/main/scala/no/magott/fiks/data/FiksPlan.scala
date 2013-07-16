@@ -37,9 +37,9 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService) extend
         }else{
           val forecast = weatherServie.findForecast(m.date, m.date.plus(m.playingTime.toDuration), stadiumOpt.get.latLongPosition)
           if(forecast.isEmpty){
-            NotFound ~> Html5(<div>Fant ikke værmelding for denne datoen</div>)
+            NotFound ~> CacheControl("public, max-age=3600") ~> Html5(<div>Fant ikke værmelding for denne datoen</div>)
           }else{
-            Ok ~> Html5(Snippets(r).forecasts(forecast))
+            Ok ~> CacheControl("public, max-age=3600") ~> Html5(Snippets(r).forecasts(forecast))
           }
         }
       }

@@ -13,10 +13,11 @@ class StadiumService {
 
   private val MongoSetting(db) = Properties.envOrNone("MONGOLAB_URI")
 
-  private val stadiumCache:Cache[String, Stadium] = CacheBuilder.newBuilder.weakKeys.weakValues.expireAfterWrite(30, DAYS).build()
+  private val stadiumCache:Cache[String, Stadium] = CacheBuilder.newBuilder.maximumSize(500).expireAfterWrite(30, DAYS).expireAfterAccess(30, DAYS).build()
 
   def findStadium(name:String) = {
-    Option(stadiumCache.getIfPresent(name)) orElse{
+    Option(stadiumCache.getIfPresent(name))
+    .orElse{
       val mongoStadium = stadiumFromMongo(name)
       mongoStadium.foreach(s => stadiumCache.put(s.name, s))
       mongoStadium

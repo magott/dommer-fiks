@@ -13,7 +13,7 @@ class StadiumPlan(stadiumService: StadiumService) extends Plan{
       r match {
         case GET(_) => {
           val jsonTemplate = """{"link":"%s", "name": "%s"}"""
-          stadiumService.findStadium(name).map(s => Ok ~> JsonContent ~> ResponseString(jsonTemplate.format(s.googleMapsLink, "Google maps")))
+          stadiumService.findStadium(name).map(s => Ok ~> JsonContent ~> CacheControl("public, max-age=3600") ~> ResponseString(jsonTemplate.format(s.googleMapsLink, "Google maps")))
           .getOrElse {
             val submitLink = uri"${XForwardProto.unapply(r).getOrElse("http")}://${Host.unapply(r).get}/stadium/submit?stadiumName=${name}&matchid=${matchId}"
             NotFound ~> ResponseString(jsonTemplate.format(submitLink, "Vet du hvor dette er? Fortell det til oss"))
@@ -27,7 +27,6 @@ class StadiumPlan(stadiumService: StadiumService) extends Plan{
           Ok ~> Html5(Pages(r).submitStadium(name, matchId))
         }
         case POST(_) => {
-          println("POST")
           val receipt = handleStadiumSubmission(r, name, matchId)
           if(receipt.isAccepted) Ok ~> Html5(Snippets(r).emptyPage(<legend>Takk for at du gjør Dommer-FIKS bedre</legend>))
           else InternalServerError ~> Html5(Pages(r).error(<div>Her skjedde det en feil. Feilkoden er: {"123"}</div>))
