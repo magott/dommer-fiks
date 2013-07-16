@@ -18,6 +18,7 @@ case class MatchForecast(period:Interval, temperature:Double, icon:Int, precipit
     <div class="forecast">
       <div class="interval">{periodString}</div>
       <div class="icon"><img src={iconUrl}></img></div>
+      <div class="temperature">{"%s°".format(temperature)}</div>
       <div class="precipitation">{"%s mm".format(precipitation)}</div>
     </div>
   }
