@@ -12,7 +12,7 @@ case class WeatherData(instants:Seq[InstantForecast], intervals:Seq[IntervalFore
 
 case class MatchForecast(period:Interval, temperature:Double, icon:Int, precipitation:Double){
   import fix.UriString._
-  def iconUrl = uri"http://api.met.no/weatherapi/weathericon/1.0/?symbol=${icon.toString};content_type=image/png"
+  def iconUrl = uri"https://api.met.no/weatherapi/weathericon/1.0/?symbol=${icon.toString};content_type=image/png"
   def periodString = period.getStart.toString("HH.mm") + " - " + period.getEnd.toString("HH.mm")
   def asHtml = {
     <div class="forecast">
