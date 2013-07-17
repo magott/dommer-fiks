@@ -6,6 +6,7 @@ import dispatch._, Defaults._
 import geo.LatLong
 import scala.concurrent.duration.Duration
 import java.util.concurrent.TimeUnit
+import org.specs2.internal.scalaz.Digit._0
 
 class WeatherService {
 
@@ -44,8 +45,8 @@ class WeatherService {
   def parseInterval(t:Node) = {
     val from = fromDate(t)
     val to = toDate(t)
-    val rain = (t \ "location" \ "precipitation" \ "@value").toString.toDouble
-    val symbol = (t \ "location" \ "symbol" \ "@number").toString.toInt
+    val rain = (t \ "location" \ "precipitation" \ "@value").text.toDouble
+    val symbol = (t \ "location" \ "symbol" \ "@number").headOption.map(_.text.toInt)
     IntervalForecast(from, to, rain, symbol)
   }
 

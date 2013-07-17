@@ -10,6 +10,8 @@ class WeatherServiceTest extends FunSuite{
     val service = new WeatherService
     val data = service.parseWeatherData(weatherDataStub)
     assert(data.instants.head.temperature == 17.0)
+    assert(data.intervals.exists(_.symbolId.isEmpty))
+    assert(data.intervals.exists(_.symbolId.isDefined))
   }
 
   test("Gives two forecasts when interval overlaps two interval forcasts"){

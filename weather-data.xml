@@ -2441,7 +2441,7 @@
       <time datatype="forecast" from="2013-07-04T12:00:00Z" to="2013-07-04T18:00:00Z">
          <location altitude="485" latitude="60.1000" longitude="9.5800">
             <precipitation unit="mm" value="0.0"/>
-<symbol id="PARTLYCLOUD" number="3"/>
+<!--<symbol id="PARTLYCLOUD" number="3"/> commented out for testing missing data-->
 <symbolProbability unit="probabilitycode" value="1"/>
          </location>
       </time>
