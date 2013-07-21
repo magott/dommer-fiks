@@ -8,6 +8,10 @@ import com.mongodb.casbah.commons.MongoDBObject
 import com.mongodb.casbah.query.Imports._
 import MongoSetting._
 import java.util.concurrent.TimeUnit.DAYS
+import dispatch.{Http, as, url}
+import scala.concurrent.Future
+import unfiltered.request.{Host, HttpRequest}
+import no.magott.fiks.HerokuRedirect.XForwardProto
 
 class StadiumService {
 
@@ -37,6 +41,10 @@ class StadiumService {
     file.map(parseCsvStadiumLine)
   }
 
+  def insertStadium(s:MongoStadium) = {
+    db("stadium").save(s.toMongo)
+  }
+
   def fromFile = {
     val stream = getClass.getResourceAsStream("/stadium.csv")
     val content = Source.fromInputStream(stream,"UTF-8")
@@ -48,25 +56,43 @@ class StadiumService {
     val tokens = line.split(";")
     FileStadium(tokens(0), tokens(2), tokens(3), tokens(16).toInt, tokens(17).toInt, tokens(18).toInt)
   }
+
+  def lookupStadiumViaGjermhus(matchId:String) = {
+    import dispatch._, Defaults._
+    val gjermhusService = url("http://services.gjermshus.net/f-arena.php") <<? Map("k" -> matchId)
+    val http = Http(gjermhusService OK as.String).option
+    http().map(parseGjermhusResponse)
+  }
+
+  def parseGjermhusResponse(http: String) : MongoStadium = {
+      import org.json4s._
+      implicit val format = DefaultFormats
+      import org.json4s.native.JsonMethods._
+      parse(http).extract[MongoStadium]
+  }
 }
 
 sealed trait Stadium{
   import fix.UriString._
   def name:String
-  def latLongPosition:LatLong
-  def googleMapsLink = uri"http://maps.google.com/?daddr=${latLongPosition.lat.toString},${latLongPosition.long.toString}"
+  def latLong:LatLong
+  def googleMapsLink = uri"http://maps.google.com/?daddr=${latLong.lat.toString},${latLong.long.toString}"
 }
 
 case class FileStadium(name:String, status:String, owner:String, utmNorth:Int, utmEast:Int, utmZone:Int) extends Stadium{
-  def latLongPosition : LatLong = {
-    val latLong = (new CoordinateConversion).utm2LatLon("%s V %s %s".format(utmZone, utmEast, utmNorth))
-    LatLong(latLong(0), latLong(1))
+  def latLong : LatLong = {
+    val ll = (new CoordinateConversion).utm2LatLon("%s V %s %s".format(utmZone, utmEast, utmNorth))
+    LatLong(ll(0), ll(1))
   }
 }
 
-case class MongoStadium(name:String,latLongPosition: LatLong) extends Stadium {
+case class MongoStadium(name:String,latLong: LatLong) extends Stadium {
   def toMongo = {
-
+    MongoDBObject("name" -> name, "latLong" -> latLong.toMongo)
+  }
+  import fix.UriString._
+  def insertLink(r:HttpRequest[_]) = {
+    uri"${XForwardProto.unapply(r).getOrElse("http")}://${Host.unapply(r).get}/stadium/new?stadiumName=${name}&lat=${latLong.lat.toString}&long=${latLong.long.toString}"
   }
 }
 

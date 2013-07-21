@@ -35,7 +35,7 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService) extend
         if(stadiumOpt.isEmpty){
           NotFound ~> Html5(<div>{"Fant ikke arenaen %s".format(m.venue)}</div>)
         }else{
-          val forecast = weatherServie.findForecast(m.date, m.date.plus(m.playingTime.toDuration), stadiumOpt.get.latLongPosition)
+          val forecast = weatherServie.findForecast(m.date, m.date.plus(m.playingTime.toDuration), stadiumOpt.get.latLong)
           if(forecast.isEmpty){
             NotFound ~> CacheControl("public, max-age=3600") ~> Html5(<div>Fant ikke værmelding for denne datoen</div>)
           }else{

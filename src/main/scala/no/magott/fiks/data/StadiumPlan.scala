@@ -5,6 +5,8 @@ import unfiltered.request._
 import unfiltered.response._
 import unfiltered.response.ResponseString
 import no.magott.fiks.HerokuRedirect.XForwardProto
+import no.magott.fiks.user.{User, LoggedOnUser}
+import geo.LatLong
 
 class StadiumPlan(stadiumService: StadiumService) extends Plan{
   private val mailService = new MailgunService
@@ -33,18 +35,40 @@ class StadiumPlan(stadiumService: StadiumService) extends Plan{
         }
       }
     }
+    case r@Path(Seg("stadium" :: "new" :: Nil)) => {
+      r match {
+        case GET(_) => r match{
+          case LoggedOnUser(User("morten.andersen.gott",_,_,_,_)) => {
+            val Params(StadiumNameParam(name)) = r
+            val Params(LatParam(lat)) = r
+            val Params(LongParam(long)) = r
+            val stadium = MongoStadium(name, LatLong(lat.toDouble, long.toDouble))
+            stadiumService.insertStadium(stadium)
+            Ok ~> ResponseString("Okidok")
+          }
+          case _ => Forbidden ~> Html5(Pages(r).error(<p>w00t u trying to do, punk!?</p>))
+        }
+        case _ => MethodNotAllowed ~> ResponseString("w00t?")
+      }
+    }
   }
   def handleStadiumSubmission(r:HttpRequest[_], stadiumName:String, matchId:String) = {
     val fiksEmail = "Dommer-FIKS<fiks@andersen-gott.com>"
     val Params(params) = r
+    val gjermhus = stadiumService.lookupStadiumViaGjermhus(matchId)
     val email = MailMessage(fiksEmail, fiksEmail, "Ny stadio",
       s"""Ny stadio er sendt inn
       |Stadionavn: ${stadiumName}
       |Kamp: http://www.fotball.no/System-pages/Kampfakta/?matchId=${matchId}
       |Avsender: ${params("email").headOption.getOrElse("Ingen e-mail")}
       |Beskrivelse: ${params("description").headOption.getOrElse("Ingen beskrivelse")}
+      |
+      |Google maps: ${gjermhus.map(_.googleMapsLink).getOrElse("")}
+      |Godkjenn mapsplassering: ${gjermhus.map(_.insertLink(r)).getOrElse("")}
       |""".stripMargin)
       mailService.sendMail(email)
   }
   object StadiumNameParam extends Params.Extract("stadiumName", Params.first)
+  object LatParam extends Params.Extract("lat", Params.first)
+  object LongParam extends Params.Extract("long", Params.first)
 }
