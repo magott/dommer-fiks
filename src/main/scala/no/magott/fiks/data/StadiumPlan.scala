@@ -55,7 +55,7 @@ class StadiumPlan(stadiumService: StadiumService) extends Plan{
   def handleStadiumSubmission(r:HttpRequest[_], stadiumName:String, matchId:String) = {
     val fiksEmail = "Dommer-FIKS<fiks@andersen-gott.com>"
     val Params(params) = r
-    val gjermhus = stadiumService.lookupStadiumViaGjermhus(matchId)
+    val gjermhus = stadiumService.lookupStadiumViaGjermshus(matchId)
     val email = MailMessage(fiksEmail, fiksEmail, "Ny stadio",
       s"""Ny stadio er sendt inn
       |Stadionavn: ${stadiumName}

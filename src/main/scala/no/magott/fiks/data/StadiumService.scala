@@ -57,14 +57,14 @@ class StadiumService {
     FileStadium(tokens(0), tokens(2), tokens(3), tokens(16).toInt, tokens(17).toInt, tokens(18).toInt)
   }
 
-  def lookupStadiumViaGjermhus(matchId:String) = {
+  def lookupStadiumViaGjermshus(matchId:String) = {
     import dispatch._, Defaults._
     val gjermhusService = url("http://services.gjermshus.net/f-arena.php") <<? Map("k" -> matchId)
     val http = Http(gjermhusService OK as.String).option
-    http().map(parseGjermhusResponse)
+    http().map(parseGjermshusResponse)
   }
 
-  def parseGjermhusResponse(http: String) : MongoStadium = {
+  def parseGjermshusResponse(http: String) : MongoStadium = {
       import org.json4s._
       implicit val format = DefaultFormats
       import org.json4s.native.JsonMethods._
