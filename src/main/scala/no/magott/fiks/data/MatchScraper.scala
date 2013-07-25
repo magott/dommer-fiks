@@ -70,7 +70,7 @@ class MatchScraper {
     if (assignedMatchesResponse.statusCode == 302) {
       throw new SessionTimeoutException()
     }
-    val assignedMatchesDoc = assignedMatchesResponse.parse;
+    val assignedMatchesDoc = assignedMatchesResponse.parse
     val matchesElements = assignedMatchesDoc.select("div#divUppdrag").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
     val upcomingAssignedMatches = matchesElements.map {
       el: Element =>
