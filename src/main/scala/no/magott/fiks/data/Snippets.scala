@@ -179,7 +179,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
               {m.venue}
             </td>
             <td>
-              {m.referees}
+              {m.refs}
             </td>
             <td>
               {googleCalendarLink(m.date, m.teams, m.venue, m.referees)}
@@ -222,7 +222,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <td>{m.date.toString("HH:mm")}</td>
       </tr>
       {
-        m.refereeTuples.map(t =>
+        m.roleAndNames.map(t =>
           <tr>
             <th>{t._1}</th>
             <td>{t._2}</td>

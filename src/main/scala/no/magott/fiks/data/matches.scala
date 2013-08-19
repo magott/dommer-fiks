@@ -5,6 +5,7 @@ import unfiltered.request.{HttpRequest, Params}
 import org.joda.time.{Interval, LocalTime, LocalDateTime}
 import validation.{FormField, InputOk}
 import fix.UriString._
+import scala.xml.NodeSeq
 
 
 object ResultType extends Enumeration{
@@ -25,6 +26,20 @@ case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String,
   def externalMatchInfoUrl = "http://www.fotball.no/System-pages/Kampfakta/?matchId=%s".format(fiksId)
   def displayDismissalReportLink = date.isBefore(LocalDateTime.now) && isReferee
   def playingTime = new Interval(date.toDateTime, date.toDateTime.plusHours(2))
+
+  def roleAndNames = refereeTuples.map((roleName) => roleName._1 -> toPhoneSpan(roleName._2))
+
+  def refs:NodeSeq = toPhoneSpan(referees)
+
+  def toPhoneSpan(input: String) = {
+    val phone = "[\\d]{8}".r
+    wrapXML(phone.replaceAllIn(input, m => s"""<a href="tel:${m}">${m}</a>"""))
+  }
+
+  def wrapXML(in: String, name: String = "span"): NodeSeq = {
+    xml.XML.loadString(s"<${name}>${in}</${name}>")
+  }
+
   def refereeLastName = {
     val last = refereeTuples.find(findReferee).get._2.split(" ").takeRight(1).mkString
     if(last.endsWith("\u00A0")) last.dropRight(1) else last
