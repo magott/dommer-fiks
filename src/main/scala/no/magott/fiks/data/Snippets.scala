@@ -6,6 +6,7 @@ import unfiltered.request.{Path, Seg, HttpRequest}
 import javax.servlet.http.HttpServletRequest
 import MatchStuff.allMatches
 import validation.FormField
+import no.magott.fiks.VCard
 
 case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
@@ -225,7 +226,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         m.roleAndNames.map(t =>
           <tr>
             <th>{t._1}</th>
-            <td>{t._2}</td>
+            <td>{t._2} {m.contactLink(t._1).getOrElse("")}</td>
           </tr>
         )
       }

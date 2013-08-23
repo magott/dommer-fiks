@@ -3,7 +3,7 @@ package no.magott.fiks.data
 import unfiltered.request._
 import unfiltered.response._
 import unfiltered.filter.{Intent, Plan}
-import no.magott.fiks.HerokuRedirect
+import no.magott.fiks.{VCard, HerokuRedirect}
 import no.magott.fiks.calendar.VCalendar
 import MatchStuff.allMatches
 import unfiltered.Cookie
@@ -42,6 +42,14 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService) extend
             Ok ~> CacheControl("public, max-age=3600") ~> Html5(Snippets(r).forecasts(forecast))
           }
         }
+      }
+    })
+    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "contacts" :: role :: Nil)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r,{
+      val vcard = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId).flatMap(_.refereeTuples.find(_._1 == role)).map(x=> new VCard(x._2))
+      if(vcard.exists(_.canBeVCard)){
+        Ok ~> VCardContentType ~> ResponseString(vcard.get.asVCardString)
+      }else{
+        NotFound ~> Html5(Pages(r).notFound)
       }
     })
     case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "result" :: Nil)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r,{

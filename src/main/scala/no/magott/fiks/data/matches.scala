@@ -6,6 +6,7 @@ import org.joda.time.{Interval, LocalTime, LocalDateTime}
 import validation.{FormField, InputOk}
 import fix.UriString._
 import scala.xml.NodeSeq
+import no.magott.fiks.VCard
 
 
 object ResultType extends Enumeration{
@@ -23,7 +24,7 @@ case class AvailableMatch(category: String, tournament: String, date: LocalDateT
 case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String, teams:String, venue:String, referees:String, fiksId:String){
   lazy val refereeTuples : Array[(String,String)] = referees.split('(').drop(1).map(s=> (s.split(')')(0) -> s.split(')')(1).trim))
   def isReferee = refereeTuples.find(findReferee).exists(!_._2.contains(","))
-  def externalMatchInfoUrl = "http://www.fotball.no/System-pages/Kampfakta/?matchId=%s".format(fiksId)
+  def externalMatchInfoUrl = s"http://www.fotball.no/System-pages/Kampfakta/?matchId=${fiksId}"
   def displayDismissalReportLink = date.isBefore(LocalDateTime.now) && isReferee
   def playingTime = new Interval(date.toDateTime, date.toDateTime.plusHours(2))
 
@@ -31,9 +32,17 @@ case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String,
 
   def refs:NodeSeq = toPhoneSpan(referees)
 
+  def contactLink(role:String) : Option[NodeSeq] = {
+    val url = s"/fiks/mymatches/$fiksId/contacts/$role"
+    refereeTuples.find(_._1 == role).flatMap(x => {
+      if(new VCard(x._2).canBeVCard) Some(<a href={url}><small>Legg til i kontakter</small></a>) else None
+    })
+  }
+
   def toPhoneSpan(input: String) = {
     val phone = "[\\d]{8}".r
-    wrapXML(phone.replaceAllIn(input, m => s"""<a href="tel:${m}">${m}</a>"""))
+    val withPhoneLink = phone.replaceAllIn(input, m => s"""<a href="tel:${m}">${m}</a>""")
+    wrapXML(withPhoneLink)
   }
 
   def wrapXML(in: String, name: String = "span"): NodeSeq = {
