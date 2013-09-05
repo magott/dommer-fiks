@@ -50,5 +50,5 @@ function createSmsLink(){
     var checkedVals = $('.smscheck:checkbox:checked').map(function() {
         return this.value;
     }).get();
-    return "sms:" + checkedVals.join(",");
+    return "sms://" + checkedVals.join(",");
 }
