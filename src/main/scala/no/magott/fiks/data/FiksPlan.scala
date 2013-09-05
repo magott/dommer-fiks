@@ -125,9 +125,9 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService) extend
       f
     } catch {
       case e: SessionTimeoutException => SetCookies(Cookie(name = "fiksToken", value = "", maxAge = Some(0))) ~> displayReauthentication(req)
-      case e: ExecutionException => handleException(e, req)
-      case e: UncheckedExecutionException => handleException(e, req)
-      case e: Exception => Html5(Pages(req).error(e))
+      case e: ExecutionException => GatewayTimeout ~> handleException(e, req)
+      case e: UncheckedExecutionException => GatewayTimeout ~> handleException(e, req)
+      case e: Exception => InternalServerError ~> Html5(Pages(req).error(e))
     }
   }
 
