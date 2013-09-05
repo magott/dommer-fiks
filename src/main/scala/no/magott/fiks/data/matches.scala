@@ -29,6 +29,7 @@ case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String,
   def playingTime = new Interval(date.toDateTime, date.toDateTime.plusHours(2))
 
   def roleAndNames = refereeTuples.map((roleName) => roleName._1 -> toPhoneSpan(roleName._2))
+  def officials = refereeTuples.map(Official.fromTuple)
 
   def refs:NodeSeq = toPhoneSpan(referees)
 

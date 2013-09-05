@@ -34,5 +34,27 @@ class MatchTest extends FunSuite{
     assert(m.dismissalUrl.startsWith("http"))
   }
 
+  test("Can create html with tel links of referee tupples"){
+    val refString = "(Dommer) Monica Larsen  Tlf.: mangler, Mobil:94058108 (AD1) Morten Andersen-Gott  (AD2) Eirik Aasheim  Tlf.: mangler, Mobil:91159497 (4. dommer) Resa Hauge  Tlf.: mangler, Mobil:97000098 (Dommerveileder) Jane Therese Sæves Myran  Tlf.:69886806, Mobil: mangler (Kampdelegat) Robert Valdemar Iversen  Tlf.:70131941, Mobil:48116530"
+
+  }
+
+  test("Can extract name, phone number and mobile"){
+    val NameMobilePhone(n1, m1, p1) = "Monica Larsen Tlf.: mangler, Mobil:94058108"
+    assert(m1.isDefined)
+    assert(p1.isEmpty)
+    assert(!n1.contains(":"))
+    val NameMobilePhone(n2, m2, p2) = "Morten Taraldsvik Olafsen  Tlf.:91304863, Mobil:91304863"
+    assert(!n2.contains(":"))
+    assert(m2.isDefined)
+    assert(p2.isDefined)
+    val NameMobilePhone(n3, m3, p3) = "Reservert Oslo  Tlf.: mangler, Mobil: mangler"
+    assert(!n3.contains(":"))
+    assert(m3.isEmpty)
+    assert(p3.isEmpty)
+  }
+
+
+
 
 }

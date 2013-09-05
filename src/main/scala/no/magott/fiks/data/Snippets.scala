@@ -63,7 +63,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   }
 
   def emptyPage(body: NodeSeq, page: Option[String] = None, scripts:Option[NodeSeq] = None): NodeSeq =
-    <html lang="en">
+    <html lang="no">
       <head>
           <meta charset="utf-8"/>
         <title>Fiks fix</title>
@@ -71,6 +71,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
           <meta name="description" content="Fiks, without the #fail"/>
           <meta name="author" content="Morten Andersen-Gott"/>
           <meta name="google-site-verification" content="ptF2AFWdgpfQFz8_Uu2o_kDR704noD60eKR4nHC3uT8"/>
+          <meta http-equiv="Content-Language" content="no" />
           <link rel="shortcut icon" href="/favicon.ico" />
 
         <!-- Le styles -->
@@ -263,6 +264,12 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
           <a class="btn btn-primary" href="/fiks/mymatches"><i class="icon-circle-arrow-left icon-white"></i> Tilbake</a>
         </td>
       </tr>
+      {if(m.officials.size > 1){
+        <tr>
+          <th>SMS</th>
+          <td>{m.officials.filter(_.mobile.isDefined).map(_.smsCheckbox) ++ (<a href="" id="sms" class="btn">Send</a>)}</td>
+        </tr>
+      }}
     </table>
   }
 

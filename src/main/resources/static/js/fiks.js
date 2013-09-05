@@ -13,7 +13,7 @@ function fetchForecast(){
             if(error.status == 404){
                 $("#weather").html(error.responseText);
             }else{
-                $("#weather").html("<div>Problemer med værmeldingstjenesten</div>");
+                $("#weather").html("<div>Problemer med v&aelig;rmeldingstjenesten</div>");
             }
         },
         complete: function(){
@@ -37,4 +37,18 @@ function fetchStadiumLink(){
                 }catch(e){}
             }
         });
+}
+
+function bindSmsButton(){
+    $('.smscheck').click(function(){
+        $("#sms").prop("href", createSmsLink());
+    });
+    createSmsLink();
+}
+
+function createSmsLink(){
+    var checkedVals = $('.smscheck:checkbox:checked').map(function() {
+        return this.value;
+    }).get();
+    return "sms:" + checkedVals.join(",");
 }

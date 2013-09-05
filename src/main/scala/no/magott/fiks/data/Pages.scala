@@ -97,6 +97,8 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
         { """
           $(document).ready(fetchForecast);
           $(document).ready(fetchStadiumLink);
+          $(document).ready(bindSmsButton);
+
 
           """}
       </script>
