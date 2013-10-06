@@ -60,11 +60,8 @@ class UserService {
     }
   }
 
-  def userForSession(fiksToken:String) = {
-    userSession(fiksToken) match {
-      case None => None
-      case Some(session) => byUsername(session.username)
-    }
+  def userForSession(fiksToken:String) : Option[User] = {
+    userSession(fiksToken).flatMap(session => byUsername(session.username))
   }
 
   def incrementPollcount(user:User) {

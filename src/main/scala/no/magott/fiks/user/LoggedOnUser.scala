@@ -8,11 +8,8 @@ object LoggedOnUser {
 
   val userservice = new UserService
 
-  def unapply[T <: HttpServletRequest](req: HttpRequest[T]) = {
-    FiksCookie.unapply(req) match {
-      case None => None
-      case Some(token) =>  userservice.userForSession(token)
-    }
+  def unapply[T <: HttpServletRequest](req: HttpRequest[T]) : Option[User] = {
+    FiksCookie.unapply(req).flatMap(token => userservice.userForSession(token))
   }
 
 }
