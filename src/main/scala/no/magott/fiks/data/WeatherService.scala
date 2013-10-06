@@ -1,7 +1,7 @@
 package no.magott.fiks.data
 
 import scala.xml._
-import org.joda.time.{DateTime, Interval, LocalDateTime}
+import org.joda.time.{DateTimeZone, DateTime, Interval, LocalDateTime}
 import dispatch._, Defaults._
 import geo.LatLong
 import scala.concurrent.duration.Duration
@@ -56,15 +56,15 @@ class WeatherService {
 
 
   def toDate(node: Node): LocalDateTime = {
-    DateTime.parse((node \ "@to").toString).toLocalDateTime
+    DateTime.parse((node \ "@to").toString).withZone(DateTimeZone.forID("Europe/Oslo")).toLocalDateTime
   }
 
   def fromDate(node: Node): LocalDateTime = {
-    DateTime.parse((node \ "@from").toString).toLocalDateTime
+    DateTime.parse((node \ "@from").toString).withZone(DateTimeZone.forID("Europe/Oslo")).toLocalDateTime
   }
 
   def toMatchForecast(instants:Seq[InstantForecast])(intervalForecast:IntervalForecast):MatchForecast = {
-    val instant = instants.find(_.dateTime == intervalForecast.end).get
+    val instant = instants.find(_.dateTime == intervalForecast.start).get
     MatchForecast(intervalForecast.interval, instant.temperature, intervalForecast.symbolId, intervalForecast.precipitation)
   }
 
