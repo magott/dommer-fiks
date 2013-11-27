@@ -18,7 +18,7 @@ object FiksLoginService {
     val eventvalidation = Option(loginDocument.getElementById("__EVENTVALIDATION")).flatMap(el=> Option(el.attr("value")))
     val params = Map("tbAnvandarnamn" -> Some(username), "tbLosenord" -> Some(password), "__VIEWSTATE" -> viewstate, "__EVENTVALIDATION" -> eventvalidation, "btnLoggaIn" -> Some("Logg inn"))
       .collect{
-      case (k, Some(v:String)) => k -> v
+      case (k, Some(v)) => k -> v
     }
     val response = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Login/Login.aspx")
       .data(params.asJava)
