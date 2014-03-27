@@ -76,7 +76,7 @@ class CalendarPlan(calendarService: CalendarService, userservice: UserService) e
       val username = params("username").head.toLowerCase
       val password = params("password").head
       val email = params("email").head
-      FiksLoginService.login(username, password) match {
+      FiksLoginService.login(username, password, false) match {
         case Left(_) => Html5(Pages(req).calendarSignup("badcredentials" :: Nil))
         case Right(_) => {
           userservice.newUser(username, password, email)

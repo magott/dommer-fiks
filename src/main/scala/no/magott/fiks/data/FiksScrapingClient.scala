@@ -8,7 +8,7 @@ object FiksScrapingClient extends App{
   val pass = System.getProperty("fiks.password")
   val scraper = new MatchScraper
   val service = new MatchService(scraper)
-  val login =  FiksLoginService.login(username, pass)
+  val login =  FiksLoginService.login(username, pass, false)
   login match {
     case Right(cookie) =>
       service.assignedMatches(cookie._2).foreach(println)

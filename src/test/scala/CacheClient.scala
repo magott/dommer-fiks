@@ -6,7 +6,7 @@ object CacheClient extends App {
   val pass = System.getProperty("fiks.password")
   val scraper = new MatchScraper
   val service = new MatchService(scraper)
-  val login =  FiksLoginService.login(username, pass)
+  val login =  FiksLoginService.login(username, pass, false)
   login match {
     case Right(cookie) =>
       service.availableMatches(cookie._2)

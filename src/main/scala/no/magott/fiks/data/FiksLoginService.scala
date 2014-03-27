@@ -17,14 +17,13 @@ object FiksLoginService {
   val VALIDATION_COOKIE_NAME = "__RequestVerificationToken_L0Zpa3NXZWI1"
   val REQ_VAL_FORMFIELD_NAME = "__RequestVerificationToken"
 
-  def login(username: String, password: String) = {
+  def login(username: String, password: String, rememberMe: Boolean) = {
     val loginPage = Jsoup.connect(LOGIN_FORM_URL).method(Method.GET).timeout(10000).execute()
     val loginDocument = loginPage.parse
     loginPage.cookies().asScala.foreach(println)
     val requestValidationCookie = loginPage.cookie(VALIDATION_COOKIE_NAME)
-    val foo = Option(loginDocument.getElementsByAttributeValue("name",REQ_VAL_FORMFIELD_NAME))
-    val requestValidationFormField = foo.flatMap(el=> Option(el.attr("value")))
-    val params = Map("UserName" -> Some(username), "Password" -> Some(password), REQ_VAL_FORMFIELD_NAME -> requestValidationFormField)
+    val requestValidationFormField = Option(loginDocument.getElementsByAttributeValue("name", REQ_VAL_FORMFIELD_NAME)).flatMap(el=> Option(el.attr("value")))
+    val params = Map("UserName" -> Some(username), "Password" -> Some(password), REQ_VAL_FORMFIELD_NAME -> requestValidationFormField, "RememberMe" -> Some(rememberMe.toString.capitalize))
       .collect{
       case (k, Some(v)) => k -> v
     }

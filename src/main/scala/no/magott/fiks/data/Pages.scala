@@ -25,9 +25,27 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
           <a href="http://www.fiks.fotball.no">offisielle fiks</a>
         </p>
         <form class="form-horizontal" action="login" method="post">
-            <input type="text" name="username"/>
-            <input type="password" name="password"/>
-          <button type="submit" class="btn btn-primary">Logg inn</button>
+          <div class="control-group">
+            <label class="control-label" for="username">Brukernavn</label>
+            <div class="controls">
+              <input type="text" name="username" placeholder="Brukernavn"/>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="password">Password</label>
+            <div class="controls">
+              <input type="password" name="password" placeholder="Passord"/>
+            </div>
+          </div>
+            <div class="control-group">
+              <div class="controls">
+                <label class="checkbox">
+                  <input type="checkbox" name="RememberMe"/> <a href="#" data-toggle="tooltip" title="Kryss av her for å forbli pålogget. Du vil ikke automatisk logges av og slipper å logge inn hver gang du besøker Dommer-FIKS">
+                  Forbli pålogget</a>
+                  </label>
+                <button type="submit" class="btn btn-primary">Logg inn</button>
+              </div>
+            </div>
         </form>
         <div class="well">
           Har Dommer-FIKS gjort hverdagen din enklere? Hva med å vise din takknemlighet med en liten donasjon via PayPal?
