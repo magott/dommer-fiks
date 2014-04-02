@@ -1,8 +1,7 @@
 package no.magott.fiks.data
 
-import fix.UriString
 import unfiltered.request.{HttpRequest, Params}
-import org.joda.time.{Interval, LocalTime, LocalDateTime}
+import org.joda.time.{Interval, LocalDateTime}
 import validation.{FormField, InputOk}
 import fix.UriString._
 import scala.xml.NodeSeq
@@ -40,6 +39,8 @@ case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String,
     })
   }
 
+
+
   def toPhoneSpan(input: String) = {
     val phone = "[\\d]{8}".r
     val withPhoneLink = phone.replaceAllIn(input, m => s"""<a href="tel:${m}">${m}</a>""")
@@ -60,8 +61,8 @@ case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String,
   private def month3Letters = date.toString("MMM")
   private def day2Digits = date.toString("dd")
   private def year4Digits = date.toString("yyyy")
-  private def homeTeam = teams.split("\u00A0-\u00A0")(0)
-  private def awayTeam  = teams.split("\u00A0-\u00A0")(1)
+  def homeTeam = teams.split("\u00A0-\u00A0")(0)
+  def awayTeam  = teams.split("\u00A0-\u00A0")(1)
   private def findReferee(refTuple:(String,String)) = refTuple._1 == "Dommer"
 
   def dismissalUrl = uri"http://www.formstack.com/forms?form=1351154&viewkey=N8yMtQ9qxb&field17868550=Offisiell%20kamp%20(serie/cup%20i%20regi%20av%20krets/NFF%20-%20kamp%20har%20kampnr.)&field17868644=$first2DigitsMatchId&field17868658=$last9DigitsMatchId&field17869114=$homeTeam&field17869126=$awayTeam&field17950255-first=$refereeFirstName&field17950255-last=$refereeLastName&field17950248M=$month3Letters&field17950248D=$day2Digits&field17950248Y=$year4Digits"

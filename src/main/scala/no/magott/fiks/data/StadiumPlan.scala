@@ -7,6 +7,7 @@ import unfiltered.response.ResponseString
 import no.magott.fiks.HerokuRedirect.XForwardProto
 import no.magott.fiks.user.{User, LoggedOnUser}
 import geo.LatLong
+import no.magott.fiks.MatchIdParameter
 
 class StadiumPlan(stadiumService: StadiumService) extends Plan{
   private val mailService = new MailgunService

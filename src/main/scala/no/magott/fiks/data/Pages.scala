@@ -6,6 +6,7 @@ import unfiltered.request.{Host, HttpRequest}
 import no.magott.fiks.HerokuRedirect.XForwardProto
 import java.net.SocketTimeoutException
 import validation.FormField
+import no.magott.fiks.invoice.Invoice
 
 case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
 
@@ -104,10 +105,10 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
   }
 
   def assignedMatches(assignedMatches: List[AssignedMatch]) = {
-    emptyPage(tableOfAssignedMatches(assignedMatches), Some("mymatches"))
+    emptyPage(tableOfAssignedMatches(assignedMatches))
   }
 
-  def assignedMatchInfo(m:AssignedMatch) = emptyPage(assignedMatchDetailsTable(m),None,
+  def assignedMatchInfo(m:AssignedMatch) = emptyPage(assignedMatchDetailsTable(m),
   Some(
     <script src="/js/fiks.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/spin.js/1.2.7/spin.min.js"></script>
@@ -126,7 +127,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
   def assignedMatchResult(r:MatchResult, inputFields: Map[String, FormField] = Map.empty) = emptyPage(assignedMatchResultForm(r, inputFields))
 
   def availableMatches(availableMatches: List[AvailableMatch]) = {
-    emptyPage(tableOfAvailableMatches(availableMatches), Some("availablematches"))
+    emptyPage(tableOfAvailableMatches(availableMatches))
   }
 
   def calendarSignup(missingFields: Seq[String] = Nil) = {
@@ -175,6 +176,20 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
         </div>
         </div>
       </div>
+    )
+  }
+
+
+  def invoiceInfoPage(invoice:Option[Invoice], am:Option[AssignedMatch]) = {
+    val navbar:Option[NodeSeq] = am.map(invoiceNavBar)
+    val matchDataPanel:Option[NodeSeq] = invoice.map(i => invoiceMatchDataPanel(i.matchData))
+    val form:NodeSeq = invoiceForm(invoice)
+    emptyPage(navbar.getOrElse(NodeSeq.Empty) ++ form ++ matchDataPanel.getOrElse(NodeSeq.Empty), Some(invoiceScripts))
+  }
+
+  def invoices(invoices:Iterator[Invoice]) = {
+    emptyPage(
+      invoiceTable(invoices)
     )
   }
 

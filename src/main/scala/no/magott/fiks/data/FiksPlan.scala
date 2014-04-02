@@ -3,7 +3,7 @@ package no.magott.fiks.data
 import unfiltered.request._
 import unfiltered.response._
 import unfiltered.filter.{Intent, Plan}
-import no.magott.fiks.{VCard, HerokuRedirect}
+import no.magott.fiks.{CommentParameter, MatchIdParameter, VCard, HerokuRedirect}
 import no.magott.fiks.calendar.VCalendar
 import MatchStuff.allMatches
 import unfiltered.Cookie
@@ -14,10 +14,11 @@ import java.net.SocketTimeoutException
 import QParams._
 import validation.Validators._
 import validation.FormField
-import no.magott.fiks.user.IsBetaUser
+import no.magott.fiks.user.{LoggedOnUser, UserSession, UserService, IsBetaUser}
 import org.joda.time.Interval
+import no.magott.fiks.invoice.InvoiceRepository
 
-class FiksPlan(matchservice: MatchService, stadiumService:StadiumService) extends Plan {
+class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoiceRepository:InvoiceRepository) extends Plan {
 
   val weatherServie = new WeatherService
 
@@ -44,6 +45,25 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService) extend
         }
       }
     })
+    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "invoice" :: Nil)) & FiksCookie(loginToken)  & LoggedOnUser(userSession)=> redirectToLoginIfTimeout(r,{
+      r match {
+        case GET(_) => {
+          val invoiceOpt = invoiceRepository.findInvoice(userSession.username, fiksId)
+          if(invoiceOpt.isDefined){
+            HerokuRedirect(r, s"/invoice/${invoiceOpt.get.id.get.toString}")
+          }else{
+            val matchOpt = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId)
+            if(matchOpt.isDefined){
+              HerokuRedirect(r, s"/invoice/new?matchid=$fiksId")
+            }else{
+              Forbidden ~> Html5(Pages(r).forbidden)
+            }
+          }
+        }
+        case POST(_) => MethodNotAllowed ~> ResponseString("Method not allowed. Allowed methods: GET")
+      }
+    })
+
     case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "contacts" :: role :: Nil)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r,{
       val vcard = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId).flatMap(_.refereeTuples.find(_._1 == role)).map(x=> new VCard(x._2))
       if(vcard.exists(_.canBeVCard)){
@@ -170,10 +190,6 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService) extend
 
 
 }
-  object MatchIdParameter extends Params.Extract("matchid", Params.first)
 
-  object ResultParameter extends Params.Extract("result", Params.first)
-
-  object CommentParameter extends Params.Extract("comment", Params.first)
 
 

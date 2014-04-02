@@ -2,11 +2,11 @@ package no.magott.fiks.user
 
 import java.util.UUID
 import no.magott.fiks.data.{MongoSetting, MatchScraper}
-import util.Properties
 import com.mongodb.casbah.commons.MongoDBObject
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import com.mongodb.casbah.query.Imports._
+import scala.util.Properties
 
 class UserService {
   val MongoSetting(db) = Properties.envOrNone("MONGOLAB_URI")

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest
 import MatchStuff.allMatches
 import validation.FormField
 import no.magott.fiks.VCard
+import no.magott.fiks.invoice.{MatchData, Invoice}
 
 case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
@@ -14,7 +15,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   val isLoggedIn = FiksCookie.unapply(req).isDefined && FiksCookie.unapply(req).get.nonEmpty
   val pages = Path(req)
 
-  def navbar(page: Option[String]) = {
+  def navbar = {
     <div class="navbar navbar-fixed-top navbar-inverse">
       <div class="navbar-inner">
         <div class="container-fluid">
@@ -35,16 +36,16 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
                     <a href="/fiks/availablematches">Ledige oppdrag</a>
                 </li>
               }
-            }<li class={if (pages.contains("about")) "active" else "inactive"}>
-              <a href="/fiks/about">Om</a>
-            </li>
+            }
             {
 
              if(isLoggedIn){
                <li class={if (pages.contains("calendar")) "active" else "inactive"}>
                  <a href="/calendar/mycal">Kalender</a>
                </li>
-
+                 <li class={if (pages.contains("invoice")) "active" else "inactive"}>
+                   <a href="/invoice/">Dommerregning</a>
+                 </li>
                <li class={"inactive"}>
                  <a href="/logout">Logg ut</a>
                </li>
@@ -55,6 +56,9 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
              }
 
             }
+              <li class={if (pages.contains("about")) "active" else "inactive"}>
+                <a href="/fiks/about">Om</a>
+              </li>
             </ul>
           </div> <!--/.nav-collapse -->
         </div>
@@ -62,7 +66,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     </div>
   }
 
-  def emptyPage(body: NodeSeq, page: Option[String] = None, scripts:Option[NodeSeq] = None): NodeSeq =
+  def emptyPage(body: NodeSeq, scripts:Option[NodeSeq] = None): NodeSeq =
     <html lang="no">
       <head>
           <meta charset="utf-8"/>
@@ -99,7 +103,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       </head>
       <body>
 
-        {navbar(page)}
+        {navbar}
       <div class="container-fluid">
 
         {body}
@@ -205,6 +209,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
           <li class="inactive"><a href="./result">Resultat</a></li>
         }
       }
+      <li class="inactive"><a href="./invoice">Regning</a></li>
     </ul>
     <table class="table table-striped table-bordered table-condensed">
         <tr>
@@ -285,6 +290,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <a href="./">Info</a>
       </li>
       <li class="active"><a href="result">Resultat</a></li>
+      <li class="inactive"><a href="invoice">Regning</a></li>
     </ul>
     <p>
       <h3>{fields("teams").value.get} <small>{fields("matchId").value.get}</small></h3>
@@ -360,6 +366,135 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       }
       }
     </div>
+  }
+
+  def invoiceTable(invoices:Iterator[Invoice]) = {
+    <table class="table table-striped table-bordered table-condensed">
+      <thead>
+        <tr>
+          <th>Dato</th>
+          <th>Kamp</th>
+          <th>Total</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          invoices.map(invoice =>
+            <tr class={invoice.rowClass}>
+              <td>{invoice.matchData.dateString}</td>
+              <td><a href={invoice.id.get.toString}>{invoice.matchData.teams}</a></td>
+              <td>{invoice.total}</td>
+              <td>{invoice.status}</td>
+            </tr>
+          )
+        }
+      </tbody>
+    </table>
+  }
+
+  def invoiceNavBar(m:AssignedMatch) = {
+    <ul class="nav nav-tabs">
+      <li class="inactive">
+        <a href={s"/fiks/mymatches/${m.fiksId}/"}>Info</a>
+      </li>
+      {
+        if(m.isReferee){
+          <li class="inactive"><a href={s"/fiks/mymatches/${m.fiksId}/result"}>Resultat</a></li>
+        }
+      }
+      <li class="active"><a href={s"/fiks/mymatches/${m.fiksId}/result"}>Regning</a></li>
+    </ul>
+  }
+  def invoiceForm(i:Option[Invoice]) = {
+    <legend>Dommerregning</legend>
+    <form class="form-horizontal" id="invoice" method="post">
+      <div class="control-group">
+        <label class="control-label" for="matchFee">Kamphonorar</label>
+        <div class="controls">
+          <input type="number" id="matchFee" name="matchFee" placeholder="" required="required" value={i.map(_.matchFee.toString).getOrElse("")}/>
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="millageAllowance">Kilometergodtgjørelse</label>
+        <div class="controls">
+          <input type="number" class="input-mini" id="km" name="km" placeholder="ant km" step="0.01"/>
+          <input type="number" class="input-mini" id="allowance" name="allowance" value="4.05" step="0.01"/>
+          <input type="number" id="millageAllowance" name="millageAllowance" class="input-medium" placeholder="sum" step="0.01" value={i.flatMap(_.millageAllowance.map(_.toString)).getOrElse("")}/>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="toll">Bompenger</label>
+        <div class="controls">
+          <input type="number" step="0.01" id="toll" placeholder=" " name="toll" class="input-medium" value={i.flatMap(_.toll.map(_.toString)).getOrElse("")}/>
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="perDiem">Diett</label>
+        <div class="controls">
+          <input type="number" id="perDiem" name="perDiem" placeholder=" " class="input-medium" value={i.flatMap(_.perDiem.map(_.toString)).getOrElse("")}/>
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="total">Total</label>
+        <div class="controls">
+          <input type="number" step="0.01" id="total" placeholder=" " name="total" class="input-medium" value={i.map(_.total.toString).getOrElse("")}/>
+          <span class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-primary">Lagre</button>
+          {
+            if(i.isDefined){
+              if(i.get.reminder.isDefined)
+                <button type="button" id="reminder" class="btn btn-warning">Purret</button>
+              else
+                <button type="button" id="reminder" class="btn btn-inverse">Merk purret</button>
+            }
+          }
+          {
+            if(i.isDefined){
+              if(i.get.settled.isDefined)
+                <button type="button" id="settled" class="btn btn-success">Betalt</button>
+              else
+                <button type="button" id="settled" class="btn">Merk betalt</button>
+            }
+          }
+          </div>
+        </div>
+    </form>
+  }
+
+  def invoiceMatchDataPanel(m:MatchData) = {
+    <legend>Kampinformasjon</legend>
+    <table class="table table-striped table-bordered table-condensed">
+      <tr>
+        <th>Kamp</th>
+        <td>{s"${m.home} - ${m.away}"}</td>
+      </tr>
+      <tr>
+        <th>Arena</th>
+        <td>{m.venue}</td>
+      </tr>
+      <tr>
+        <th>Kampnummer</th>
+        <td>{m.matchId}</td>
+      </tr>      <tr>
+        <th>Turnering</th>
+        <td>{m.tournament}</td>
+      </tr>
+    </table>
+  }
+
+
+  def invoiceScripts = {
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.0/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js" type="text/javascript"></script>
+    <script src="/js/invoice.js" type="text/javascript"></script>
   }
 
   def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) = {
