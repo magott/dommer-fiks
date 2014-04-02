@@ -1,14 +1,19 @@
 package no.magott.fiks.user
 
 import java.util.UUID
-import no.magott.fiks.data.{MongoSetting, MatchScraper}
+import no.magott.fiks.data.{MongoSetting}
 import com.mongodb.casbah.commons.MongoDBObject
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import com.mongodb.casbah.query.Imports._
 import scala.util.Properties
+import com.google.common.cache.{CacheLoader, CacheBuilder, LoadingCache}
+import java.util.concurrent.TimeUnit
 
 class UserService {
+  import no.magott.fiks.data.Scala2GuavaConversions._
+  val sessionCache:LoadingCache[String, Option[UserSession]] = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((loginToken:String) => userSessionFromMongo(loginToken)))
+
   val MongoSetting(db) = Properties.envOrNone("MONGOLAB_URI")
   val where = MongoDBObject
   val cipher = new StandardPBEStringEncryptor();
@@ -54,6 +59,9 @@ class UserService {
   }
 
   def userSession(fiksToken:String) = {
+    sessionCache.get(fiksToken)
+  }
+  private def userSessionFromMongo(fiksToken:String) = {
     db("sessions").findOne(where("fiksToken" -> fiksToken)) match {
       case None => None
       case Some(dbObj) => Some(UserSession.fromMongo(dbObj))

@@ -10,9 +10,7 @@ import no.magott.fiks.HerokuRedirect.XForwardProto
 import javax.servlet.http.HttpServletRequest
 import no.magott.fiks.user.{UserSession, UserService}
 
-class SecurityPlan(val matchservice:MatchService) extends Plan{
-
-  val userservice = new UserService
+class SecurityPlan(matchservice:MatchService, userservice:UserService) extends Plan{
 
   def intent = {
     case r@GET(_) & XForwardProto("http") => {
@@ -27,6 +25,13 @@ class SecurityPlan(val matchservice:MatchService) extends Plan{
     }
     case r@POST(Path(Seg("login" :: Nil))) & Params(p) => handleLogin(r,p)
     case r@GET(Path(Seg("logout" :: Nil))) => handleLogout(r)
+    case r@FiksCookie(token) => {
+      if(userservice.userSession(token).isDefined){
+        Pass
+      }else{
+        HerokuRedirect(r,"/login")
+      }
+    }
   }
 
   def handleLogin[T<:HttpServletRequest](req: HttpRequest[T], map: Map[String, Seq[String]]) = {
