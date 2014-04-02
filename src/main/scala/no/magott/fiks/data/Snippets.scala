@@ -403,7 +403,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
           <li class="inactive"><a href={s"/fiks/mymatches/${m.fiksId}/result"}>Resultat</a></li>
         }
       }
-      <li class="active"><a href={s"/fiks/mymatches/${m.fiksId}/result"}>Regning</a></li>
+      <li class="active"><a href={s"/fiks/mymatches/${m.fiksId}/invoice"}>Regning</a></li>
     </ul>
   }
   def invoiceForm(i:Option[Invoice]) = {
