@@ -5,7 +5,7 @@ import org.joda.time.LocalDateTime
 
 object VCalendarTesten extends App{
 
-  val m = AssignedMatch(LocalDateTime.now,"Foo - Bar","12341234","Foo - Bar","Et sted","Foo, Bar, Foobar", "123")
+  val m = AssignedMatch(LocalDateTime.now,"Foo - Bar","12341234","Foo - Bar","Et sted","Foo, Bar, Foobar", "123", None)
   println(
   new VCalendar(m,m.copy(teams="A - B"), m.copy(teams="C - D")).feed
   )

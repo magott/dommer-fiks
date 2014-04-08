@@ -3,7 +3,7 @@ package no.magott.fiks.data
 import unfiltered.request._
 import unfiltered.response._
 import unfiltered.filter.{Intent, Plan}
-import no.magott.fiks.{CommentParameter, MatchIdParameter, VCard, HerokuRedirect}
+import no.magott.fiks._
 import no.magott.fiks.calendar.VCalendar
 import MatchStuff.allMatches
 import unfiltered.Cookie
@@ -17,6 +17,16 @@ import validation.FormField
 import no.magott.fiks.user.{LoggedOnUser, UserSession, UserService, IsBetaUser}
 import org.joda.time.Interval
 import no.magott.fiks.invoice.InvoiceRepository
+import scala.Some
+import unfiltered.response.Html
+import unfiltered.response.Html5
+import unfiltered.Cookie
+import unfiltered.response.ResponseString
+import scala.Some
+import unfiltered.response.Html
+import unfiltered.response.Html5
+import unfiltered.Cookie
+import unfiltered.response.ResponseString
 
 class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoiceRepository:InvoiceRepository) extends Plan {
 
@@ -41,6 +51,28 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
             NotFound ~> CacheControl("public, max-age=3600") ~> Html5(<div>Fant ikke værmelding for denne datoen</div>)
           }else{
             Ok ~> CacheControl("public, max-age=3600") ~> Html5(Snippets(r).forecasts(forecast))
+          }
+        }
+      }
+    })
+    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "yield" :: Nil)) & FiksCookie(loginToken)  & Params(CancellationIdParameter(cancellationId)) => redirectToLoginIfTimeout(r,{
+      r match{
+        case POST(_) => {
+          val m = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId)
+          if(m.isEmpty)
+            Forbidden ~> Html(Pages(r).forbidden)
+          else{
+            val reason = ReasonParameter.unapply(Params.unapply(r).get).get
+            matchservice.yieldMatch(cancellationId, reason, loginToken)
+            HerokuRedirect(r,"/fiks/mymatches")
+          }
+        }
+        case GET(_) => {
+          val m = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId)
+          if(m.isEmpty)
+            Forbidden ~> Html(Pages(r).forbidden)
+          else{
+            Ok ~> Html5(Pages(r).yieldMatch(m.get))
           }
         }
       }

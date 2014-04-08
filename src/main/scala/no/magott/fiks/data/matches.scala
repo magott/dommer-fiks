@@ -20,7 +20,7 @@ import ResultType._
 case class AvailableMatch(category: String, tournament: String, date: LocalDateTime,
                           matchId: String, teams: String, venue: String, role: String, availabilityId: Option[String])
 
-case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String, teams:String, venue:String, referees:String, fiksId:String){
+case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String, teams:String, venue:String, referees:String, fiksId:String, cancellationId:Option[String]){
   lazy val refereeTuples : Array[(String,String)] = referees.split('(').drop(1).map(s=> (s.split(')')(0) -> s.split(')')(1).trim))
   def isReferee = refereeTuples.find(findReferee).exists(!_._2.contains(","))
   def externalMatchInfoUrl = s"http://www.fotball.no/System-pages/Kampfakta/?matchId=${fiksId}"
@@ -68,6 +68,7 @@ case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String,
   def dismissalUrl = uri"http://www.formstack.com/forms?form=1351154&viewkey=N8yMtQ9qxb&field17868550=Offisiell%20kamp%20(serie/cup%20i%20regi%20av%20krets/NFF%20-%20kamp%20har%20kampnr.)&field17868644=$first2DigitsMatchId&field17868658=$last9DigitsMatchId&field17869114=$homeTeam&field17869126=$awayTeam&field17950255-first=$refereeFirstName&field17950255-last=$refereeLastName&field17950248M=$month3Letters&field17950248D=$day2Digits&field17950248Y=$year4Digits"
 
 }
+
 case class MatchResult(fiksId:String, teams:String, matchId:String, finalScore:Option[Score] = None, halfTimeScore:Option[Score] = None,
                        attendance:Int = 0, firstHalfAddedTime:Option[Int] = None, secondHalfAddedTime:Option[Int] = None,
                        protestHomeTeam:Boolean = false, protestAwayTeam:Boolean = false, resultReports:Set[ResultReport] = Set.empty){

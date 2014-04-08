@@ -41,6 +41,12 @@ class MatchService(val matchscraper:MatchScraper) {
     matchscraper.postMatchResult(result, loginToken);
   }
 
+  def yieldMatch(cancellationId:String, reason:String, loginToken:String) = {
+    val viewstate = matchscraper.scrapeMeldForfallViewState(cancellationId, loginToken)
+    matchscraper.postForfall(cancellationId, reason, viewstate, loginToken)
+    assignedMatchesCache.invalidate(loginToken)
+  }
+
   def matchDetails(matchId:String, loginToken:String) = assignedMatches(loginToken).find(_.fiksId == matchId)
 
   def availableMatchInfo(assignmentId: String, loginToken:String) = {

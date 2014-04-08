@@ -193,6 +193,12 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     )
   }
 
+  def yieldMatch(m:AssignedMatch) = {
+    emptyPage(
+      yieldMatchForm(m)
+    )
+  }
+
   def notFound = emptyPage( <div class="alert alert-block">
     <h4 class="alert-heading">Auda!</h4>
     Fant ikke siden du forsøkte å gå til. Bruk menyen over for å navigere. Eller gå direkte til <a href="/login">innloggingen</a>

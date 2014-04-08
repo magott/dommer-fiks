@@ -11,6 +11,7 @@ import unfiltered.request.POST
 
 class MatchScraper {
   val COOKIE_NAME = "ASP.NET_SessionId"
+  val cancelIdPattern = """.*\((.*)\).*""".r
   val dateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm")
   val matchReportUrl = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchDomarrapport.aspx?matchId=s%"
 
@@ -79,10 +80,32 @@ class MatchScraper {
           el.child(3).getElementsByTag("a").text,
           el.child(4).text,
           el.child(5).text,
-          el.child(6).text,
-          el.child(3).getElementsByTag("a").attr("href").split("=")(1))
+          el.child(6).text.replace("Meld forfall",""),
+          el.child(3).getElementsByTag("a").attr("href").split("=")(1),
+          cancelIdPattern.unapplySeq(el.child(6).getElementsByTag("a").attr("onclick")).flatMap(_.headOption)
+        )
     }
     upcomingAssignedMatches.toList
+  }
+
+  def scrapeMeldForfallViewState(forfallId:String, loginToken:String) = {
+    val url = s"https://fiks.fotball.no/FogisDomarKlient/Uppdrag/UppdragAterbudOrsakModal.aspx?domaruppdragId=$forfallId"
+    val viewstate = Jsoup.connect(url).cookie(COOKIE_NAME, loginToken).timeout(10000).get.select("input#__VIEWSTATE").`val`
+    viewstate
+  }
+
+  def postForfall(forfallId:String, reason:String, viewstate:String, loginToken:String) = {
+    val url = s"https://fiks.fotball.no/FogisDomarKlient/Uppdrag/UppdragAterbudOrsakModal.aspx?domaruppdragId=$forfallId"
+    val resp = Jsoup.connect(url)
+      .data("tbKommentar", reason)
+      .data("__VIEWSTATE", viewstate)
+      .data("btnSpara","Lagre")
+      .method(Method.POST).followRedirects(false).execute()
+    val code = resp.statusCode()
+    println("Forfall meldt med statuskode: "+code)
+    println("Location: "+resp.header("Location"))
+
+    code
   }
 
   def scrapeMatchResult(fiksId:String, loginToken:String) = {

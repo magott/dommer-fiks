@@ -185,7 +185,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
               {m.venue}
             </td>
             <td>
-              {m.refs}
+              {m.refs} &nbsp; {m.cancellationId.map(c => <a href={s"mymatches/${m.fiksId}/yield?cancellationId=${c}"}>Meld forfall</a> ).getOrElse("")}
             </td>
             <td>
               {googleCalendarLink(m.date, m.teams, m.venue, m.referees)}
@@ -552,6 +552,55 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       }
       case None =>
     }
+  }
+
+  def yieldMatchForm(m: AssignedMatch) = {
+    <table class="table table-striped table-bordered table-condensed">
+      <tr>
+        <th>Kamp</th>
+        <td>
+          {m.teams}
+        </td>
+      </tr>
+      <tr>
+        <th>Tidspunkt</th>
+        <td>
+          {m.date.toString("dd.MM.yyyy HH:mm")}
+        </td>
+      </tr>
+      <tr>
+        <th>Bane</th>
+        <td>
+          {m.venue}
+        </td>
+      </tr>
+      <tr>
+      <th>Turnering</th>
+      <td>
+        {m.tournament}
+      </td>
+    </tr>
+    <tr>
+      <th>Dommeroppsett</th>
+      <td>
+        {m.referees}
+      </td>
+    </tr>
+      <form class="well" method="post">
+        <tr>
+          <th>Begrunnelse</th>
+          <td>
+            <textarea name="reason" id="reason"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <button type="submit" class="btn btn-primary">Meld forfall</button>
+          </td>
+        </tr>
+      </form>
+    </table>
   }
 
   def reportInterestForm(availableMatch: AvailableMatch) = {
