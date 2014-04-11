@@ -187,7 +187,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
             <td>
               {m.refs} &nbsp;
               {
-               //m.cancellationId.map(c => <a href={s"mymatches/${m.fiksId}/yield?cancellationId=${c}"}>Meld forfall</a> ).getOrElse("")
+               m.cancellationId.map(c => <a href={s"mymatches/${m.fiksId}/yield?cancellationId=${c}"}>Meld forfall</a> ).getOrElse("")
               }
             </td>
             <td>
