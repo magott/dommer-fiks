@@ -93,7 +93,8 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
         case Path(Seg("invoice" :: Nil)) => req match {
           case GET(_) => {
             val invoices = invoiceRepository.findInvoicesForUser(username)
-            Ok ~> Html5(Pages(req).invoices(invoices))
+            val totals = invoices.foldLeft(InvoiceTotals.empty)(_+_)
+            Ok ~> Html5(Pages(req).invoices(invoices, totals))
           }
         }
 

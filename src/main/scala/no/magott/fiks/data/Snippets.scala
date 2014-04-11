@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest
 import MatchStuff.allMatches
 import validation.FormField
 import no.magott.fiks.VCard
-import no.magott.fiks.invoice.{MatchData, Invoice}
+import no.magott.fiks.invoice.{InvoiceTotals, MatchData, Invoice}
 
 case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
@@ -185,7 +185,10 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
               {m.venue}
             </td>
             <td>
-              {m.refs} &nbsp; {m.cancellationId.map(c => <a href={s"mymatches/${m.fiksId}/yield?cancellationId=${c}"}>Meld forfall</a> ).getOrElse("")}
+              {m.refs} &nbsp;
+              {
+               //m.cancellationId.map(c => <a href={s"mymatches/${m.fiksId}/yield?cancellationId=${c}"}>Meld forfall</a> ).getOrElse("")
+              }
             </td>
             <td>
               {googleCalendarLink(m.date, m.teams, m.venue, m.referees)}
@@ -368,7 +371,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     </div>
   }
 
-  def invoiceTable(invoices:Iterator[Invoice]) = {
+  def invoiceTable(invoices:Seq[Invoice]) = {
     <table class="table table-striped table-bordered table-condensed">
       <thead>
         <tr>
@@ -392,6 +395,24 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       </tbody>
     </table>
   }
+
+  def invoiceTotals(t:InvoiceTotals) =
+  <div class="pull-right">
+    <table class="table">
+      <tr>
+        <td>Betalt</td>
+        <td>{t.settled}</td>
+      </tr>
+      <tr>
+        <td>Utestående</td>
+        <td>{t.outstanding}</td>
+      </tr>
+      <tr>
+        <td><strong>Totalt</strong></td>
+        <td><strong>{t.total}</strong></td>
+      </tr>
+    </table>
+  </div>
 
   def invoiceNavBar(m:AssignedMatch) = {
     <ul class="nav nav-tabs">

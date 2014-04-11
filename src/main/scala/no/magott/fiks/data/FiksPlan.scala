@@ -28,7 +28,7 @@ import unfiltered.response.Html5
 import unfiltered.Cookie
 import unfiltered.response.ResponseString
 
-class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoiceRepository:InvoiceRepository) extends Plan {
+class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoiceRepository:InvoiceRepository, userService:UserService) extends Plan {
 
   val weatherServie = new WeatherService
 
@@ -77,10 +77,11 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
         }
       }
     })
-    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "invoice" :: Nil)) & FiksCookie(loginToken)  & LoggedOnUser(userSession)=> redirectToLoginIfTimeout(r,{
+    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "invoice" :: Nil)) & FiksCookie(loginToken)  => redirectToLoginIfTimeout(r,{
+      val username = userService.userSession(loginToken).map(_.username).get
       r match {
         case GET(_) => {
-          val invoiceOpt = invoiceRepository.findInvoice(userSession.username, fiksId)
+          val invoiceOpt = invoiceRepository.findInvoice(username, fiksId)
           if(invoiceOpt.isDefined){
             HerokuRedirect(r, s"/invoice/${invoiceOpt.get.id.get.toString}")
           }else{

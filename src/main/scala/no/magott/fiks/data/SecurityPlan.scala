@@ -20,7 +20,7 @@ class SecurityPlan(matchservice:MatchService, userservice:UserService) extends P
       }
     }
     case r@GET(Path(Seg("login" :: Nil))) & Params(p)=> {
-      SetCookies(Cookie(name="fiksToken", value="", maxAge=Some(0))) ~>
+      SetCookies(Cookie(name="fiksToken", value="deleted", maxAge=Some(-360000))) ~>
         Html5(Pages(r).loginForm(p))
     }
     case r@POST(Path(Seg("login" :: Nil))) & Params(p) => handleLogin(r,p)
@@ -29,7 +29,7 @@ class SecurityPlan(matchservice:MatchService, userservice:UserService) extends P
       if(userservice.userSession(token).isDefined){
         Pass
       }else{
-        HerokuRedirect(r,"/login")
+        HerokuRedirect(r,"/login?message=sessionTimeout")
       }
     }
   }

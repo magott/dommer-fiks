@@ -23,12 +23,12 @@ object Web {
     val http = jetty.Http(port)
     http.resources(getClass().getResource("/static"))
       .plan(new SecurityPlan(matchservice, userservice))
-      .plan(new FiksPlan(matchservice, stadiumservice, invoiceRepository))
+      .plan(new FiksPlan(matchservice, stadiumservice, invoiceRepository, userservice))
       .plan(new CalendarPlan(calendarservice,userservice))
       .plan(new StadiumPlan(stadiumservice))
       .plan(new InvoicePlan(matchservice, userservice, invoiceRepository))
       .plan(new FallbackPlan)
-    .run
+    .run()
   }
 
 }

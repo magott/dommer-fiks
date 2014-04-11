@@ -57,14 +57,17 @@ $('#invoice').validate({
             number:true
         },
         perDiem:{
-            number:true
+            digits:true
         },
         total:{
             number:true
         }
     },
     messages:{
-        matchFee: "Kamphonorar må være et heltall",
+        matchFee: {
+            required: "Kamphonorar må fylles ut",
+            digits: "Kamphonorar må være et heltall"
+        },
         perDiem: "Diett må være heltall",
         toll: "Bompenger må være et tall",
         total: "Total må være et tall"

@@ -6,7 +6,7 @@ import unfiltered.request.{Host, HttpRequest}
 import no.magott.fiks.HerokuRedirect.XForwardProto
 import java.net.SocketTimeoutException
 import validation.FormField
-import no.magott.fiks.invoice.Invoice
+import no.magott.fiks.invoice.{InvoiceTotals, Invoice}
 
 case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
 
@@ -187,9 +187,9 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     emptyPage(navbar.getOrElse(NodeSeq.Empty) ++ form ++ matchDataPanel.getOrElse(NodeSeq.Empty), Some(invoiceScripts))
   }
 
-  def invoices(invoices:Iterator[Invoice]) = {
+  def invoices(invoices:Seq[Invoice], totals:InvoiceTotals) = {
     emptyPage(
-      invoiceTable(invoices)
+      invoiceTable(invoices) ++ invoiceTotals(totals)
     )
   }
 

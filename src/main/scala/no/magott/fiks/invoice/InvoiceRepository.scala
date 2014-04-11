@@ -24,8 +24,10 @@ class InvoiceRepository {
   }
 
   def findInvoicesForUser(username:String) = {
-    db("invoice").find(where("username" -> username)).map(Invoice.fromMongo)
+    db("invoice").find(where("username" -> username)).map(Invoice.fromMongo).toSeq
   }
+
+  def all = db("invoice").find().map(Invoice.fromMongo).toList
 
   def saveInvoice(invoice:Invoice) = {
     db("invoice").update(q = invoice.updateClause, o = invoice.toMongo, upsert = true, multi = false)
