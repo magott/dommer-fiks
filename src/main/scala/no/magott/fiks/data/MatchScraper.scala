@@ -97,14 +97,13 @@ class MatchScraper {
   def postForfall(forfallId:String, reason:String, viewstate:String, loginToken:String) = {
     val url = s"https://fiks.fotball.no/FogisDomarKlient/Uppdrag/UppdragAterbudOrsakModal.aspx?domaruppdragId=$forfallId"
     val resp = Jsoup.connect(url)
+      .cookie(COOKIE_NAME, loginToken)
       .data("tbKommentar", reason)
       .data("__VIEWSTATE", viewstate)
       .data("btnSpara","Lagre")
       .method(Method.POST).followRedirects(false).execute()
     val code = resp.statusCode()
-    println("Forfall meldt med statuskode: "+code)
-    println("Location: "+resp.header("Location"))
-
+    println(s"""Forfall meldt med statuskode: ${code} Location: ${ resp.header("Location") }""")
     code
   }
 
