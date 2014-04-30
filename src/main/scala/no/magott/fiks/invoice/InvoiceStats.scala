@@ -8,7 +8,11 @@ import org.joda.time.DateTime
 class InvoiceStats {
 
   def badCredit(i:List[Invoice]) = {
-    i.filter(overdueBy1Week).groupBy(groupByTournament).toList.sortBy(_._2.size).reverse
+    i.filter(stillUnpaidAfter1Week).groupBy(teamGroup).toList.sortBy(_._2.size).reverse
+  }
+
+  def stillUnpaidAfter1Week(inv:Invoice) = {
+    overdueBy1Week(inv) && inv.settled.isEmpty
   }
 
   def earlySettlers(inv:Invoice) = {
@@ -22,16 +26,16 @@ class InvoiceStats {
   def overdueBy1Week = overdueBy(7)
 
 
-  def groupByClub(invoice:Invoice) = {
+  def clubGroup(invoice:Invoice) = {
     invoice.matchData.home
   }
 
-  def groupByTournament(invoice:Invoice) = {
+  def tournamentGroup(invoice:Invoice) = {
     invoice.matchData.tournament
   }
 
   def teamGroup(i:Invoice) = {
-    groupByClub(i) +" "+ groupByTournament(i)
+    clubGroup(i) +" "+ tournamentGroup(i)
   }
 
 

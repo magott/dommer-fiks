@@ -26,7 +26,7 @@ class WeatherService {
     implicit val ordering = new OverlapComperator(interval)
     val sorted = overlaps.sorted
     val top3 = sorted.take(2).takeWhile(forecastDateMatchesDateOfMatch)
-    top3.map(toMatchForecast(data.instants))
+    top3.flatMap(interval => toMatchForecast(data.instants)(interval))
   }
 
   def parseWeatherData(data: Elem) = {
@@ -63,9 +63,9 @@ class WeatherService {
     DateTime.parse((node \ "@from").toString).withZone(DateTimeZone.forID("Europe/Oslo")).toLocalDateTime
   }
 
-  def toMatchForecast(instants:Seq[InstantForecast])(intervalForecast:IntervalForecast):MatchForecast = {
-    val instant = instants.find(_.dateTime == intervalForecast.start).get
-    MatchForecast(intervalForecast.interval, instant.temperature, intervalForecast.symbolId, intervalForecast.precipitation)
+  def toMatchForecast(instants:Seq[InstantForecast])(intervalForecast:IntervalForecast):Option[MatchForecast] = {
+    val instantOpt = instants.find(_.dateTime == intervalForecast.start)
+    instantOpt.map(instant => MatchForecast(intervalForecast.interval, instant.temperature, intervalForecast.symbolId, intervalForecast.precipitation))
   }
 
   class OverlapComperator(target:Interval) extends Ordering[IntervalForecast]{
