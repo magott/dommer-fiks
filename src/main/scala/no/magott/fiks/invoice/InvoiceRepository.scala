@@ -24,7 +24,7 @@ class InvoiceRepository {
   }
 
   def findInvoicesForUser(username:String) = {
-    db("invoice").find(where("username" -> username)).map(Invoice.fromMongo).toSeq
+    db("invoice").find(where("username" -> username)).sort(MongoDBObject("matchData.date"-> 1)).map(Invoice.fromMongo).toSeq
   }
 
   def all = db("invoice").find().map(Invoice.fromMongo).toList
