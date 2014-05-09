@@ -1,4 +1,15 @@
-function fetchForecast(){
+// Windows Phone FIX! - AG
+(function () {
+    if ("-ms-user-select" in document.documentElement.style && navigator.userAgent.match(/IEMobile\/10\.0/)) {
+        var msViewportStyle = document.createElement("style");
+        msViewportStyle.appendChild(
+            document.createTextNode("@-ms-viewport{width:auto!important}")
+        );
+        document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+    }
+})();
+
+function fetchForecast() {
     $("#weather").empty();
     var opts = { lines: 8, length: 4, width: 3, radius: 5, left: 10}
     var target = document.getElementById('spinner');
