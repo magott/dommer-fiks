@@ -2,6 +2,6 @@ resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositori
 
 resolvers += Classpaths.typesafeResolver
 
-addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.3.0-SNAPSHOT")
+addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")
 
-addSbtPlugin("com.typesafe.startscript" % "xsbt-start-script-plugin" % "0.5.3")
+addSbtPlugin("com.typesafe.sbt" % "sbt-start-script" % "0.10.0")
