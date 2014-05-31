@@ -9,13 +9,13 @@ object CacheClient extends App {
   val login =  FiksLoginService.login(username, pass, false)
   login match {
     case Right(cookie) =>
-      service.availableMatches(cookie._2)
-      service.availableMatches(cookie._2)
+      service.availableMatches(cookie.sessionToken)
+      service.availableMatches(cookie.sessionToken)
       println("Clearing cache")
-      service.availableMatchesCache.invalidate(cookie._2)
+      service.availableMatchesCache.invalidate(cookie.sessionToken)
 
-      service.availableMatches(cookie._2)
-      service.availableMatches(cookie._2)
+      service.availableMatches(cookie.sessionToken)
+      service.availableMatches(cookie.sessionToken)
 
     case Left(exception) => Console println "Login failed"
   }

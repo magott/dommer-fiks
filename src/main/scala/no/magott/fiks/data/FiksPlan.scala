@@ -133,16 +133,18 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
   }
 
   val myMatches = Intent {
-    case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) =>
+    case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) => {
+      val session = userService.userSession(loginToken).get //TODO: YOLO
       redirectToLoginIfTimeout(r, {
         if (allMatches(r)) {
-          val assigned = matchservice.assignedMatches(loginToken)
+          val assigned = matchservice.assignedMatches(session.sessionToken)
           Ok ~> Html5(Pages(r).assignedMatches(assigned))
         } else {
-          val assigned = matchservice.upcomingAssignedMatches(loginToken)
+          val assigned = matchservice.upcomingAssignedMatches(session.sessionToken)
           Ok ~> Html5(Pages(r).assignedMatches(assigned))
         }
       })
+    }
     case r@GET(Path(Seg("match.ics" :: Nil))) & FiksCookie(loginToken) & Params(MatchIdParameter(matchId)) => redirectToLoginIfTimeout(r, {
       val assigned = matchservice.assignedMatches(loginToken).find(_.matchId == matchId)
       Ok ~> CalendarContentType ~> ResponseString(new VCalendar(assigned.get).feed)
@@ -153,11 +155,13 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
 
   val availableMatches = Intent {
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & Params(MatchIdParameter(matchId)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      val matchInfo = matchservice.availableMatchInfo(matchId, loginToken)
+      val session = userService.userSession(loginToken).get //TODO: YOLO
+      val matchInfo = matchservice.availableMatchInfo(matchId, session.sessionToken)
       Ok ~> Html5(Pages(r).reportInterestIn(matchInfo))
     })
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      val available = matchservice.availableMatches(loginToken)
+      val session = userService.userSession(loginToken).get //TODO: YOLO
+      val available = matchservice.availableMatches(session.sessionToken)
       Ok ~> Html5(Pages(r).availableMatches(available))
     })
   }

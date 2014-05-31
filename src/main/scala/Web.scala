@@ -1,3 +1,4 @@
+import com.mongodb.casbah.commons.conversions.scala.RegisterJodaTimeConversionHelpers
 import java.util.Locale
 import no.magott.fiks.calendar.{CalendarService, CalendarPlan}
 import no.magott.fiks.data._
@@ -10,6 +11,7 @@ import unfiltered.jetty
 
 object Web {
   def main(args: Array[String]) {
+    RegisterJodaTimeConversionHelpers()
     System.setProperty("user.timezone", "Europe/Oslo")
     Locale.setDefault(new Locale("no_NO"))
     val matchscraper = new MatchScraper

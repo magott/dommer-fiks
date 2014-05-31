@@ -55,14 +55,15 @@ class UserService {
   }
 
   def save(userSession:UserSession) = {
-    db("sessions").update(where("fiksToken"->userSession.fiksToken), userSession.asMongoDbObject, true, false)
+    val update = db("sessions").update(where("id"->userSession.id), userSession.asMongoDbObject, true, false)
+    update
   }
 
-  def userSession(fiksToken:String) = {
-    sessionCache.get(fiksToken)
+  def userSession(sessionId:String) = {
+    sessionCache.get(sessionId)
   }
-  private def userSessionFromMongo(fiksToken:String) = {
-    db("sessions").findOne(where("fiksToken" -> fiksToken)) match {
+  private def userSessionFromMongo(sessionId:String) = {
+    db("sessions").findOne(where("id" -> sessionId)) match {
       case None => None
       case Some(dbObj) => Some(UserSession.fromMongo(dbObj))
     }

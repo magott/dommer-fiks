@@ -39,12 +39,12 @@ class SecurityPlan(matchservice:MatchService, userservice:UserService) extends P
     val password = map.get("password").get.head
     val rememberMe = map.get("RememberMe").exists(_.contains("on"))
     FiksLoginService.login(username, password, rememberMe) match {
-      case Right(cookie) => {
-        matchservice.prefetchAvailableMatches(cookie._2)
-        userservice.save(UserSession(cookie._2,username))
+      case Right(session) => {
+        matchservice.prefetchAvailableMatches(session.sessionToken)
+        userservice.save(session)
         val secure = req match { case XForwardProto("https") => Some(true) case _ => Some(false)}
         val maxAge = if(rememberMe) Some(3600*24*365) else None
-        SetCookies(Cookie(name = "fiksToken", value=cookie._2, secure = secure, httpOnly = true, maxAge=maxAge)) ~>
+        SetCookies(Cookie(name = "fiksToken", value=session.id, secure = secure, httpOnly = true, maxAge=maxAge)) ~>
           HerokuRedirect(req,"/fiks/mymatches")
       }
       case _ => HerokuRedirect(req,"/login?message=loginFailed")

@@ -5,6 +5,8 @@ import org.jsoup.Connection.Method
 import scala.collection.JavaConverters._
 import unfiltered.response.Html5
 import no.magott.fiks.user.{UserSession, UserService}
+import java.util.UUID
+import org.joda.time.DateTime
 
 object FiksLoginService {
 
@@ -17,7 +19,7 @@ object FiksLoginService {
   val VALIDATION_COOKIE_NAME = "__RequestVerificationToken_L0Zpa3NXZWI1"
   val REQ_VAL_FORMFIELD_NAME = "__RequestVerificationToken"
 
-  def login(username: String, password: String, rememberMe: Boolean) = {
+  def login(username: String, password: String, rememberMe: Boolean) : Either[Exception, UserSession] = {
     val loginPage = Jsoup.connect(LOGIN_FORM_URL).method(Method.GET).timeout(10000).execute()
     val loginDocument = loginPage.parse
     loginPage.cookies().asScala.foreach(println)
@@ -39,7 +41,8 @@ object FiksLoginService {
     if (response.statusCode == 302) {
       val applicationCookie = response.cookie(APP_COOKIE_NAME)
       val sessionCookie = Jsoup.connect(REF_CLIENT_URL).method(Method.GET).timeout(10000).cookie(APP_COOKIE_NAME, applicationCookie).execute().cookie(SESS_COOKIE_NAME)
-      Right(SESS_COOKIE_NAME -> sessionCookie)
+      val session = UserSession(UUID.randomUUID().toString, sessionCookie, applicationCookie, username, DateTime.now.plusWeeks(14))
+      Right(session)
     } else {
       Left(new RuntimeException("Login failed"))
     }
