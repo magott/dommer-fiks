@@ -133,7 +133,19 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
   """}
-
+        </script>
+        <script type="text/javascript">
+          {"""
+          if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+            var msViewportStyle = document.createElement("style");
+            msViewportStyle.appendChild(
+              document.createTextNode(
+                "@-ms-viewport{width:auto!important}"
+              )
+            );
+            document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+          }
+        """}
         </script>
         {if(scripts.isDefined) scripts.get}
        </body>
