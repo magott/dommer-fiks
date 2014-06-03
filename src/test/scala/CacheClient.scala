@@ -8,14 +8,14 @@ object CacheClient extends App {
   val service = new MatchService(scraper)
   val login =  FiksLoginService.login(username, pass, false)
   login match {
-    case Right(cookie) =>
-      service.availableMatches(cookie.sessionToken)
-      service.availableMatches(cookie.sessionToken)
+    case Right(session) =>
+      service.availableMatches(session)
+      service.availableMatches(session)
       println("Clearing cache")
-      service.availableMatchesCache.invalidate(cookie.sessionToken)
+      service.availableMatchesCache.invalidate(session.sessionToken)
 
-      service.availableMatches(cookie.sessionToken)
-      service.availableMatches(cookie.sessionToken)
+      service.availableMatches(session)
+      service.availableMatches(session)
 
     case Left(exception) => Console println "Login failed"
   }

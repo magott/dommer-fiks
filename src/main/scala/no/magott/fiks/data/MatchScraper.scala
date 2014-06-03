@@ -8,6 +8,7 @@ import org.joda.time.LocalDate
 import org.jsoup.Connection.Method
 import org.jsoup.safety.Whitelist
 import unfiltered.request.POST
+import no.magott.fiks.user.UserSession
 
 class MatchScraper {
   val COOKIE_NAME = "ASP.NET_SessionId"
@@ -15,35 +16,26 @@ class MatchScraper {
   val dateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm")
   val matchReportUrl = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchDomarrapport.aspx?matchId=s%"
 
-  def scrapeMatchInfo(assignmentId: String, loginToken:String) = {
-    val cleanAssignmentId = Jsoup.clean(assignmentId, Whitelist.none)
-    val response = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=" + cleanAssignmentId)
-      .method(Method.GET).cookie(COOKIE_NAME, loginToken).followRedirects(false).timeout(15000).execute()
-    if(response.statusCode == 302){
-      throw new SessionTimeoutException()
+  def scrapeAssignedMatches(session: UserSession) = {
+    val assignedMatchesDoc = withAutomaticReAuth(session, doScrapeAssignedMatches)
+    val matchesElements = assignedMatchesDoc.select("div#divUppdrag").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
+    val upcomingAssignedMatches = matchesElements.map {
+      el: Element =>
+        AssignedMatch(dateTimeFormat.parseLocalDateTime(el.child(0).text),
+          el.child(1).text,
+          el.child(3).getElementsByTag("a").text,
+          el.child(4).text,
+          el.child(5).text,
+          el.child(6).text.replace("Meld forfall",""),
+          el.child(3).getElementsByTag("a").attr("href").split("=")(1),
+          cancelIdPattern.unapplySeq(el.child(6).getElementsByTag("a").attr("onclick")).flatMap(_.headOption)
+        )
     }
-    val el = response.parse().select("table")
-    AvailableMatch(
-      el.select("span#lblTavlingskategori").text,
-      el.select("span#lblTavling").text,
-      dateTimeFormat.parseLocalDateTime(el.select("span#lblTid").text),
-      el.select("span#lblMatchnr").text,
-      el.select("span#lblMatch").text,
-      el.select("span#lblAnlaggning").text,
-      el.select("span#lblUppdrag").text,
-      Some(cleanAssignmentId)
-    )
+    upcomingAssignedMatches.toList
   }
 
-  def scrapeAvailableMatches(loginToken: String) = {
-    val availableMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Start/StartLedigaUppdragLista.aspx")
-      .cookie(COOKIE_NAME, loginToken).method(Method.GET).followRedirects(false).timeout(25000).execute()
-
-    if (availableMatchesResponse.statusCode == 302) {
-      throw new SessionTimeoutException();
-    }
-
-    val availableMatchesDoc = availableMatchesResponse.parse()
+  def scrapeAvailableMatches(session: UserSession) = {
+    val availableMatchesDoc = withAutomaticReAuth(session, doScrapeAvailableMatches)
     val matchElements = availableMatchesDoc.select("div#divMainContent").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
 
     matchElements.map {
@@ -64,53 +56,158 @@ class MatchScraper {
     }.toList
   }
 
-  def scrapeAssignedMatches(loginToken: String) = {
+  def scrapeMatchInfo(assignmentId: String, session:UserSession) = {
+    val cleanAssignmentId = Jsoup.clean(assignmentId, Whitelist.none)
+    val response = withAutomaticReAuth(session, doScrapeMatchInfo(assignmentId) )
+    val el = response.select("table")
+    AvailableMatch(
+      el.select("span#lblTavlingskategori").text,
+      el.select("span#lblTavling").text,
+      dateTimeFormat.parseLocalDateTime(el.select("span#lblTid").text),
+      el.select("span#lblMatchnr").text,
+      el.select("span#lblMatch").text,
+      el.select("span#lblAnlaggning").text,
+      el.select("span#lblUppdrag").text,
+      Some(cleanAssignmentId)
+    )
+  }
+
+  def scrapeMeldForfallViewState(forfallId:String, session:UserSession) = {
+    val url = s"https://fiks.fotball.no/FogisDomarKlient/Uppdrag/UppdragAterbudOrsakModal.aspx?domaruppdragId=$forfallId"
+    val viewstate = withAutomaticReAuth(session, session => Jsoup.connect(url).cookie(COOKIE_NAME, session.sessionToken).timeout(10000).get)
+                      .select("input#__VIEWSTATE").`val`
+    viewstate
+  }
+
+  def postForfall(forfallId:String, reason:String, viewstate:String, session:UserSession) = {
+    val url = s"https://fiks.fotball.no/FogisDomarKlient/Uppdrag/UppdragAterbudOrsakModal.aspx?domaruppdragId=$forfallId"
+    withAutomaticReAuth(session, session => {
+      val resp = Jsoup.connect(url)
+        .cookie(COOKIE_NAME, session.sessionToken)
+        .data("tbKommentar", reason)
+        .data("__VIEWSTATE", viewstate)
+        .data("btnSpara", "Lagre")
+        .method(Method.POST).followRedirects(false).execute()
+      println( s"""Forfall meldt med statuskode: ${resp.statusCode()} Location: ${resp.header("Location")}""")
+      resp.parse()
+    })
+  }
+
+  def scrapeMatchResult(fiksId:String, session:UserSession) = {
+    val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(fiksId)
+    val matchResultDocument = withAutomaticReAuth(session,
+      session=> Jsoup.connect(url).cookie(COOKIE_NAME, session.sessionToken).timeout(10000).get)
+    parseMatchResultDocument(fiksId:String, matchResultDocument)
+  }
+
+  def deleteMatchResult(fiksId:String, deletions:Set[ResultReport], session:UserSession){
+    val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(fiksId)
+    val matchResultForm = withAutomaticReAuth(session,
+      session => Jsoup.connect(url).cookie(COOKIE_NAME,session.sessionToken).get)
+    val con = Jsoup.connect(url).cookie(COOKIE_NAME, session.sessionToken).timeout(15000)
+    deletions.foreach(r => con.data(r.reportId,"on"))
+    con.data("hiddenFunktion","radera")
+      .data("btnSpara","Lagre")
+      .data("__VIEWSTATE",matchResultForm.getElementById("__VIEWSTATE").attr("value"))
+      .data("__EVENTVALIDATION",matchResultForm.getElementById("__EVENTVALIDATION").attr("value"))
+      .followRedirects(false)
+    con.method(Method.POST).execute()
+  }
+
+  def postMatchResult(matchResult: MatchResult, session:UserSession){
+    val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(matchResult.fiksId)
+    val matchResultForm = withAutomaticReAuth(session, session => Jsoup.connect(url).cookie(COOKIE_NAME,session.sessionToken).get)
+
+    val con = Jsoup.connect(url).cookie(COOKIE_NAME, session.sessionToken).timeout(25000)
+    matchResult.halfTimeScore.foreach(x => con.data("tbHalvtidHemmalag", x.home.toString)) //XXX: Fixit!!
+    matchResult.halfTimeScore.foreach(x=> con.data("tbHalvtidBortalag", x.away.toString))
+    matchResult.finalScore.foreach(x => con.data("tbSlutresultatHemmalag", x.home.toString))
+    matchResult.finalScore.foreach(x => con.data("tbSlutresultatBortalag", x.away.toString))
+    con.data("tbAntalAskadare",matchResult.attendance.toString)
+    .data("btnSpara","Lagre")
+    .data("__VIEWSTATE",matchResultForm.getElementById("__VIEWSTATE").attr("value"))
+    .data("__EVENTVALIDATION",matchResultForm.getElementById("__EVENTVALIDATION").attr("value"))
+    .followRedirects(false)
+    con.method(Method.POST).execute()
+  }
+
+  def postInterestForm(availabilityId: String, comment:String, session:UserSession) {
+    val url = "https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=" + availabilityId
+    val reportInterestForm = withAutomaticReAuth(session, doScrapeReportInterestForm(url))
+    val viewstate = Option(reportInterestForm.getElementById("__VIEWSTATE")).flatMap(el => Option(el.attr("value")))
+    val eventvalidation = Option(reportInterestForm.getElementById("__EVENTVALIDATION")).flatMap(el=> Option(el.attr("value")))
+    val optionalData = Map("__VIEWSTATE" -> viewstate,"__EVENTVALIDATION" -> eventvalidation).collect{
+      case (k, Some(v)) => k -> v
+    }
+    val response = Jsoup.connect(url)
+      .method(Method.POST)
+      .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
+      .data("btnAnmal","Meld inn")
+      .data("tbKommentar",comment)
+      .data(optionalData.asJava)
+      .referrer(url)
+      .cookie(COOKIE_NAME,session.sessionToken).followRedirects(false).timeout(25000).execute()
+  }
+
+  private def withAutomaticReAuth(session:UserSession, f: UserSession => Document):Document = {
+    val first = f(session)
+    if(isJsRedirectToLogin(first)) {
+      FiksLoginService.reAuthenticate(session)
+      val second = f(session)
+      if (isJsRedirectToLogin(second)) {
+        throw new SessionTimeoutException
+      } else {
+        second
+      }
+    } else {
+      first
+    }
+  }
+
+  private def isJsRedirectToLogin(doc:Document) = {
+    Option(doc.body).flatMap(el => Option(el.children)).forall(_.isEmpty)
+  }
+
+  private def doScrapeAssignedMatches(session: UserSession) = {
     val assignedMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragUppdragLista.aspx")
-      .cookie(COOKIE_NAME, loginToken).method(Method.GET).timeout(25000).followRedirects(false).execute()
+      .cookie(COOKIE_NAME, session.sessionToken).method(Method.GET).timeout(25000).followRedirects(false).execute()
 
     if (assignedMatchesResponse.statusCode == 302) {
       throw new SessionTimeoutException()
     }
-    val assignedMatchesDoc = assignedMatchesResponse.parse
-    val matchesElements = assignedMatchesDoc.select("div#divUppdrag").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
-    val upcomingAssignedMatches = matchesElements.map {
-      el: Element =>
-        AssignedMatch(dateTimeFormat.parseLocalDateTime(el.child(0).text),
-          el.child(1).text,
-          el.child(3).getElementsByTag("a").text,
-          el.child(4).text,
-          el.child(5).text,
-          el.child(6).text.replace("Meld forfall",""),
-          el.child(3).getElementsByTag("a").attr("href").split("=")(1),
-          cancelIdPattern.unapplySeq(el.child(6).getElementsByTag("a").attr("onclick")).flatMap(_.headOption)
-        )
+    assignedMatchesResponse.parse
+  }
+
+  private def doScrapeAvailableMatches(session: UserSession) = {
+    val availableMatchesResponse = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Start/StartLedigaUppdragLista.aspx")
+      .cookie(COOKIE_NAME, session.sessionToken).method(Method.GET).followRedirects(false).timeout(25000).execute()
+
+    if (availableMatchesResponse.statusCode == 302) {
+      throw new SessionTimeoutException()
     }
-    upcomingAssignedMatches.toList
+    availableMatchesResponse.parse()
   }
 
-  def scrapeMeldForfallViewState(forfallId:String, loginToken:String) = {
-    val url = s"https://fiks.fotball.no/FogisDomarKlient/Uppdrag/UppdragAterbudOrsakModal.aspx?domaruppdragId=$forfallId"
-    val viewstate = Jsoup.connect(url).cookie(COOKIE_NAME, loginToken).timeout(10000).get.select("input#__VIEWSTATE").`val`
-    viewstate
+  private def doScrapeMatchInfo(assignmentId: String) (session: UserSession) = {
+    val response = Jsoup.connect("https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=" + assignmentId)
+      .method(Method.GET).cookie(COOKIE_NAME, session.sessionToken).followRedirects(false).timeout(15000).execute()
+    if(response.statusCode == 302){
+      throw new SessionTimeoutException()
+    }else {
+      response.parse
+    }
   }
 
-  def postForfall(forfallId:String, reason:String, viewstate:String, loginToken:String) = {
-    val url = s"https://fiks.fotball.no/FogisDomarKlient/Uppdrag/UppdragAterbudOrsakModal.aspx?domaruppdragId=$forfallId"
-    val resp = Jsoup.connect(url)
-      .cookie(COOKIE_NAME, loginToken)
-      .data("tbKommentar", reason)
-      .data("__VIEWSTATE", viewstate)
-      .data("btnSpara","Lagre")
-      .method(Method.POST).followRedirects(false).execute()
-    val code = resp.statusCode()
-    println(s"""Forfall meldt med statuskode: ${code} Location: ${ resp.header("Location") }""")
-    code
+  private def doScrapeReportInterestForm(url:String) (session: UserSession) = {
+    Jsoup.connect(url).cookie(COOKIE_NAME,session.sessionToken).get
   }
 
-  def scrapeMatchResult(fiksId:String, loginToken:String) = {
-    val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(fiksId)
-    val matchResultDocument = Jsoup.connect(url).cookie(COOKIE_NAME, loginToken).timeout(10000).get
-    parseMatchResultDocument(fiksId:String, matchResultDocument)
+  private def stringToOptionOfInt(s:String):Option[Int] = {
+    if (s.trim.isEmpty) {
+      None
+    } else {
+      Some(s.toInt)
+    }
   }
 
   def parseMatchResultDocument(fiksId:String, matchResultDocument:Document) = {
@@ -132,65 +229,12 @@ class MatchScraper {
         Score.fromString(el.child(2).text, el.child(3).text),
         el.child(0).child(0).attr("name") ,
         el.child(7).text
-        )
-      }
+      )
+    }
 
     MatchResult(fiksId, teams, matchId, finalScore = Score.toOption(finalHomeGoal, finalAwayGoal),
       halfTimeScore = Score.toOption(halfTimeHomeGoal, halfTimeAwayGoal), attendance=attendance,
       protestHomeTeam=protestHome, protestAwayTeam=protestAway, resultReports=resultReports.toSet)
-  }
-
-  def deleteMatchResult(fiksId:String, deletions:Set[ResultReport], loginToken:String){
-    val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(fiksId)
-    val matchResultForm = Jsoup.connect(url).cookie(COOKIE_NAME,loginToken).get
-    val con = Jsoup.connect(url).cookie(COOKIE_NAME, loginToken).timeout(15000)
-    deletions.foreach(r => con.data(r.reportId,"on"))
-    con.data("hiddenFunktion","radera")
-      .data("btnSpara","Lagre")
-      .data("__VIEWSTATE",matchResultForm.getElementById("__VIEWSTATE").attr("value"))
-      .data("__EVENTVALIDATION",matchResultForm.getElementById("__EVENTVALIDATION").attr("value"))
-      .followRedirects(false)
-    con.method(Method.POST).execute()
-  }
-
-  def postMatchResult(matchResult: MatchResult, loginToken:String){
-    val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(matchResult.fiksId)
-    val matchResultForm = Jsoup.connect(url).cookie(COOKIE_NAME,loginToken).get
-
-    val con = Jsoup.connect(url).cookie(COOKIE_NAME, loginToken).timeout(25000)
-    matchResult.halfTimeScore.foreach(x => con.data("tbHalvtidHemmalag", x.home.toString)) //XXX: Fixit!!
-    matchResult.halfTimeScore.foreach(x=> con.data("tbHalvtidBortalag", x.away.toString))
-    matchResult.finalScore.foreach(x => con.data("tbSlutresultatHemmalag", x.home.toString))
-    matchResult.finalScore.foreach(x => con.data("tbSlutresultatBortalag", x.away.toString))
-    con.data("tbAntalAskadare",matchResult.attendance.toString)
-    .data("btnSpara","Lagre")
-    .data("__VIEWSTATE",matchResultForm.getElementById("__VIEWSTATE").attr("value"))
-    .data("__EVENTVALIDATION",matchResultForm.getElementById("__EVENTVALIDATION").attr("value"))
-    .followRedirects(false)
-    con.method(Method.POST).execute()
-  }
-
-
-  def postInterestForm(availabilityId: String, comment:String, loginToken:String) {
-    val url = "https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=" + availabilityId
-    val reportInterestForm = Jsoup.connect(url).cookie(COOKIE_NAME,loginToken).get
-    val viewstate = Option(reportInterestForm.getElementById("__VIEWSTATE")).flatMap(el => Option(el.attr("value")))
-    val eventvalidation = Option(reportInterestForm.getElementById("__EVENTVALIDATION")).flatMap(el=> Option(el.attr("value")))
-    val optionalData = Map("__VIEWSTATE" -> viewstate,"__EVENTVALIDATION" -> eventvalidation).collect{
-      case (k, Some(v)) => k -> v
-    }
-    val response = Jsoup.connect(url)
-      .method(Method.POST)
-      .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
-      .data("btnAnmal","Meld inn")
-      .data("tbKommentar",comment)
-      .data(optionalData.asJava)
-      .referrer(url)
-      .cookie(COOKIE_NAME,loginToken).followRedirects(false).timeout(25000).execute()
-  }
-
-  private def stringToOptionOfInt(s:String):Option[Int] = {
-    if(s.trim.isEmpty) None else Some(s.toInt)
   }
 
   import ResultType._

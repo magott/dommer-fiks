@@ -37,8 +37,9 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
   }
 
   val matchInfo = Intent {
-    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "forecast" :: Nil)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r,{
-      val matchOption = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId)
+    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "forecast" :: Nil)) & SessionId(sessionId) => redirectToLoginIfTimeout(r,{
+      val session = userService.userSession(sessionId).get //TODO: YOLO
+      val matchOption = matchservice.assignedMatches(session).find(_.fiksId == fiksId)
       if(matchOption.isEmpty) Forbidden ~> Html5(<div>Feil</div>)
       else{
         val m = matchOption.get
@@ -55,20 +56,21 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
         }
       }
     })
-    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "yield" :: Nil)) & FiksCookie(loginToken)  & Params(CancellationIdParameter(cancellationId)) => redirectToLoginIfTimeout(r,{
+    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "yield" :: Nil)) & SessionId(sessionId)  & Params(CancellationIdParameter(cancellationId)) => redirectToLoginIfTimeout(r,{
+      val session = userService.userSession(sessionId).get //TODO: YOLO
       r match{
         case POST(_) => {
-          val m = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId)
+          val m = matchservice.assignedMatches(session).find(_.fiksId == fiksId)
           if(m.isEmpty)
             Forbidden ~> Html(Pages(r).forbidden)
           else{
             val reason = ReasonParameter.unapply(Params.unapply(r).get).get
-            matchservice.yieldMatch(cancellationId, reason, loginToken)
+            matchservice.yieldMatch(cancellationId, reason, session)
             HerokuRedirect(r,"/fiks/mymatches")
           }
         }
         case GET(_) => {
-          val m = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId)
+          val m = matchservice.assignedMatches(session).find(_.fiksId == fiksId)
           if(m.isEmpty)
             Forbidden ~> Html(Pages(r).forbidden)
           else{
@@ -77,15 +79,15 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
         }
       }
     })
-    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "invoice" :: Nil)) & FiksCookie(loginToken)  => redirectToLoginIfTimeout(r,{
-      val username = userService.userSession(loginToken).map(_.username).get
+    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "invoice" :: Nil)) & SessionId(sessionId)  => redirectToLoginIfTimeout(r,{
+      val session = userService.userSession(sessionId).get //TODO: YOLO
       r match {
         case GET(_) => {
-          val invoiceOpt = invoiceRepository.findInvoice(username, fiksId)
+          val invoiceOpt = invoiceRepository.findInvoice(session.username, fiksId)
           if(invoiceOpt.isDefined){
             HerokuRedirect(r, s"/invoice/${invoiceOpt.get.id.get.toString}")
           }else{
-            val matchOpt = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId)
+            val matchOpt = matchservice.assignedMatches(session).find(_.fiksId == fiksId)
             if(matchOpt.isDefined){
               HerokuRedirect(r, s"/invoice/new?matchid=$fiksId")
             }else{
@@ -97,35 +99,38 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
       }
     })
 
-    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "contacts" :: role :: Nil)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r,{
-      val vcard = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId).flatMap(_.refereeTuples.find(_._1 == role)).map(x=> new VCard(x._2))
+    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "contacts" :: role :: Nil)) & SessionId(sessionId) => redirectToLoginIfTimeout(r,{
+      val session = userService.userSession(sessionId).get //TODO: YOLO
+      val vcard = matchservice.assignedMatches(session).find(_.fiksId == fiksId).flatMap(_.refereeTuples.find(_._1 == role)).map(x=> new VCard(x._2))
       if(vcard.exists(_.canBeVCard)){
         Ok ~> VCardContentType ~> ResponseString(vcard.get.asVCardString)
       }else{
         NotFound ~> Html5(Pages(r).notFound)
       }
     })
-    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "result" :: Nil)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r,{
-      val matchOption = matchservice.assignedMatches(loginToken).find(_.fiksId == fiksId)
+    case r@Path(Seg("fiks" :: "mymatches" :: fiksId :: "result" :: Nil)) & SessionId(sessionId) => redirectToLoginIfTimeout(r,{
+      val session = userService.userSession(sessionId).get
+      val matchOption = matchservice.assignedMatches(session).find(_.fiksId == fiksId)
       if(matchOption.isEmpty || !matchOption.get.isReferee){
         Forbidden ~> Html5(Pages(r).forbidden)
       }else{
         r match {
           case GET(_) => redirectToLoginIfTimeout(r, {
-            val matchresult = matchservice.matchResult(fiksId, loginToken)
+            val matchresult = matchservice.matchResult(fiksId, session)
             Html5(Pages(r).assignedMatchResult(matchresult, matchresult.asInputFields))
           })
           case POST(_) & Params(params) => redirectToLoginIfTimeout(r, {
-              val matchresult = matchservice.matchResult(fiksId, loginToken)
-              handleSubmitMatchResult(r, params, matchresult,loginToken)
+              val matchresult = matchservice.matchResult(fiksId, session)
+              handleSubmitMatchResult(r, params, matchresult, session)
           })
           case _ => MethodNotAllowed ~> Html5(Pages(r).notFound)
         }
       }
     })
 
-    case r@GET(Path(Seg("fiks" :: "mymatches" :: matchId :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      matchservice.matchDetails(matchId, loginToken) match {
+    case r@GET(Path(Seg("fiks" :: "mymatches" :: matchId :: Nil))) & SessionId(sessionId) => redirectToLoginIfTimeout(r, {
+      val session = userService.userSession(sessionId).get //TODO: Yolo
+      matchservice.matchDetails(matchId, session) match {
         case Some(m) => Html5(Pages(r).assignedMatchInfo(m))
         case None => Html5(Pages(r).notFound)
       }
@@ -133,42 +138,44 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
   }
 
   val myMatches = Intent {
-    case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & FiksCookie(loginToken) => {
+    case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & SessionId(loginToken) => {
       val session = userService.userSession(loginToken).get //TODO: YOLO
       redirectToLoginIfTimeout(r, {
         if (allMatches(r)) {
-          val assigned = matchservice.assignedMatches(session.sessionToken)
+          val assigned = matchservice.assignedMatches(session)
           Ok ~> Html5(Pages(r).assignedMatches(assigned))
         } else {
-          val assigned = matchservice.upcomingAssignedMatches(session.sessionToken)
+          val assigned = matchservice.upcomingAssignedMatches(session)
           Ok ~> Html5(Pages(r).assignedMatches(assigned))
         }
       })
     }
-    case r@GET(Path(Seg("match.ics" :: Nil))) & FiksCookie(loginToken) & Params(MatchIdParameter(matchId)) => redirectToLoginIfTimeout(r, {
-      val assigned = matchservice.assignedMatches(loginToken).find(_.matchId == matchId)
+    case r@GET(Path(Seg("match.ics" :: Nil))) & SessionId(sessionId) & Params(MatchIdParameter(matchId)) => redirectToLoginIfTimeout(r, {
+      val session = userService.userSession(sessionId).get //TODO: YOLO
+      val assigned = matchservice.assignedMatches(session).find(_.matchId == matchId)
       Ok ~> CalendarContentType ~> ResponseString(new VCalendar(assigned.get).feed)
     })
-    case r@GET(Path(Seg(Nil))) & FiksCookie(_) => HerokuRedirect(r, "/fiks/mymatches")
+    case r@GET(Path(Seg(Nil))) & SessionId(_) => HerokuRedirect(r, "/fiks/mymatches")
     case r@GET(Path(Seg(Nil))) => HerokuRedirect(r, "/login")
   }
 
   val availableMatches = Intent {
-    case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & Params(MatchIdParameter(matchId)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
+    case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & Params(MatchIdParameter(matchId)) & SessionId(loginToken) => redirectToLoginIfTimeout(r, {
       val session = userService.userSession(loginToken).get //TODO: YOLO
-      val matchInfo = matchservice.availableMatchInfo(matchId, session.sessionToken)
+      val matchInfo = matchservice.availableMatchInfo(matchId, session)
       Ok ~> Html5(Pages(r).reportInterestIn(matchInfo))
     })
-    case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
+    case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & SessionId(loginToken) => redirectToLoginIfTimeout(r, {
       val session = userService.userSession(loginToken).get //TODO: YOLO
-      val available = matchservice.availableMatches(session.sessionToken)
+      val available = matchservice.availableMatches(session)
       Ok ~> Html5(Pages(r).availableMatches(available))
     })
   }
 
   val reportInterest = Intent {
-    case r@POST(Path(Seg("fiks" :: "availablematches" :: Nil))) & Params(MatchIdParameter(matchId)) & Params(CommentParameter(comment)) & FiksCookie(loginToken) => redirectToLoginIfTimeout(r, {
-      matchservice.reportInterest(matchId, comment, loginToken)
+    case r@POST(Path(Seg("fiks" :: "availablematches" :: Nil))) & Params(MatchIdParameter(matchId)) & Params(CommentParameter(comment)) & SessionId(loginToken) => redirectToLoginIfTimeout(r, {
+      val session = userService.userSession(loginToken).get //TODO: YOLO
+      matchservice.reportInterest(matchId, comment, session)
       HerokuRedirect(r, "/fiks/availablematches")
     })
   }
@@ -203,7 +210,7 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
     HerokuRedirect(req, "/login?message=sessionTimeout")
   }
 
-  def handleSubmitMatchResult[T <: HttpServletRequest](req:HttpRequest[T], params: Map[String, Seq[String]], matchResult: MatchResult, loginToken:String): ResponseFunction[Any] = {
+  def handleSubmitMatchResult[T <: HttpServletRequest](req:HttpRequest[T], params: Map[String, Seq[String]], matchResult: MatchResult, session:UserSession): ResponseFunction[Any] = {
     val finalHomeGoals = isBlankOrInt("finalHomeGoals",params("finalHomeGoals").head,"Sluttresultat er ugyldig")
     val finalAwayGoals = isBlankOrInt("finalAwayGoals",params("finalAwayGoals").head,"Sluttresultat er ugyldig")
     val halfTimeHomeGoals = isBlankOrInt("halfTimeHomeGoals", params("halfTimeHomeGoals").head, "Pauseresultat er ugyldig")
@@ -218,7 +225,7 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
       .++(halfTimeHomeGoals.and(halfTimeAwayGoals)(bothSetOrUnset("Pauseresultat er ugyldig")))
 
     if(fields.values.forall(_.isValid)){
-      matchservice.postMatchResult(matchResult.applyFormFields(fields), loginToken)
+      matchservice.postMatchResult(matchResult.applyFormFields(fields), session)
       HerokuRedirect(req, "fiks/mymatches/"+ matchResult.fiksId +"/result")
     }else{
       BadRequest ~> Html5(Pages(req).assignedMatchResult(matchResult, fields))

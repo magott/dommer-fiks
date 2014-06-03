@@ -6,7 +6,7 @@ import unfiltered.response._
 import unfiltered.filter.{Intent, Plan}
 import javax.servlet.http.HttpServletRequest
 import no.magott.fiks.user.{LoggedOnUser, UserService}
-import no.magott.fiks.data.{FiksCookie, CalendarContentType, FiksLoginService, Pages}
+import no.magott.fiks.data.{SessionId, CalendarContentType, FiksLoginService, Pages}
 import scala.concurrent.ops.spawn
 
 class CalendarPlan(calendarService: CalendarService, userservice: UserService) extends Plan {
@@ -19,7 +19,7 @@ class CalendarPlan(calendarService: CalendarService, userservice: UserService) e
 
   val calendarSignup = Intent {
     case r@POST(Path(Seg("calendar" :: "mycal" :: Nil))) & Params(p)  => handleSignup(r, p)
-    case r@GET(Path(Seg("calendar" :: "mycal" :: Nil))) & FiksCookie(token) => {
+    case r@GET(Path(Seg("calendar" :: "mycal" :: Nil))) & SessionId(token) => {
       userservice.userForSession(token) match {
         case Some(user) => user.calendarId match {
           case Some(calendarId) => Html5(Pages(r).calendarInfo(calendarId))

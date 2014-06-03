@@ -4,7 +4,7 @@ import unfiltered.filter.Plan
 import unfiltered.request._
 import unfiltered.response._
 import no.magott.fiks.{ActionParameter, HerokuRedirect, MatchIdParameter}
-import no.magott.fiks.data.{AssignedMatch, MatchService, Pages, FiksCookie}
+import no.magott.fiks.data.{AssignedMatch, MatchService, Pages, SessionId}
 import no.magott.fiks.user.UserService
 import unfiltered.response.ResponseString
 import org.joda.time.DateTime
@@ -16,13 +16,13 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
 
 
   override def intent: Plan.Intent = {
-    case req@FiksCookie(token) => {
-      val username = userService.userSession(token).map(_.username).get
+    case req@SessionId(token) => {
+      val session = userService.userSession(token).get //TODO: YOLO
       req match {
         //New invoice
         case Path( Seg( "invoice" :: "new" :: Nil)) & Params(MatchIdParameter(matchId)) => req match{
           case GET(_) => {
-            val matchOpt = matchService.assignedMatches(token).find(_.fiksId == matchId)
+            val matchOpt = matchService.assignedMatches(session).find(_.fiksId == matchId)
             if (matchOpt.isDefined) {
               Ok ~> Html5(Pages(req).invoiceInfoPage(None, matchOpt))
             }else{
@@ -30,9 +30,9 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
             }
           }
           case POST(_) => {
-            val matchOpt = matchService.assignedMatches(token).find(_.fiksId == matchId)
+            val matchOpt = matchService.assignedMatches(session).find(_.fiksId == matchId)
             if(matchOpt.isDefined){
-              val invoice = extractNewInvoiceFromParams(username, matchOpt.get, Params.unapply(req).get)
+              val invoice = extractNewInvoiceFromParams(session.username, matchOpt.get, Params.unapply(req).get)
               val id = invoiceRepository.saveInvoice(invoice).getOrElse("")
               HerokuRedirect(req, s"/invoice/${id.toString}")
             }else{
@@ -47,8 +47,8 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
           req match{
             case GET(_) => {
               if(invoiceOpt.isEmpty) NotFound ~> Html5(Pages(req).notFound)
-              else if(invoiceOpt.exists(_.username == username)){
-                val matchOpt = matchService.assignedMatches(token).find(_.fiksId == invoiceOpt.get.matchData.fiksId)
+              else if(invoiceOpt.exists(_.username == session.username)){
+                val matchOpt = matchService.assignedMatches(session).find(_.fiksId == invoiceOpt.get.matchData.fiksId)
                 Ok ~> Html5(Pages(req).invoiceInfoPage(invoiceOpt, matchOpt))
               }else{
                 Forbidden ~> Html5(Pages(req).forbidden)
@@ -80,8 +80,8 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
             }
             case POST(_) & Params(p)=> {
               if(invoiceOpt.isEmpty) NotFound ~> Html5(Pages(req).notFound)
-              else if(invoiceOpt.exists(_.username == username)){
-                val updatedInvoice = extractUpdatedInvoiceFromParams(username, invoiceOpt.get, p)
+              else if(invoiceOpt.exists(_.username == session)){
+                val updatedInvoice = extractUpdatedInvoiceFromParams(session.username, invoiceOpt.get, p)
                 invoiceRepository.saveInvoice(updatedInvoice)
                 Ok ~> HerokuRedirect(req, s"/invoice/${id}")
               }else{
@@ -92,7 +92,7 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
         }
         case Path(Seg("invoice" :: Nil)) => req match {
           case GET(_) => {
-            val invoices = invoiceRepository.findInvoicesForUser(username)
+            val invoices = invoiceRepository.findInvoicesForUser(session.username)
             val totals = invoices.foldLeft(InvoiceTotals.empty)(_+_)
             Ok ~> Html5(Pages(req).invoices(invoices, totals))
           }

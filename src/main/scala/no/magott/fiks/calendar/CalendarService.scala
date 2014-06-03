@@ -4,7 +4,7 @@ import org.joda.time.LocalDateTime
 import no.magott.fiks.data.{AssignedMatch, FiksLoginService, MatchScraper}
 import java.util.concurrent.TimeUnit
 import com.google.common.cache.{Cache, CacheBuilder}
-import no.magott.fiks.user.User
+import no.magott.fiks.user.{UserSession, User}
 
 class CalendarService(matchscraper: MatchScraper) {
 
@@ -17,8 +17,8 @@ class CalendarService(matchscraper: MatchScraper) {
     }else{
       val logintoken = FiksLoginService.login(user.username, user.password.get, false)
       logintoken match{
-        case(Right(x)) => {
-          val matches = matchesThisYearForLogin(x.sessionToken)
+        case(Right(session)) => {
+          val matches = matchesThisYearForLogin(session)
           cache.put(user.calendarId.get,matches)
           Some(matches)
         }
@@ -27,8 +27,8 @@ class CalendarService(matchscraper: MatchScraper) {
     }
   }
 
-  private def matchesThisYearForLogin(logintoken:String) = {
-    matchscraper.scrapeAssignedMatches(logintoken).filter(_.date.year == LocalDateTime.now.year)
+  private def matchesThisYearForLogin(session:UserSession) = {
+    matchscraper.scrapeAssignedMatches(session).filter(_.date.year == LocalDateTime.now.year)
   }
 
 }

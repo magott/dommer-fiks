@@ -25,7 +25,7 @@ class SecurityPlan(matchservice:MatchService, userservice:UserService) extends P
     }
     case r@POST(Path(Seg("login" :: Nil))) & Params(p) => handleLogin(r,p)
     case r@GET(Path(Seg("logout" :: Nil))) => handleLogout(r)
-    case r@FiksCookie(token) => {
+    case r@SessionId(token) => {
       if(userservice.userSession(token).isDefined){
         Pass
       }else{
@@ -37,10 +37,10 @@ class SecurityPlan(matchservice:MatchService, userservice:UserService) extends P
   def handleLogin[T<:HttpServletRequest](req: HttpRequest[T], map: Map[String, Seq[String]]) = {
     val username = map.get("username").get.head.toLowerCase
     val password = map.get("password").get.head
-    val rememberMe = map.get("RememberMe").exists(_.contains("on"))
+    val rememberMe = true //map.get("RememberMe").exists(_.contains("on"))
     FiksLoginService.login(username, password, rememberMe) match {
       case Right(session) => {
-        matchservice.prefetchAvailableMatches(session.sessionToken)
+        matchservice.prefetchAvailableMatches(session)
         userservice.save(session)
         val secure = req match { case XForwardProto("https") => Some(true) case _ => Some(false)}
         val maxAge = if(rememberMe) Some(3600*24*365) else None

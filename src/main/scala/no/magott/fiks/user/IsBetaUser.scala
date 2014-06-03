@@ -2,7 +2,7 @@ package no.magott.fiks.user
 
 import javax.servlet.http.HttpServletRequest
 import unfiltered.request.HttpRequest
-import no.magott.fiks.data.FiksCookie
+import no.magott.fiks.data.SessionId
 
 object IsBetaUser {
 

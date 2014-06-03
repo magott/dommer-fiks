@@ -1,7 +1,8 @@
 package no.magott.fiks.data
 
 import org.scalatest.FunSuite
-import org.joda.time.LocalDateTime
+import org.joda.time.{DateTime, LocalDateTime}
+import no.magott.fiks.user.UserSession
 
 class MatchServiceTest extends FunSuite {
 
@@ -9,15 +10,16 @@ class MatchServiceTest extends FunSuite {
   test("cache is updated after reporting interest"){
 
     val service = new MatchService(new MatchScraper(){
-      override def scrapeAvailableMatches(loginToken:String) = AvailableMatch("Foo","5. Div", LocalDateTime.now,"123","Foo - Bar","Foobar","Dommer",Some("123")) :: Nil
-      override def postInterestForm(matchId: String, comment:String, loginToken:String){}
+      override def scrapeAvailableMatches(session:UserSession) = AvailableMatch("Foo","5. Div", LocalDateTime.now,"123","Foo - Bar","Foobar","Dommer",Some("123")) :: Nil
+      override def postInterestForm(matchId: String, comment:String, session:UserSession){}
     })
 
-    val available = service.availableMatches("").head
+    val session = UserSession("", "", "", "", DateTime.now)
+    val available = service.availableMatches(session).head
     assert(available.availabilityId.isDefined)
 
-    service.reportInterest("123","","")
-    val availableAfterPostingInterest = service.availableMatches("").head
+    service.reportInterest("123","", session)
+    val availableAfterPostingInterest = service.availableMatches(session).head
     assert(availableAfterPostingInterest.availabilityId.isEmpty)
 
   }

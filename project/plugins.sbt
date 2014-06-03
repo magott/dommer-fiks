@@ -1,6 +1,6 @@
 resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
-resolvers += Classpaths.typesafeResolver
+resolvers += Classpaths.typesafeReleases
 
 addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")
 

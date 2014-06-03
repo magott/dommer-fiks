@@ -12,7 +12,7 @@ import no.magott.fiks.invoice.{InvoiceTotals, MatchData, Invoice}
 case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
   val calendarFormatString = "yyyyMMdd'T'HHmmss'Z"
-  val isLoggedIn = FiksCookie.unapply(req).isDefined && FiksCookie.unapply(req).get.nonEmpty
+  val isLoggedIn = SessionId.unapply(req).isDefined && SessionId.unapply(req).get.nonEmpty
   val pages = Path(req)
 
   def navbar = {

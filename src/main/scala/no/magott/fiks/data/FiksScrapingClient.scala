@@ -11,7 +11,7 @@ object FiksScrapingClient extends App{
   val login =  FiksLoginService.login(username, pass, false)
   login match {
     case Right(session) =>
-      service.assignedMatches(session.sessionToken).foreach(println)
+      service.assignedMatches(session).foreach(println)
     case Left(exception) => Console println "Login failed"
   }
 

@@ -13,9 +13,9 @@ object FiksLoginService {
 
   val APP_COOKIE_NAME = ".AspNet.ApplicationCookie"
   val SESS_COOKIE_NAME = "ASP.NET_SessionId"
-  val LOGIN_FORM_URL = "http://www.fiks.fotball.no/FiksWeb/Login"
-  val LOGIN_URL = "http://www.fiks.fotball.no/FiksWeb/Login?ReturnUrl=~%2FHome%2FConsolidateUsers"
-  val REF_CLIENT_URL = "http://www.fiks.fotball.no/FiksWeb/Home/RedirectToFiksReferee?clubId=0"
+  val LOGIN_FORM_URL = "http://fiks.fotball.no/FiksWeb/Login"
+  val LOGIN_URL = "http://fiks.fotball.no/FiksWeb/Login?ReturnUrl=~%2FHome%2FConsolidateUsers"
+  val REF_CLIENT_URL = "http://fiks.fotball.no/FiksWeb/Home/RedirectToFiksReferee?clubId=0"
   val VALIDATION_COOKIE_NAME = "__RequestVerificationToken_L0Zpa3NXZWI1"
   val REQ_VAL_FORMFIELD_NAME = "__RequestVerificationToken"
 
@@ -25,7 +25,7 @@ object FiksLoginService {
     loginPage.cookies().asScala.foreach(println)
     val requestValidationCookie = loginPage.cookie(VALIDATION_COOKIE_NAME)
     val requestValidationFormField = Option(loginDocument.getElementsByAttributeValue("name", REQ_VAL_FORMFIELD_NAME)).flatMap(el=> Option(el.attr("value")))
-    val params = Map("UserName" -> Some(username), "Password" -> Some(password), REQ_VAL_FORMFIELD_NAME -> requestValidationFormField, "RememberMe" -> Some(rememberMe.toString.capitalize))
+    val params = Map("UserName" -> Some(username), "Password" -> Some(password), REQ_VAL_FORMFIELD_NAME -> requestValidationFormField, "RememberMe" -> Some(rememberMe.toString))
       .collect{
       case (k, Some(v)) => k -> v
     }
@@ -40,12 +40,22 @@ object FiksLoginService {
 
     if (response.statusCode == 302) {
       val applicationCookie = response.cookie(APP_COOKIE_NAME)
-      val sessionCookie = Jsoup.connect(REF_CLIENT_URL).method(Method.GET).timeout(10000).cookie(APP_COOKIE_NAME, applicationCookie).execute().cookie(SESS_COOKIE_NAME)
-      val session = UserSession(UUID.randomUUID().toString, sessionCookie, applicationCookie, username, DateTime.now.plusWeeks(14))
+      val session: UserSession = authenticate(username, applicationCookie, None)
       Right(session)
     } else {
       Left(new RuntimeException("Login failed"))
     }
   }
 
+  def reAuthenticate(session:UserSession) = authenticate(session.id, session.longLivedToken, Some(session.sessionToken))
+
+  def authenticate(username: String, applicationCookie: String, sessionCookie:Option[String]): UserSession = {
+    val connection = Jsoup.connect(REF_CLIENT_URL).method(Method.GET).timeout(10000)
+      .cookie(APP_COOKIE_NAME, applicationCookie)
+    sessionCookie.foreach(value => connection.cookie(SESS_COOKIE_NAME, value))
+    val cookieFromServer =  connection.execute().cookie(SESS_COOKIE_NAME)
+    val session = UserSession(UUID.randomUUID().toString, cookieFromServer, applicationCookie, username,
+      DateTime.now.plusWeeks(14))
+    session
+  }
 }
