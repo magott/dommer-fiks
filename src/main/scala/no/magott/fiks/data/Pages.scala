@@ -40,10 +40,6 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
           </div>
             <div class="control-group">
               <div class="controls">
-                <label class="checkbox">
-                  <input type="checkbox" name="RememberMe"/> <a href="#" data-toggle="tooltip" title="Kryss av her for å forbli pålogget. Du vil ikke automatisk logges av og slipper å logge inn hver gang du besøker Dommer-FIKS">
-                  Forbli pålogget</a>
-                  </label>
                 <button type="submit" class="btn btn-primary">Logg inn</button>
               </div>
             </div>
