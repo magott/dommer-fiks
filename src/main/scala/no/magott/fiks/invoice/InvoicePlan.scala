@@ -80,7 +80,7 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
             }
             case POST(_) & Params(p)=> {
               if(invoiceOpt.isEmpty) NotFound ~> Html5(Pages(req).notFound)
-              else if(invoiceOpt.exists(_.username == session)){
+              else if(invoiceOpt.exists(_.username == session.username)){
                 val updatedInvoice = extractUpdatedInvoiceFromParams(session.username, invoiceOpt.get, p)
                 invoiceRepository.saveInvoice(updatedInvoice)
                 Ok ~> HerokuRedirect(req, s"/invoice/${id}")
