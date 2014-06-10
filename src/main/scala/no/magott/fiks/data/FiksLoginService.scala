@@ -13,16 +13,15 @@ object FiksLoginService {
 
   val APP_COOKIE_NAME = ".AspNet.ApplicationCookie"
   val SESS_COOKIE_NAME = "ASP.NET_SessionId"
-  val LOGIN_FORM_URL = "http://fiks.fotball.no/FiksWeb/Login"
-  val LOGIN_URL = "http://fiks.fotball.no/FiksWeb/Login?ReturnUrl=~%2FHome%2FConsolidateUsers"
-  val REF_CLIENT_URL = "http://fiks.fotball.no/FiksWeb/Home/RedirectToFiksReferee?clubId=0"
+  val LOGIN_FORM_URL = "https://fiks.fotball.no/FiksWeb/Login"
+  val LOGIN_URL = "https://fiks.fotball.no/FiksWeb/Login?ReturnUrl=~%2FHome%2FConsolidateUsers"
+  val REF_CLIENT_URL = "https://fiks.fotball.no/FiksWeb/Home/RedirectToFiksReferee?clubId=0"
   val VALIDATION_COOKIE_NAME = "__RequestVerificationToken_L0Zpa3NXZWI1"
   val REQ_VAL_FORMFIELD_NAME = "__RequestVerificationToken"
 
   def login(username: String, password: String, rememberMe: Boolean) : Either[Exception, UserSession] = {
     val loginPage = Jsoup.connect(LOGIN_FORM_URL).method(Method.GET).timeout(10000).execute()
     val loginDocument = loginPage.parse
-    loginPage.cookies().asScala.foreach(println)
     val requestValidationCookie = loginPage.cookie(VALIDATION_COOKIE_NAME)
     val requestValidationFormField = Option(loginDocument.getElementsByAttributeValue("name", REQ_VAL_FORMFIELD_NAME)).flatMap(el=> Option(el.attr("value")))
     val params = Map("UserName" -> Some(username), "Password" -> Some(password), REQ_VAL_FORMFIELD_NAME -> requestValidationFormField, "RememberMe" -> Some(rememberMe.toString))
