@@ -20,7 +20,7 @@ object NameMobilePhone {
   def unapply(input: String): Option[(String, Option[String], Option[String])] = {
     input match {
       case Structure(n, p, m) => {
-        Some(n.trim, Option(m).flatMap(Number.findFirstIn), Option(p).flatMap(Number.findFirstIn))
+        Some(n.trim, Option(p).flatMap(Number.findFirstIn), Option(m).flatMap(Number.findFirstIn))
       }
       case n => Some((n.trim, None, None))
     }
