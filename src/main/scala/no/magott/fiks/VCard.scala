@@ -7,8 +7,8 @@ class VCard(refString:String) {
   def asVCardString:String = {
       s"""BEGIN:VCARD
       |VERSION:2.1
-      |N:${lastName.getOrElse("")};${firstName.getOrElse("")};;;
-      |FN:${fullName.getOrElse("")}
+      |N;CHARSET=UTF-8:${lastName.getOrElse("")};${firstName.getOrElse("")};;;
+      |FN;CHARSET=UTF-8:${fullName.getOrElse("")}
       |TEL;CELL;VOICE:${mobile.map("+47"+_).getOrElse("")}
       |TEL;HOME;VOICE:${home.map("+47"+_).getOrElse("")}
       |END:VCARD"""
