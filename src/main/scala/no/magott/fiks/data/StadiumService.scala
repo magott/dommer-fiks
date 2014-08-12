@@ -61,14 +61,14 @@ class StadiumService {
     import dispatch._, Defaults._
     val gjermhusService = url("http://services.gjermshus.net/f-arena.php") <<? Map("k" -> matchId)
     val http = Http(gjermhusService OK as.String).option
-    http().map(parseGjermshusResponse)
+    http().flatMap(parseGjermshusResponse)
   }
 
-  def parseGjermshusResponse(http: String) : MongoStadium = {
+  def parseGjermshusResponse(http: String) : Option[MongoStadium] = {
       import org.json4s._
       implicit val format = DefaultFormats
       import org.json4s.native.JsonMethods._
-      parse(http).extract[MongoStadium]
+      parseOpt(http).map(_.extract[MongoStadium])
   }
 }
 

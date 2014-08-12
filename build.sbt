@@ -1,10 +1,10 @@
 import com.typesafe.sbt.SbtStartScript
 
-seq(SbtStartScript.startScriptForClassesSettings: _*)
+SbtStartScript.startScriptForClassesSettings
 
 name:="dommer-fiks"
 
-scalaVersion:="2.10.0"
+scalaVersion:="2.10.4"
 
 organization := "com.andersen-gott"
 
@@ -18,7 +18,7 @@ libraryDependencies ++=
     "org.jsoup" % "jsoup" % "1.6.1",
     "joda-time" % "joda-time" % "2.1",
     "org.joda" % "joda-convert" % "1.2",
-    "org.scalatest" %% "scalatest" % "1.9.1" % "test",
+    "org.scalatest" %% "scalatest" % "2.2.1" % "test",
     "com.google.guava" % "guava" % "11.0.2",
     "org.mongodb" %% "casbah" % "2.5.0",
     "org.mongodb" % "mongo-java-driver" % "2.10.1",
