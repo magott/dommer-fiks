@@ -8,24 +8,24 @@ case class Official(name:String, mobile:Option[String], home:Option[String], rol
 
 object Official{
   def fromTuple(tuple:Tuple2[String, String]):Official = {
+    val isUser = !tuple._2.contains(",")
     val NameMobilePhone(name, mobile, home) = tuple._2
     Official(name, mobile, home, Role.fromString(tuple._1))
   }
 }
 
 object NameMobilePhone {
-  val Structure = "(?:(.+)\\s*?Tlf\\.:?:[\\s]?):?(\\w+)?(?:,\\s*Mobil:?:[\\s]?)(\\w+)?".r
-  val Number = "\\d{8}".r
+  val Structure = "(?:(.+)\\s*?Tlf\\.:?:[\\s]?):?(\\w+)?(?:,\\s*Mobil:?:[\\s]?)([A-Za-z0-9 \\+]+)?".r
+  val Number = "((\\+47)?)[\\d ]{8,11}".r
 
   def unapply(input: String): Option[(String, Option[String], Option[String])] = {
     input match {
       case Structure(n, p, m) => {
-        Some(n.trim, Option(p).flatMap(Number.findFirstIn), Option(m).flatMap(Number.findFirstIn))
+        Some(n.trim, Option(p).flatMap(Number.findFirstIn), Option(m).flatMap(Number.findFirstIn).map(_.filterNot(_.isWhitespace)))
       }
       case n => Some((n.trim, None, None))
     }
   }
-
 }
 
 sealed abstract class Role(val value:String){

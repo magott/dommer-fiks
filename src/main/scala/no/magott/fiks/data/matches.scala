@@ -42,8 +42,8 @@ case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String,
 
 
   def toPhoneSpan(input: String) = {
-    val phone = "[\\d]{8}".r
-    val withPhoneLink = phone.replaceAllIn(input, m => s"""<a href="tel:${m}">${m}</a>""")
+    val phone = "((\\+47)?)[\\d ]{8,11}".r
+    val withPhoneLink = phone.replaceAllIn(input, m => s"""<a href="tel:${m.toString.replaceAll(" ","")}">${m}</a>""")
     wrapXML(withPhoneLink)
   }
 
