@@ -278,13 +278,13 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
           <div id="spinner"></div>
         </td>
       </tr>
-      <tr>
         {if(m.officials.size > 1){
         <tr>
           <th>SMS</th>
           <td>{m.officials.filter(_.mobile.isDefined).map(_.smsCheckbox) ++ (<a href="" id="sms" class="btn">Send</a>)}</td>
         </tr>
       }}
+      <tr>
         <th></th>
         <td>
           <a class="btn btn-primary" href="/fiks/mymatches"><i class="icon-circle-arrow-left icon-white"></i> Tilbake</a>
