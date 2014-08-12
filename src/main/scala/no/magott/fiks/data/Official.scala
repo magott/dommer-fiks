@@ -9,7 +9,7 @@ case class Official(name:String, mobile:Option[String], home:Option[String], rol
 object Official{
   def fromTuple(tuple:Tuple2[String, String]):Official = {
     val isUser = !tuple._2.contains(",")
-    val NameMobilePhone(name, mobile, home) = tuple._2
+    val NameMobilePhone(name, home, mobile) = tuple._2
     Official(name, mobile, home, Role.fromString(tuple._1))
   }
 }
