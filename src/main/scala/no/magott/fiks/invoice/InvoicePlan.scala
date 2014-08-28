@@ -88,6 +88,15 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
                 Forbidden ~> Html5(Pages(req).forbidden)
               }
             }
+           case DELETE(_) => {
+             if(invoiceOpt.isEmpty) NotFound
+             else if(invoiceOpt.exists(_.username == session.username)){
+               invoiceRepository.deleteInvoice(id)
+               Ok ~> ResponseString("""{"location": "/invoice/" """)
+             }else{
+               Forbidden
+             }
+           }
           }
         }
         case Path(Seg("invoice" :: Nil)) => req match {
