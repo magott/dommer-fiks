@@ -11,6 +11,9 @@ import com.mongodb.casbah.commons.conversions.scala.RegisterJodaTimeConversionHe
  * Created by morten on 31/03/14.
  */
 class InvoiceRepository {
+
+  def deleteInvoice(id: String) = db("invoice").remove((where("_id" -> new ObjectId(id))))
+
   RegisterJodaTimeConversionHelpers()
   val MongoSetting(db) = Properties.envOrNone("MONGOLAB_URI")
   val where = MongoDBObject
