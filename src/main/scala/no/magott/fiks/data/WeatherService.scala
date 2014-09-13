@@ -11,7 +11,7 @@ import org.specs2.internal.scalaz.Digit._0
 class WeatherService {
 
   def findForecast(start:LocalDateTime, end:LocalDateTime, latLong:LatLong) : Seq[MatchForecast] = {
-    val met = url("http://api.met.no/weatherapi/locationforecast/1.8/") <<? Map("lat" -> latLong.lat.toString, "lon" -> latLong.long.toString)
+    val met = url("http://api.met.no/weatherapi/locationforecast/1.9/") <<? Map("lat" -> latLong.lat.toString, "lon" -> latLong.long.toString)
     val forecast = Http(met > as.xml.Elem)
     val weatherData = parseWeatherData(forecast())
     forecastFor(start, end, weatherData)
