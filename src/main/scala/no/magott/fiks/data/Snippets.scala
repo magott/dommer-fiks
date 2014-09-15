@@ -137,13 +137,13 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <script type="text/javascript">
           {"""
           if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
-            var msViewportStyle = document.createElement("style");
+            var msViewportStyle = document.createElement('style');
             msViewportStyle.appendChild(
               document.createTextNode(
-                "@-ms-viewport{width:auto!important}"
+                '@-ms-viewport{width:auto!important}'
               )
             );
-            document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+            document.getElementsByTagName('head')[0].appendChild(msViewportStyle);
           }
         """}
         </script>
@@ -481,6 +481,15 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       <div class="control-group">
         <div class="controls">
           <button type="submit" class="btn btn-primary">Lagre</button>
+          {
+            if(i.isDefined){
+              <button type="button" id="delete" class="btn btn-danger"><i class="icon-trash icon-white"></i> Slett</button>
+            }
+          }
+          </div>
+        </div>
+      <div class="control-group">
+        <div class="controls">
           {
             if(i.isDefined){
               if(i.get.reminder.isDefined)
