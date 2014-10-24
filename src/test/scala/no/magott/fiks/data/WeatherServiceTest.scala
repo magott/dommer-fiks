@@ -9,7 +9,7 @@ class WeatherServiceTest extends FunSuite{
   test("Can parse weather data"){
     val service = new WeatherService
     val data = service.parseWeatherData(weatherDataStub)
-    assert(data.instants.head.temperature == 17.0)
+    assert(data.instants.head.temperature.exists(_ == 17.0))
     assert(data.intervals.exists(_.symbolId.isEmpty))
     assert(data.intervals.exists(_.symbolId.isDefined))
   }
@@ -20,7 +20,7 @@ class WeatherServiceTest extends FunSuite{
     val to = new LocalDateTime(2013, 6, 26, 19, 0)
     val data = service.parseWeatherData(weatherDataStub)
     val forecasts = service.forecastFor(from, to, data)
-    assert(forecasts.size == 1)
+    assert(forecasts.size == 2)
   }
 
   val weatherDataStub = XML.loadFile("weather-data.xml")

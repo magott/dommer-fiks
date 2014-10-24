@@ -7,6 +7,7 @@ import geo.LatLong
 import scala.concurrent.duration.Duration
 import java.util.concurrent.TimeUnit
 import org.specs2.internal.scalaz.Digit._0
+import scala.util.control.Exception._
 
 class WeatherService {
 
@@ -37,7 +38,7 @@ class WeatherService {
 
   def parseInstant(t:Node) = {
     val dateTime = toDate(t)
-    val temp = (t \ "location" \ "temperature" \ "@value").toString.toDouble
+    val temp = allCatch.opt((t \ "location" \ "temperature" \ "@value").toString.toDouble)
     val wind = (t \ "location" \ "windSpeed" \ "@value").toString
     InstantForecast(dateTime, temp, wind)
   }
