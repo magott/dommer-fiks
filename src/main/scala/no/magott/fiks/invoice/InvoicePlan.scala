@@ -7,8 +7,9 @@ import no.magott.fiks.{ActionParameter, HerokuRedirect, MatchIdParameter}
 import no.magott.fiks.data.{AssignedMatch, MatchService, Pages, SessionId}
 import no.magott.fiks.user.UserService
 import unfiltered.response.ResponseString
-import org.joda.time.DateTime
-
+import org.joda.time.{LocalDate, DateTime}
+import scalaz._, Scalaz._
+import argonaut._, Argonaut._
 /**
  * Created by morten on 31/03/14.
  */
@@ -101,9 +102,15 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
         }
         case Path(Seg("invoice" :: Nil)) => req match {
           case GET(_) => {
-            val invoices = invoiceRepository.findInvoicesForUser(session.username)
-            val totals = invoices.foldLeft(InvoiceTotals.empty)(_+_)
-            Ok ~> Html5(Pages(req).invoices(invoices, totals))
+            req match {
+              case Accepts.Json(_) =>{
+                val year = YearParam.unapply(Params.unapply(req).get).map(_.toInt).getOrElse(LocalDate.now.getYear)
+                val invoices = invoiceRepository.findInvoicesForUser(session.username).filter(_.matchData.date.getYear == year)
+                val totals = invoices.foldLeft(InvoiceTotals.empty)(_+_)
+                Ok ~> JsonContent ~> ResponseString(invoices.toList.map(_.toJson).jencode.nospaces)
+              }
+              case _ => Ok ~> Html5(Pages(req).invoiceSAP)
+            }
           }
         }
 
@@ -128,5 +135,8 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
     val total = params("total").head.toDouble
     invoice.copy(matchFee = matchFee, toll = toll, millageAllowance = millageAllowance, perDiem = perDiem, total = total)
   }
+
+  object YearParam extends Params.Extract("year", Params.first)
+
 
 }

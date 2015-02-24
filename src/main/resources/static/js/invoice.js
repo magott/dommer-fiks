@@ -82,3 +82,43 @@ function orZero(element){
         return value;
     }
 }
+
+var app = angular.module('invoiceapp', []);
+app.controller("ctrl", function($scope, $http) {
+     $scope.invoices = [];
+     $scope.loadInvoices = function(year) {
+        var httpRequest = $http({
+            method: 'GET',
+            url: '/invoice?year='+year,
+            headers: {
+               'Content-Type': 'application/json'
+            }
+        }).success(function(data, status) {
+            $scope.invoices = data;
+        });
+    };
+    $scope.sumSettled = function(fitleredInvoices) {
+        return _.reduce(fitleredInvoices, function(acc, i){
+            if(i.settled == true){
+                return acc + i.total;
+            }else {
+                return acc;
+            }
+        }, 0);
+    };
+    $scope.sumTotal = function(fitleredInvoices) {
+        return _.reduce(fitleredInvoices, function(acc, i){
+           return acc + i.total;
+        }, 0);
+    };
+    $scope.sumUnsettled = function(fitleredInvoices) {
+        return _.reduce(fitleredInvoices, function(acc, i){
+            if(i.settled === false){
+                return acc + i.total;
+            }else {
+                return acc;
+            }
+        }, 0);
+    };
+
+});

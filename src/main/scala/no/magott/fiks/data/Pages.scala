@@ -189,6 +189,12 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     )
   }
 
+  def invoiceSAP = {
+    emptyPage(
+    invoiceTableSPA, Some(invoiceScripts ++ momentJS ++ lodashJS)
+    )
+  }
+
   def yieldMatch(m:AssignedMatch) = {
     emptyPage(
       yieldMatchForm(m)

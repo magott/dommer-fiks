@@ -13,6 +13,8 @@ libraryDependencies ++=
     "net.databinder" %% "unfiltered" % "0.6.7",
     "net.databinder" %% "unfiltered-filter" % "0.6.7",
     "net.databinder" %% "unfiltered-jetty" % "0.6.7",
+    "net.databinder.dispatch" %% "dispatch-core" % "0.10.1",
+    "io.argonaut" %% "argonaut" % "6.0.4",
     "org.slf4j" % "slf4j-simple" % "1.6.4",
     "commons-logging" % "commons-logging" % "1.1.1",
     "org.jsoup" % "jsoup" % "1.6.1",
@@ -25,6 +27,6 @@ libraryDependencies ++=
     "bouncycastle" % "bcprov-jdk16" % "140",
     "org.jasypt" % "jasypt" % "1.9.0",
     "no.arktekk" %% "uri-template" % "1.0.1",
-    "net.databinder.dispatch" %% "dispatch-core" % "0.10.1",
-    "org.json4s" %% "json4s-native" % "3.2.4"
+    "org.json4s" %% "json4s-native" % "3.2.4",
+    "org.constretto" %% "constretto-scala" % "1.1"
   )

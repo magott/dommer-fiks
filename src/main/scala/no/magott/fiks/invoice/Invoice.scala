@@ -3,6 +3,8 @@ package no.magott.fiks.invoice
 import org.joda.time.{LocalDate, DateTime}
 import com.mongodb.casbah.query.Imports._
 import scala.collection.mutable
+import scalaz._, Scalaz._
+import argonaut._, Argonaut._
 
 case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], millageAllowance:Option[Double], perDiem: Option[Int], total: Double, reminder:Option[DateTime], settled:Option[DateTime]) {
 
@@ -23,6 +25,21 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
   }
   def updateClause : MongoDBObject = if(id.isDefined) MongoDBObject("_id" -> id.get) else toMongo
   private def moreDaysPassedThan(days:Int) = matchData.date.plusDays(days).isBeforeNow
+
+  def toJson: Json = {
+    Json.obj(
+      "id" := id.get.toString,
+      "match" := matchData.toJson,
+      "matchFee" := matchFee,
+      "toll" := toll,
+      "millageAllowance" := toll,
+      "perDiem" := perDiem,
+      "total" := total,
+      "rowClass" := rowClass,
+      "status" := status,
+      "settled" := settled.isDefined
+    )
+  }
 }
 
 object Invoice {
@@ -47,7 +64,7 @@ object Invoice {
   def unsettledJson = """{"buttonText":"Merk betalt", "buttonClass":"btn"}"""
   def settledJson = """{"buttonText":"Betalt", "buttonClass":"btn btn-success"}"""
   def remindedJson = """{"buttonText":"Purret", "buttonClass":"btn btn-warning"}"""
-  def notRemindedJson = """{"buttonText":"Send purring", "buttonClass":"btn btn-inverse"}"""
+  def notRemindedJson = """{"buttonText":"Merk purret", "buttonClass":"btn btn-inverse"}"""
 
 
 }

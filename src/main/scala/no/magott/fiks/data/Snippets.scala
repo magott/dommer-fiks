@@ -1,7 +1,7 @@
 package no.magott.fiks.data
 
 import xml.{XML, NodeSeq}
-import org.joda.time.{DateTimeZone, DateTime, LocalDateTime}
+import org.joda.time.{LocalDate, DateTimeZone, DateTime, LocalDateTime}
 import unfiltered.request.{Path, Seg, HttpRequest}
 import javax.servlet.http.HttpServletRequest
 import MatchStuff.allMatches
@@ -383,6 +383,54 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     </div>
   }
 
+  def invoiceTableSPA = {
+    val years = (2014 to LocalDate.now.getYear).reverse
+    <div ng-app="invoiceapp">
+      <div ng-controller="ctrl" data-ng-init={s"loadInvoices(${years.head})"}>
+        <div class="btn-group">
+          {
+            years.map(y=> <button class="btn" ng-click={s"loadInvoices($y)"}>{y}</button> )
+          }
+        </div>
+        <input type="search" class="input-medium search-query pull-right" name="search" ng-model="search" id="search" placeholder="Filter.."></input>
+        <table class="table table-striped table-bordered table-condensed">
+          <thead>
+            <tr>
+              <th>Dato</th>
+              <th>Kamp</th>
+              <th>Total</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="invoice in invoices | filter:search as filtered" class={"{{invoice.rowClass}}"}>
+              <td>{"{{invoice.match.date | date:'dd-MM-yyyy'}}"}</td>
+              <td><a href={"{{invoice.id}}"}>{"{{invoice.match.home}} - {{invoice.match.away}}"}</a></td>
+              <td>{"{{invoice.total}}"}</td>
+              <td>{"{{invoice.status}}"}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pull-right">
+          <table class="table">
+            <tr>
+              <td>Betalt</td>
+              <td>{"{{sumSettled(filtered)}}"}</td>
+            </tr>
+            <tr>
+              <td>Utestående</td>
+              <td>{"{{sumUnsettled(filtered)}}"}</td>
+            </tr>
+            <tr>
+              <td><strong>Totalt</strong></td>
+              <td><strong>{"{{sumTotal(filtered)}}"}</strong></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
+
   def invoiceTable(invoices:Seq[Invoice]) = {
     <table class="table table-striped table-bordered table-condensed">
       <thead>
@@ -536,6 +584,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   def invoiceScripts = {
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.0/jquery.validate.min.js" type="text/javascript"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js" type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.min.js" type="text/javascript"></script>
     <script src="/js/invoice.js" type="text/javascript"></script>
   }
 
@@ -823,5 +872,9 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     fields.filterKeys(parameterNames.contains(_)).values.exists(_.isError)
   }
 
+
+  private def momentAngularJS = <script src="//cdnjs.cloudflare.com/ajax/libs/angular-moment/0.9.0/angular-moment.min.js" type="text/javascript"></script>
+  def momentJS = <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js" type="text/javascript"></script>
+  def lodashJS = <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.3.0/lodash.min.js" type="text/javascript"></script>
 
 }
