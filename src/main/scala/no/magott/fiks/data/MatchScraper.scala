@@ -9,12 +9,16 @@ import org.jsoup.Connection.Method
 import org.jsoup.safety.Whitelist
 import unfiltered.request.POST
 import no.magott.fiks.user.UserSession
+import no.magott.fiks.JSoupPimps._
+
 
 class MatchScraper {
   val COOKIE_NAME = "ASP.NET_SessionId"
   val cancelIdPattern = """.*\((.*)\).*""".r
   val dateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm")
   val matchReportUrl = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchDomarrapport.aspx?matchId=s%"
+  val VIEWSTATE = "_VIEWSTATE"
+  val EVENTVALIDATION = "__EVENTVALIDATION"
 
   def scrapeAssignedMatches(session: UserSession) = {
     val assignedMatchesDoc = withAutomaticReAuth(session, doScrapeAssignedMatches)
@@ -108,11 +112,12 @@ class MatchScraper {
     deletions.foreach(r => con.data(r.reportId,"on"))
     con.data("hiddenFunktion","radera")
       .data("btnSpara","Lagre")
-      .data("__VIEWSTATE",matchResultForm.getElementById("__VIEWSTATE").attr("value"))
-      .data("__EVENTVALIDATION",matchResultForm.getElementById("__EVENTVALIDATION").attr("value"))
+      .data(VIEWSTATE,matchResultForm.valueOfElement(VIEWSTATE))
+      .data(EVENTVALIDATION,matchResultForm.valueOfElement(EVENTVALIDATION))
       .followRedirects(false)
     con.method(Method.POST).execute()
   }
+
 
   def postMatchResult(matchResult: MatchResult, session:UserSession){
     val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(matchResult.fiksId)
@@ -124,28 +129,24 @@ class MatchScraper {
     matchResult.finalScore.foreach(x => con.data("tbSlutresultatHemmalag", x.home.toString))
     matchResult.finalScore.foreach(x => con.data("tbSlutresultatBortalag", x.away.toString))
     con.data("tbAntalAskadare",matchResult.attendance.toString)
+    .data(VIEWSTATE, matchResultForm.valueOfElement(VIEWSTATE))
+    .data(EVENTVALIDATION, matchResultForm.valueOfElement(EVENTVALIDATION))
     .data("btnSpara","Lagre")
-    .data("__VIEWSTATE",matchResultForm.getElementById("__VIEWSTATE").attr("value"))
-    .data("__EVENTVALIDATION",matchResultForm.getElementById("__EVENTVALIDATION").attr("value"))
     .followRedirects(false)
-    con.method(Method.POST).execute()
+    con.method(Method.POST)
+    con.execute()
   }
 
   def postInterestForm(availabilityId: String, comment:String, session:UserSession) {
     val url = "https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=" + availabilityId
     val reportInterestForm = withAutomaticReAuth(session, doScrapeReportInterestForm(url))
-    val viewstate = Option(reportInterestForm.getElementById("__VIEWSTATE")).flatMap(el => Option(el.attr("value")))
-    val eventvalidation = Option(reportInterestForm.getElementById("__EVENTVALIDATION")).flatMap(el=> Option(el.attr("value")))
-    val optionalData = Map("__VIEWSTATE" -> viewstate,"__EVENTVALIDATION" -> eventvalidation).collect{
-      case (k, Some(v)) => k -> v
-    }
-    val response = Jsoup.connect(url)
+    Jsoup.connect(url)
       .method(Method.POST)
       .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
       .data("btnAnmal","Meld inn")
       .data("tbKommentar",comment)
-      .data(optionalData.asJava)
-      .referrer(url)
+      .data(VIEWSTATE, reportInterestForm.valueOfElement(VIEWSTATE))
+      .data(EVENTVALIDATION, reportInterestForm.valueOfElement(EVENTVALIDATION)).referrer(url)
       .cookie(COOKIE_NAME,session.sessionToken).followRedirects(false).timeout(25000).execute()
   }
 
@@ -202,23 +203,15 @@ class MatchScraper {
     Jsoup.connect(url).cookie(COOKIE_NAME,session.sessionToken).get
   }
 
-  private def stringToOptionOfInt(s:String):Option[Int] = {
-    if (s.trim.isEmpty) {
-      None
-    } else {
-      Some(s.toInt)
-    }
-  }
-
   def parseMatchResultDocument(fiksId:String, matchResultDocument:Document) = {
     val teams = matchResultDocument.select("span#lblMatchRubrik").text
     val matchId = matchResultDocument.select("span#lblMatchNr").text
     val resultTable = matchResultDocument.select("div#divMainContent")
-    val finalHomeGoal = resultTable.select("input#tbSlutresultatHemmalag").`val`
-    val finalAwayGoal = resultTable.select("input#tbSlutresultatBortalag").`val`
-    val halfTimeHomeGoal = resultTable.select("input#tbHalvtidHemmalag").`val`
-    val halfTimeAwayGoal = resultTable.select("input#tbHalvtidBortalag").`val`
-    val attendance = resultTable.select("input#tbAntalAskadare").`val`.toInt;
+    val finalHomeGoal = resultTable.selectValue("input#tbSlutresultatHemmalag")
+    val finalAwayGoal = resultTable.selectValue("input#tbSlutresultatBortalag")
+    val halfTimeHomeGoal = resultTable.selectValue("input#tbHalvtidHemmalag")
+    val halfTimeAwayGoal = resultTable.selectValue("input#tbHalvtidBortalag")
+    val attendance = resultTable.selectValue("input#tbAntalAskadare").toInt;
     val protestHome = resultTable.select("input#ChkProtestHjemme").attr("checked") == "checked"
     val protestAway = resultTable.select("input#ChkProtestBorte").attr("checked") == "checked"
 
