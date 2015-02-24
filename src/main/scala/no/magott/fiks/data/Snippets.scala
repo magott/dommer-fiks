@@ -402,7 +402,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
               <th>Status</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody ng-cloak="">
             <tr ng-repeat="invoice in invoices | filter:search as filtered" class={"{{invoice.rowClass}}"}>
               <td>{"{{invoice.match.date | date:'dd-MM-yyyy'}}"}</td>
               <td><a href={"{{invoice.id}}"}>{"{{invoice.match.home}} - {{invoice.match.away}}"}</a></td>
@@ -411,7 +411,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
             </tr>
           </tbody>
         </table>
-        <div class="pull-right">
+        <div class="pull-right" ng-cloak="">
           <table class="table">
             <tr>
               <td>Betalt</td>
