@@ -1,5 +1,6 @@
 package no.magott.fiks.data
 
+import com.google.common.base.Charsets
 import unfiltered.request._
 import unfiltered.response._
 import unfiltered.filter.{Intent, Plan}
@@ -103,7 +104,9 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
       val session = userService.userSession(sessionId).get //TODO: YOLO
       val vcard = matchservice.assignedMatches(session).find(_.fiksId == fiksId).flatMap(_.refereeTuples.find(_._1 == role)).map(x=> new VCard(x._2))
       if(vcard.exists(_.canBeVCard)){
-        Ok ~> VCardContentType ~> ResponseString(vcard.get.asVCardString)
+        val vCardString = vcard.get.asVCardString
+        val contentLength = vCardString.getBytes(Charsets.UTF_8).length
+        Ok ~> VCardContentType ~> ResponseString(vCardString)
       }else{
         NotFound ~> Html5(Pages(r).notFound)
       }
