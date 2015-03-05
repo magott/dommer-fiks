@@ -16,17 +16,19 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   val pages = Path(req)
 
   def navbar = {
-    <div class="navbar navbar-fixed-top navbar-inverse">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="/">Dommer-FIKS</a>
-          <div class="nav-collapse">
-            <ul class="nav">
+          <a class="navbar-brand" href="/">Dommer-FIKS</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
             {
               if (isLoggedIn) {
                 <li class={if (pages.contains("mymatches")) "active" else "inactive"}>
@@ -62,24 +64,23 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
             </ul>
           </div> <!--/.nav-collapse -->
         </div>
-      </div>
-    </div>
+      </nav>
   }
 
   def emptyPage(body: NodeSeq, scripts:Option[NodeSeq] = None): NodeSeq =
     <html lang="no">
       <head>
-          <meta charset="utf-8"/>
+        <meta charset="utf-8"/>
         <title>Fiks fix</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-          <meta name="description" content="Fiks, without the #fail"/>
-          <meta name="author" content="Morten Andersen-Gott"/>
-          <meta name="google-site-verification" content="ptF2AFWdgpfQFz8_Uu2o_kDR704noD60eKR4nHC3uT8"/>
-          <meta http-equiv="Content-Language" content="no" />
-          <link rel="shortcut icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="description" content="Fiks, without the #fail"/>
+        <meta name="author" content="Morten Andersen-Gott"/>
+        <meta name="google-site-verification" content="ptF2AFWdgpfQFz8_Uu2o_kDR704noD60eKR4nHC3uT8"/>
+        <meta http-equiv="Content-Language" content="no" />
+        <link rel="shortcut icon" href="/favicon.ico" />
 
-        <!-- Le styles -->
-          <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+      <!-- Le styles -->
+        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet"/>
         <style type="text/css">
           {
           {"""
@@ -92,13 +93,13 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
           }
            """}
           }
-        </style>
-          <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet"/>
-          <link href="/css/fiks.css" rel="stylesheet"/>
+      </style>
+      <link href="/css/fiks.css" rel="stylesheet" type="text/css"/>
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
-    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
       </head>
       <body>
@@ -107,6 +108,10 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       <div class="container-fluid">
 
         {body}
+
+        <div class="refsworld">
+          <a href="http://www.refsworlduk.co.uk/"><img src="/img/refsworlduk1.gif" class="refsworld"></img></a>
+        </div>
 
         <footer class="footer">
           <p>
@@ -120,8 +125,8 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
 
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
         <script type="text/javascript">
           {"""
           var _gaq = _gaq || [];
@@ -136,15 +141,15 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         </script>
         <script type="text/javascript">
           {"""
-          if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
-            var msViewportStyle = document.createElement('style');
-            msViewportStyle.appendChild(
-              document.createTextNode(
-                '@-ms-viewport{width:auto!important}'
-              )
-            );
-            document.getElementsByTagName('head')[0].appendChild(msViewportStyle);
-          }
+             if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+               var msViewportStyle = document.createElement('style');
+               msViewportStyle.appendChild(
+                 document.createTextNode(
+                   '@-ms-viewport{width:auto!important}'
+                 )
+               );
+               document.querySelector('head').appendChild(msViewportStyle);
+             }
         """}
         </script>
         {if(scripts.isDefined) scripts.get}
@@ -161,7 +166,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         }
       }
       </small>
-
+    <div class="table-responsive">
     <table class="table table-striped table-bordered table-condensed">
       <thead>
         <tr>
@@ -211,6 +216,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       }}
       </tbody>
     </table>
+    </div>
 
   }
 
@@ -281,7 +287,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         {if(m.officials.size > 1){
         <tr>
           <th>SMS</th>
-          <td>{m.officials.filter(_.mobile.isDefined).map(_.smsCheckbox) ++ (<a href="" id="sms" class="btn">Send</a>)}</td>
+          <td>{m.officials.filter(_.mobile.isDefined).map(_.smsCheckbox) ++ (<a href="" id="sms" class="btn btn-default">Send</a>)}</td>
         </tr>
       }}
       <tr>
@@ -319,51 +325,6 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
      }
     }
     </div>
-    <form action="result" class="form-horizontal" method="post">
-      <fieldset>
-        <div class={controlGroup(fields, "finalHomeGoals", "finalAwayGoals")}>
-          <label class="control-label" for="finalHomeGoals">Sluttresultat</label>
-          <div class="controls">
-              <input type="number" class="input-micro" id="finalHomeGoals" name="finalHomeGoals" value={fields("finalHomeGoals").value.getOrElse("")}/>
-              -
-              <input type="number" class="input-micro" id="finalAwayGoals" name="finalAwayGoals" value={fields("finalAwayGoals").value.getOrElse("")}/>
-           </div>
-        </div>
-        <div class={controlGroup(fields, "halfTimeHomeGoals", "halfTimeAwayGoals")}>
-          <label class="control-label" for="halfTimeHomeGoals">Pauseresultat</label>
-          <div class="controls">
-              <input type="number" class="input-micro" id="halfTimeHomeGoals" name="halfTimeHomeGoals" value={fields("halfTimeHomeGoals").value.getOrElse("")}/>
-            -
-              <input type="number" class="input-micro" id="halfTimeAwayGoals" name="halfTimeAwayGoals" value={fields("halfTimeAwayGoals").value.getOrElse("")}/>
-          </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label" for="attendance">Antall tilskuere</label>
-          <div class="controls">
-              <input type="number" class="input-mini" name="attendance" id="attendance" value={fields("attendance").value.getOrElse("")}/>
-          </div>
-        </div>
-        <!--
-        <div class="control-group">
-          <label class="control-label" for="protestHome">Protest varslet</label>
-          <div class="controls">
-            <input type="checkbox" name="protestHome"/> Hjemmelag
-          </div>
-          <div class="controls">
-            <input type="checkbox" name="protestHome"/> Bortelag
-          </div>
-        </div>
-        -->
-        <div>
-          <span class="label label-warning">NB!</span>
-          Denne forenklete resultatrapporteringen er <strong>ikke egnet</strong> for cup-kamper med ekstraomganger og straffesparkkonkurranse
-        </div>
-        <div class="form-actions">
-          <a class="btn" href="./">Tilbake</a>
-          <button type="submit" class="btn btn-primary">Send inn</button>
-        </div>
-      </fieldset>
-    </form>
     <div>
       {
       if(!r.resultReports.isEmpty){
@@ -387,13 +348,18 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     val years = (2014 to LocalDate.now.getYear).reverse
     <div ng-app="invoiceapp">
       <div ng-controller="ctrl" data-ng-init={s"loadInvoices(${years.head})"}>
-        <div class="btn-group">
-          {
-            years.map(y=> <button class="btn" ng-click={s"loadInvoices($y)"}>{y}</button> )
-          }
+        <div class="col-md-12 row table-filter-row">
+          <div class="btn-group btn-group-sm pull-left">
+            {
+              years.map(y=> <button class="btn btn-default" ng-click={s"loadInvoices($y)"} ng-class={s"{active: isShowingFor($y)}"} >{y}</button> )
+            }
+          </div>
+          <div class="pull-right">
+            <input type="search" class="input-sm form-control" name="search" ng-model="search" id="search" placeholder="Filtrer.."></input>
+          </div>
         </div>
-        <input type="search" class="input-medium search-query pull-right" name="search" ng-model="search" id="search" placeholder="Filter.."></input>
-        <table class="table table-striped table-bordered table-condensed">
+        <div class="col-md-12 row">
+          <table class="table table-striped table-bordered table-condensed">
           <thead>
             <tr>
               <th>Dato</th>
@@ -427,52 +393,10 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
             </tr>
           </table>
         </div>
+        </div>
       </div>
     </div>
   }
-
-  def invoiceTable(invoices:Seq[Invoice]) = {
-    <table class="table table-striped table-bordered table-condensed">
-      <thead>
-        <tr>
-          <th>Dato</th>
-          <th>Kamp</th>
-          <th>Total</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          invoices.map(invoice =>
-            <tr class={invoice.rowClass}>
-              <td>{invoice.matchData.dateString}</td>
-              <td><a href={invoice.id.get.toString}>{invoice.matchData.teams}</a></td>
-              <td>{invoice.total}</td>
-              <td>{invoice.status}</td>
-            </tr>
-          )
-        }
-      </tbody>
-    </table>
-  }
-
-  def invoiceTotals(t:InvoiceTotals) =
-  <div class="pull-right">
-    <table class="table">
-      <tr>
-        <td>Betalt</td>
-        <td>{t.settled}</td>
-      </tr>
-      <tr>
-        <td>Utestående</td>
-        <td>{t.outstanding}</td>
-      </tr>
-      <tr>
-        <td><strong>Totalt</strong></td>
-        <td><strong>{t.total}</strong></td>
-      </tr>
-    </table>
-  </div>
 
   def invoiceNavBar(m:AssignedMatch) = {
     <ul class="nav nav-tabs">
@@ -489,55 +413,60 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   }
   def invoiceForm(i:Option[Invoice]) = {
     <legend>Dommerregning</legend>
-    <form class="form-horizontal" id="invoice" method="post">
-      <div class="control-group">
-        <label class="control-label" for="matchFee">Kamphonorar</label>
-        <div class="controls">
-          <input type="number" id="matchFee" name="matchFee" placeholder="" required="required" value={i.map(_.matchFee.toString).getOrElse("")}/>
-          <span class="help-inline"></span>
+    <form id="invoice" method="post" class="form-horizontal">
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="matchFee">Kamphonorar</label>
+        <div class="col-sm-2">
+          <input type="number" id="matchFee" name="matchFee" class="form-control" placeholder="" required="required" value={i.map(_.matchFee.toString).getOrElse("")}/>
         </div>
+        <p class="help-block"></p>
       </div>
-      <div class="control-group">
-        <label class="control-label" for="millageAllowance">Kilometergodtgjørelse</label>
-        <div class="controls">
-          <input type="number" class="input-mini" id="km" name="km" placeholder="ant km" step="0.01"/>
-          <input type="number" class="input-mini" id="allowance" name="allowance" value="4.05" step="0.01"/>
-          <input type="number" id="millageAllowance" name="millageAllowance" class="input-medium" placeholder="sum" step="0.01" value={i.flatMap(_.millageAllowance.map(_.toString)).getOrElse("")}/>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="millageAllowance">Kilometergodtgjørelse</label>
+        <div class="col-sm-2">
+          <input type="number" class="form-control" id="km" name="km" placeholder="ant km" step="0.01"/>
         </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="toll">Bompenger</label>
-        <div class="controls">
-          <input type="number" step="0.01" id="toll" placeholder=" " name="toll" class="input-medium" value={i.flatMap(_.toll.map(_.toString)).getOrElse("")}/>
-          <span class="help-inline"></span>
+        <div class="col-sm-2">
+          <input type="number" class="form-control" id="kmMultiplier" name="kmMultiplier" value="4.10" step="0.01"/>
         </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="perDiem">Diett</label>
-        <div class="controls">
-          <input type="number" id="perDiem" name="perDiem" placeholder=" " class="input-medium" value={i.flatMap(_.perDiem.map(_.toString)).getOrElse("")}/>
-          <span class="help-inline"></span>
+        <div class="col-sm-2">
+          <input type="number" id="millageAllowance" name="millageAllowance" class="form-control" placeholder="sum" step="0.01" value={i.flatMap(_.millageAllowance.map(_.toString)).getOrElse("")}/>
         </div>
+        <p class="help-block"></p>
       </div>
-      <div class="control-group">
-        <label class="control-label" for="total">Total</label>
-        <div class="controls">
-          <input type="number" step="0.01" id="total" placeholder=" " name="total" class="input-medium" value={i.map(_.total.toString).getOrElse("")}/>
-          <span class="help-inline"></span>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="toll">Bompenger</label>
+        <div class="col-sm-2">
+          <input type="number" step="0.01" id="toll" placeholder=" " name="toll" class="form-control" value={i.flatMap(_.toll.map(_.toString)).getOrElse("")}/>
         </div>
+        <p class="help-block"></p>
       </div>
-      <div class="control-group">
-        <div class="controls">
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="perDiem">Diett</label>
+        <div class="col-sm-2">
+          <input type="number" id="perDiem" name="perDiem" placeholder=" " class="form-control" value={i.flatMap(_.perDiem.map(_.toString)).getOrElse("")}/>
+        </div>
+        <p class="help-block"></p>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="total">Total</label>
+        <div class="col-sm-2">
+          <input type="number" step="0.01" id="total" placeholder=" " name="total" class="form-control" value={i.map(_.total.toString).getOrElse("")}/>
+        </div>
+        <p class="help-block"></p>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-6 col-sm-offset-2">
           <button type="submit" class="btn btn-primary">Lagre</button>
-          {
+          {/*
             if(i.isDefined){
               <button type="button" id="delete" class="btn btn-danger"><i class="icon-trash icon-white"></i> Slett</button>
-            }
+            }*/
           }
-          </div>
         </div>
-      <div class="control-group">
-        <div class="controls">
+      </div>
+      <div class="form-group">
+        <div class="col-sm-6 col-sm-offset-2">
           {
             if(i.isDefined){
               if(i.get.reminder.isDefined)
@@ -582,10 +511,9 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
 
   def invoiceScripts = {
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.0/jquery.validate.min.js" type="text/javascript"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js" type="text/javascript"></script>
+    (<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.0/jquery.validate.min.js" type="text/javascript"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.min.js" type="text/javascript"></script>
-    <script src="/js/invoice.js" type="text/javascript"></script>
+    <script src="/js/invoice.js" type="text/javascript"></script> ) ++lodashJS
   }
 
   def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) = {
@@ -636,7 +564,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     messageParams.get("message") match {
       case Some(msg) => msg.mkString("") match {
         case "loginRequired" => <div class="alert alert-info">Du må logge inn for å få tilgang til denne siden</div>
-        case "loginFailed" => <div class="alert alert-error">Login feilet, prøv igjen</div>
+        case "loginFailed" => <div class="alert alert-danger">Login feilet, prøv igjen</div>
         case "sessionTimeout" => <div class="alert alert">Sesjonen din er for gammel, du må logge inn på nytt</div>
         case "logout" => <p><strong>Du er nå logget ut</strong></p>
         case _ =>
@@ -757,60 +685,73 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <div>
           {
             if(validationErrors.contains("badcredentials")){
-              <div class="alert alert-error">
+              <div class="alert alert-danger">
                 Ugyldig brukernavn/passord, prøv igjen
               </div>
             }
           }
         </div>
-        <label>Brukernavn</label>
         {
           if(validationErrors.contains("username")){
-            <div class="control-group error">
-            <input type="text" name="username" id="inputError"/>
-            <span class="help-inline">Brukernavn må fylles ut</span>
+            <div class="form-group has-error">
+            <label for="username" class="control-label">Brukernavn</label>
+            <input type="text" name="username" class="form-control" id="inputError"/>
+            <span class="help-block">Brukernavn må fylles ut</span>
             </div>
           }else{
-            <input type="text" name="username"/>
+            <div class="form-group">
+            <label for="username" class="control-label">Brukernavn</label>
+            <input type="text" name="username" class="form-control"/>
+            </div>
           }
         }
 
-        <label>Passord</label>
         {
           if(validationErrors.contains("password")){
-          <div class="control-group error">
-              <input type="password" name="password" id="inputError"/>
-            <span class="help-inline">Passord må fylles ut</span>
+          <div class="form-group has-error">
+              <label for="password" class="control-label">Passord</label>
+              <input type="password" class="form-control" name="password" id="inputError"/>
+            <span class="help-block">Passord må fylles ut</span>
           </div>
           }else{
-            <input type="password" name="password"/>
+            <div class="form-group">
+              <label for="password" class="control-label">Passord</label>
+              <input type="password" class="form-control" name="password"/>
+            </div>
           }
         }
 
-        <label>E-post</label>
         {
-          if(validationErrors.contains("email")){
-            <div class="control-group error">
-                <input type="email" name="email" id="inputError"/>
-              <span class="help-inline">E-post må fylles ut</span>
-            </div>
-          }else{
-              <input type="email" name="email"/>
-              <span class="help-inline">Brukes <strong>kun</strong> dersom Dommer-FIKS har viktige meldinger til deg om tjenesten</span>
+        if(validationErrors.contains("email")){
+          <div class="form-group has-error">
+            <label for="email" class="control-label">E-post</label>
+            <input type="email" name="email" class="form-control" id="inputError"/>
+            <span class="help-inline">E-post må fylles ut</span>
+          </div>
+        }else{
+          <div class="form-group">
+            <label for="email" class="control-label">E-post</label>
+            <input type="email" name="email" class="form-control"/>
+            <span class="help-inline">Brukes <strong>kun</strong> dersom Dommer-FIKS har viktige meldinger til deg om tjenesten</span>
+          </div>
           }
         }
         {
           if(validationErrors.contains("terms")){
-            <div class="control-group error">
-              <label class="checkbox">
-                  <input type="checkbox" name="terms"/>
-                Jeg godtar at Dommer-FIKS oppbevarer mitt brukernavn og passord (påkrevd)
-              </label>
+            <div class="form-group has-error">
+              <div class="checkbox">
+                <label class="control-label">
+                    <input type="checkbox" name="terms"/>
+                  Jeg godtar at Dommer-FIKS oppbevarer mitt brukernavn og passord (påkrevd)
+                </label>
+              </div>
             </div>
           }else{
-            <label class="checkbox"><input type="checkbox" name="terms"/>
+            <div class="checkbox">
+              <label><input type="checkbox" name="terms"/>
               Jeg godtar at Dommer-FIKS oppbevarer mitt brukernavn og passord
             </label>
+            </div>
           }
         }
         <button type="submit" class="btn btn-primary">Sett opp kalender</button>
@@ -861,11 +802,11 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
 
 
-   private def controlGroup(fields:Map[String, FormField], parameterNames:String*):String = {
+   private def formGroup(fields:Map[String, FormField], parameterNames:String*):String = {
     if(fields.filterKeys(parameterNames.contains(_)).values.exists(_.isError)){
-      "control-group error"
+      "form-group has-error"
     }else{
-      "control-group"
+      "form-group"
     }
   }
   private def errorInGroup(fields:Map[String, FormField], parameterNames:String*):Boolean = {

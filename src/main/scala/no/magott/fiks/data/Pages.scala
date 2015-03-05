@@ -23,23 +23,23 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
           Logg inn med ditt Fiks brukernavn og passord.
             <br/>
           Du skal bruke samme brukernavn og passord som du bruker på
-          <a href="http://www.fiks.fotball.no">offisielle fiks</a>
+          <a href="http://fiks.fotball.no">offisielle fiks</a>
         </p>
         <form class="form-horizontal" action="login" method="post">
-          <div class="control-group">
-            <label class="control-label" for="username">Brukernavn</label>
-            <div class="controls">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="username">Brukernavn</label>
+            <div class="col-sm-6">
               <input type="text" name="username" placeholder="Brukernavn"/>
             </div>
           </div>
-          <div class="control-group">
-            <label class="control-label" for="password">Password</label>
-            <div class="controls">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="password">Password</label>
+            <div class="col-sm-6">
               <input type="password" name="password" placeholder="Passord"/>
             </div>
           </div>
-            <div class="control-group">
-              <div class="controls">
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-6">
                 <button type="submit" class="btn btn-primary">Logg inn</button>
               </div>
             </div>
@@ -156,21 +156,17 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
             <li><strong>Generer ny kalender:</strong> Det genereres en ny adresse for kalenderen din. Du må oppdatere din kalender til å peke på den nye adressen</li>
           </ul>
         </p>
-      <div>
-        <div class="control-group">
-        <div class="input-append">
-         <input type="text" value={schemeAndUrl} class="input-xxlarge"></input>
-           <a class="btn btn-inverse" href={resetCalIdUrl}><i class="icon-refresh icon-white"></i> Generer ny adresse</a>
-           <a class="btn btn-danger" href={deleteCalUrl}><i class="icon-trash"></i> Slett kalender</a>
+      <div class="calendar-controls">
+        <div>
+         <input type="text" value={schemeAndUrl} class="form-control"></input>
         </div>
-        </div>
-        <div class="control-group">
-        <div class="btn-group">
-          <a class="btn" href={schemeAndUrl}><i class="icon-download"></i> Last ned</a>
-          <a class="btn" href={webcalUrl}><i class="icon-plus"></i> Abonnér i Outlook/iCal/iPhone</a>
-          <a class="btn" href={googleCalUrl} target="_blank"><i class="icon-plus"></i> Abonnér i Google Calendar</a>
-        </div>
-        </div>
+          <div class="btn-group">
+            <a class="btn btn-danger" href={deleteCalUrl}><i class="glyphicon glyphicon-trash"></i> Slett kalender</a>
+            <a class="btn btn-default" href={resetCalIdUrl}><i class="glyphicon glyphicon-refresh icon-white"></i> Generer ny adresse</a>
+            <a class="btn btn-default" href={schemeAndUrl}><i class="glyphicon glyphicon-download"></i> Last ned</a>
+            <a class="btn btn-default" href={webcalUrl}><i class="glyphicon glyphicon-plus"></i> Abonnér i Outlook/iCal/iPhone</a>
+            <a class="btn btn-default" href={googleCalUrl} target="_blank"><i class="glyphicon glyphicon-plus"></i> Abonnér i Google Calendar</a>
+          </div>
       </div>
     )
   }
@@ -183,15 +179,9 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     emptyPage(navbar.getOrElse(NodeSeq.Empty) ++ form ++ matchDataPanel.getOrElse(NodeSeq.Empty), Some(invoiceScripts))
   }
 
-  def invoices(invoices:Seq[Invoice], totals:InvoiceTotals) = {
-    emptyPage(
-      invoiceTable(invoices) ++ invoiceTotals(totals)
-    )
-  }
-
   def invoiceSAP = {
     emptyPage(
-    invoiceTableSPA, Some(invoiceScripts ++ momentJS ++ lodashJS)
+    invoiceTableSPA, Some(invoiceScripts ++ momentJS)
     )
   }
 
@@ -257,29 +247,29 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
         oppdatert med informasjonen.
       </p>
       <form class="form-horizontal" action={req.uri} method="POST">
-        <div class="control-group">
-          <label class="control-label">Banenavn</label>
-          <div class="controls">
-            <span class="input-large uneditable-input">{stadiumName}</span>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="stadiumName">Banenavn</label>
+          <div class="col-sm-6">
+            <input class="form-control" id="stadiumName" name="stadiumName" readonly="true" value={stadiumName}></input>
           </div>
         </div>
-        <div class="control-group">
-          <label class="control-label" for="inputEmail">Email</label>
-          <div class="controls">
-            <input type="email" name="email" id="inputEmail" placeholder="Email" required="required"/>
-            <span class="help-inline">Dersom Dommer-FIKS trenger å kontakte deg for mer informasjon</span>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="email">Email</label>
+          <div class="col-sm-6">
+            <input type="email" class="form-control" name="email" id="email" placeholder="Email" required="required"/>
+            <p class="help-block">Dersom Dommer-FIKS trenger å kontakte deg for mer informasjon</p>
           </div>
         </div>
-        <div class="control-group">
-          <label class="control-label" for="inputPassword">Beskrivelse av banen</label>
-          <div class="controls">
-            <textarea rows="3" placeholder="Beskrivelse av banens plassering (adresse etc)" name="description" required="required"></textarea>
-            <span class="help-block">Beskriv så godt som mulig hvor banen ligger.
-              Bruk gjerne gataadresse om du har det. Du kan også legge inn linker til Google maps eller lignende.</span>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="description">Beskrivelse av banen</label>
+          <div class="col-sm-6">
+            <textarea class="form-control" rows="3" placeholder="Beskrivelse av banens plassering (adresse etc)" name="description" id="description" required="required"></textarea>
+            <p class="help-block">Beskriv så godt som mulig hvor banen ligger.
+              Bruk gjerne gataadresse om du har det. Du kan også legge inn linker til Google maps eller lignende.</p>
           </div>
         </div>
-        <div class="control-group">
-          <div class="controls">
+        <div class="form-group">
+          <div class="col-sm-2 col-sm-offset-2">
             <button type="submit" class="btn">Send inn</button>
           </div>
         </div>

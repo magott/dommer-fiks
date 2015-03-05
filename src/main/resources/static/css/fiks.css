@@ -1,26 +1,29 @@
-.navbar .brand {
+.navbar-brand {
     background-image: url("../img/fiks.png");
     background-repeat: no-repeat;
-    background-position: -1px 4px;
+    background-position: -1px 8px;
     padding-left: 35px;
 }
-
 .input-micro {
     width: 30px;
 }
-
 .forecast {
     display: table-cell;
+    padding-right: 5px;
+    padding-left: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
-
+.forecast:not(:last-child) {
+    border-right: 1px solid #999999;
+}
 .forecasts {
     display: table-row;
 }
-
 .forecast-table {
     display: table;
 }
-
 .beta {
     font-size: smaller;
     vertical-align: super;
@@ -30,6 +33,31 @@
 @-ms-viewport{width: device-width;}
 @-o-viewport{width: device-width;}
 @viewport{width: device-width;}
+
+.table-filter-row {
+    margin-bottom: 3px;
+}
+
+.nav-tabs{
+    margin-bottom: 20px;
+}
+
+.refsworld{
+    margin-top: 10px;
+    max-width: 100%;
+}
+.calendar-controls{
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+@media screen and (max-width: 991px) and (min-width: 768px){
+    body { padding-top: 110px; }
+}
+
+.footer{
+    margin-top: 10px;
+}
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;

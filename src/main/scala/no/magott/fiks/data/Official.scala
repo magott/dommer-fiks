@@ -3,7 +3,7 @@ package no.magott.fiks.data
 import scala.xml.NodeSeq
 
 case class Official(name:String, mobile:Option[String], home:Option[String], role:Role){
-  def smsCheckbox : NodeSeq = <label class="checkbox"><input type="checkbox" value={mobile.getOrElse("")} class="smscheck"></input>{name}</label>
+  def smsCheckbox : NodeSeq = <div class="checkbox"><label><input type="checkbox" value={mobile.getOrElse("")} class="smscheck"></input>{name}</label></div>
 }
 
 object Official{

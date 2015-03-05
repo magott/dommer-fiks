@@ -1,8 +1,8 @@
-$( "#km, #allowance").keyup(function(e) {
-    var allowance = parseFloat($("#allowance").val());
+$( "#km, #kmMultiplier").keyup(function(e) {
+    var kmMultiplier = parseFloat($("#kmMultiplier").val());
     var km = parseFloat($("#km").val());
-    if(_.isFinite(allowance) && _.isFinite(km)){
-        $("#millageAllowance").val(Number(km * allowance).toFixed(2));
+    if(_.isFinite(kmMultiplier) && _.isFinite(km)){
+        $("#millageAllowance").val(Number(km * kmMultiplier).toFixed(2));
     }
 });
 
@@ -27,6 +27,24 @@ $("#settled").click(function(){
     }
 });
 
+$.validator.setDefaults({
+    highlight: function(element) {
+        $(element).closest('.form-group').addClass('has-error');
+    },
+    unhighlight: function(element) {
+        $(element).closest('.form-group').removeClass('has-error');
+    },
+    errorElement: 'p',
+    errorClass: 'help-block',
+    errorPlacement: function(error, element) {
+        if(element.parent('.input-group').length) {
+            error.insertAfter(element.parent());
+        } else {
+            error.insertAfter(element);
+        }
+    }
+});
+
 function invoiceAction(method, button, action){
     button.attr("disabled", "disabled");
     $.ajax({
@@ -45,15 +63,21 @@ function calculateTotal(){
     $("#total").val(Number(matchFee + millageAllowance + toll + perDiem).toFixed(2));
 }
 $('#invoice').validate({
-    errorPlacement:function (error, element) {
-        error.appendTo(element.nextAll("span"));
-    },
     rules:{
         matchFee:{
             required:true,
             digits:true
         },
         toll:{
+            number:true
+        },
+        km:{
+            number:true
+        },
+        kmMultiplier:{
+            number:true
+        },
+        millageAllowance:{
             number:true
         },
         perDiem:{
@@ -68,6 +92,7 @@ $('#invoice').validate({
             required: "Kamphonorar må fylles ut",
             digits: "Kamphonorar må være et heltall"
         },
+        millageAllowance: "Kilometergodtgjørelse (sum) må være et tall",
         perDiem: "Diett må være heltall",
         toll: "Bompenger må være et tall",
         total: "Total må være et tall"
@@ -86,6 +111,7 @@ function orZero(element){
 var app = angular.module('invoiceapp', []);
 app.controller("ctrl", function($scope, $http) {
      $scope.invoices = [];
+     $scope.activeYear = 0;
      $scope.loadInvoices = function(year) {
         var httpRequest = $http({
             method: 'GET',
@@ -94,9 +120,13 @@ app.controller("ctrl", function($scope, $http) {
                'Content-Type': 'application/json'
             }
         }).success(function(data, status) {
+            $scope.activeYear = year;
             $scope.invoices = data;
         });
     };
+    $scope.isShowingFor = function(year){
+        return year === $scope.activeYear;
+    }
     $scope.sumSettled = function(fitleredInvoices) {
         return _.reduce(fitleredInvoices, function(acc, i){
             if(i.settled == true){
