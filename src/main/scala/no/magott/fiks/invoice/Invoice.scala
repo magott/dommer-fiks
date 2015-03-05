@@ -9,21 +9,32 @@ import argonaut._, Argonaut._
 case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], millageAllowance:Option[Double], perDiem: Option[Int], total: Double, reminder:Option[DateTime], settled:Option[DateTime]) {
 
   def status = if(settled.isDefined) s"Betalt ${settled.get.toString("dd.MM")}" else if(reminder.isDefined) s"Purret ${reminder.get.toString("dd.MM")}" else "Utestående"
-  def rowClass = if(settled.isDefined) "success" else if(moreDaysPassedThan(10)) "error" else if(moreDaysPassedThan(7)) "warning" else if(moreDaysPassedThan(5)) "info" else ""
-  def toMongo:DBObject = {
-    val sets = mutable.Map[String, Any](
-    "username" -> username,
-    "matchData" -> matchData.toMongo,
-    "matchFee" -> matchFee,
-    "total" -> total
-    )
-    toll.foreach(x => sets += "toll" -> x)
-    millageAllowance.foreach(x => sets += "millageAllowance" -> x)
-    perDiem.foreach(x=> sets += "perDiem" -> x)
+  def rowClass = if(settled.isDefined) "success" else if(moreDaysPassedThan(10)) "danger" else if(moreDaysPassedThan(7)) "warning" else if(moreDaysPassedThan(5)) "info" else ""
 
-    $set(Seq(sets.toSeq:_*))
+  def isNew = id.isEmpty
+  private def asMap = {
+    val map = mutable.Map[String, Any](
+      "username" -> username,
+      "matchData" -> matchData.toMongo,
+      "matchFee" -> matchFee,
+      "total" -> total
+    )
+    toll.foreach(x => map += "toll" -> x)
+    millageAllowance.foreach(x => map += "millageAllowance" -> x)
+    perDiem.foreach(x=> map += "perDiem" -> x)
+    map
   }
-  def updateClause : MongoDBObject = if(id.isDefined) MongoDBObject("_id" -> id.get) else toMongo
+
+  def asMongoUpdate:DBObject = {
+    $set(Seq(asMap.toSeq:_*))
+  }
+
+  def asMongoInsert: DBObject = {
+    MongoDBObject(asMap.toList:_*)
+  }
+
+  def updateClause : MongoDBObject = MongoDBObject("_id" -> id.get)
+
   private def moreDaysPassedThan(days:Int) = matchData.date.plusDays(days).isBeforeNow
 
   def toJson: Json = {

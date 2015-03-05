@@ -27,13 +27,17 @@ class InvoiceRepository {
   }
 
   def findInvoicesForUser(username:String) = {
-    db("invoice").find(where("username" -> username)).sort(MongoDBObject("matchData.date"-> 1)).map(Invoice.fromMongo).toSeq
+    db("invoice").find(where("username" -> username)).sort(MongoDBObject("matchData.date"-> -1)).map(Invoice.fromMongo).toSeq
   }
 
   def all = db("invoice").find().map(Invoice.fromMongo).toList
 
   def saveInvoice(invoice:Invoice) = {
-    db("invoice").update(q = invoice.updateClause, o = invoice.toMongo, upsert = true, multi = false)
+    if(invoice.isNew){
+      db("invoice").save(invoice.asMongoInsert)
+    }else{
+      db("invoice").update(q = invoice.updateClause, o = invoice.asMongoUpdate, upsert = false, multi = false)
+    }
     findInvoice(invoice.username, invoice.matchData.fiksId).map(_.id.get)
   }
 
