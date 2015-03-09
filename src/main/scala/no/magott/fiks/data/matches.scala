@@ -6,6 +6,8 @@ import validation.{FormField, InputOk}
 import fix.UriString._
 import scala.xml.NodeSeq
 import no.magott.fiks.VCard
+import argonaut._, Argonaut._
+import scalaz._, Scalaz._
 
 
 object ResultType extends Enumeration{
@@ -39,7 +41,19 @@ case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String,
     })
   }
 
+  def refsObjects = officials.toList.map(_.asJson)
 
+  def asJson = {
+    Json.obj(
+      "fiksId" := fiksId,
+      "date" := date.toString,
+      "teams" := teams,
+      "competition" := tournament,
+      "venue" := venue,
+      "cancellationId" := cancellationId,
+      "officials" := refsObjects
+    )
+  }
 
   def toPhoneSpan(input: String) = {
     val phone = "((\\+47)?)[\\d ]{8,11}".r

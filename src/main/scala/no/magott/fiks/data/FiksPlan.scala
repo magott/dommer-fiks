@@ -7,7 +7,7 @@ import unfiltered.filter.{Intent, Plan}
 import no.magott.fiks._
 import no.magott.fiks.calendar.VCalendar
 import MatchStuff.allMatches
-import unfiltered.Cookie
+import unfiltered.{response, Cookie}
 import java.util.concurrent.ExecutionException
 import javax.servlet.http.HttpServletRequest
 import com.google.common.util.concurrent.UncheckedExecutionException
@@ -21,13 +21,13 @@ import no.magott.fiks.invoice.InvoiceRepository
 import scala.Some
 import unfiltered.response.Html
 import unfiltered.response.Html5
-import unfiltered.Cookie
 import unfiltered.response.ResponseString
 import scala.Some
 import unfiltered.response.Html
 import unfiltered.response.Html5
-import unfiltered.Cookie
 import unfiltered.response.ResponseString
+import scalaz._, Scalaz._
+import argonaut._, Argonaut._
 
 class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoiceRepository:InvoiceRepository, userService:UserService) extends Plan {
 
@@ -135,7 +135,7 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
       val session = userService.userSession(sessionId).get //TODO: Yolo
       matchservice.matchDetails(matchId, session) match {
         case Some(m) => Html5(Pages(r).assignedMatchInfo(m))
-        case None => Html5(Pages(r).notFound)
+        case None => NotFound ~> Html5(Pages(r).notFound)
       }
     })
   }
@@ -144,12 +144,19 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & SessionId(loginToken) => {
       val session = userService.userSession(loginToken).get //TODO: YOLO
       redirectToLoginIfTimeout(r, {
-        if (allMatches(r)) {
-          val assigned = matchservice.assignedMatches(session)
-          Ok ~> Html5(Pages(r).assignedMatches(assigned))
-        } else {
-          val assigned = matchservice.upcomingAssignedMatches(session)
-          Ok ~> Html5(Pages(r).assignedMatches(assigned))
+        r match {
+          case Accepts.Json(_) => {
+            Ok ~> JsonContent ~> ResponseString(matchservice.assignedMatches(session).map(_.asJson).jencode.nospaces)
+          }
+          case _ => {
+            if (allMatches(r)) {
+              val assigned = matchservice.assignedMatches(session)
+              Ok ~> Html5(Pages(r).matchesSPA)
+            } else {
+              val assigned = matchservice.upcomingAssignedMatches(session)
+              Ok ~> Html5(Pages(r).matchesSPA)
+            }
+          }
         }
       })
     }

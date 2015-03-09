@@ -179,6 +179,10 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     emptyPage(navbar.getOrElse(NodeSeq.Empty) ++ form ++ matchDataPanel.getOrElse(NodeSeq.Empty), Some(invoiceScripts))
   }
 
+  def matchesSPA = {
+    emptyPage(matchesSPATable, Some(matchesScripts))
+  }
+
   def invoiceSAP = {
     emptyPage(
     invoiceTableSPA, Some(invoiceScripts ++ momentJS)

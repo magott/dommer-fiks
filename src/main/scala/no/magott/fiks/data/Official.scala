@@ -1,17 +1,29 @@
 package no.magott.fiks.data
 
 import scala.xml.NodeSeq
+import argonaut._, Argonaut._
+import scalaz._, Scalaz._
 
 case class Official(name:String, mobile:Option[String], home:Option[String], role:Role){
   def smsCheckbox : NodeSeq = <div class="checkbox"><label><input type="checkbox" value={mobile.getOrElse("")} class="smscheck"></input>{name}</label></div>
+  def asJson = {
+    Json.obj(
+      "name" := name.trim,
+      "mobile" := mobile,
+      "home" := home,
+      "role" := role.value
+    )
+  }
+
 }
 
 object Official{
   def fromTuple(tuple:Tuple2[String, String]):Official = {
     val isUser = !tuple._2.contains(",")
     val NameMobilePhone(name, home, mobile) = tuple._2
-    Official(name, mobile, home, Role.fromString(tuple._1))
+    Official(name.replace("\u00A0", ""), mobile, home, Role.fromString(tuple._1))
   }
+
 }
 
 object NameMobilePhone {

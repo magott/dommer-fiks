@@ -227,10 +227,10 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       </li>
       {
         if(m.isReferee){
-          <li class="inactive"><a href="./result">Resultat</a></li>
+          <li class="inactive"><a href={s"/fiks/mymatches/${m.fiksId}/result"}>Resultat</a></li>
         }
       }
-      <li class="inactive"><a href="./invoice">Regning</a></li>
+      <li class="inactive"><a href={s"/fiks/mymatches/${m.fiksId}/invoice"}>Regning</a></li>
     </ul>
     <table class="table table-striped table-bordered table-condensed">
         <tr>
@@ -342,6 +342,58 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       }
       }
     </div>
+  }
+
+  def matchesSPATable: NodeSeq = {
+      <div ng-app="matchesapp">
+        <div ng-controller="ctrl" data-ng-init={s"loadMatches()"}>
+          <div class="col-md-12 row table-filter-row">
+            <div class="btn-group btn-group-sm pull-left">
+              <button class="btn btn-default" ng-click="setFromDate(yearAgo())" ng-class="{active: isShowingAllMatches()}">Vis alle</button>
+              <button class="btn btn-default" ng-click="setFromDate(today())" ng-class="{active: !isShowingAllMatches()}">Vis kommende</button>
+            </div>
+            <div class="pull-right">
+              <input type="search" class="input-sm form-ctrol" name="search" ng-model="search" id="search" placeholder="Søk.."></input>
+            </div>
+          </div>
+          <div class="table-responsive col-md-12 row" ng-if="!isLoading">
+            <table class="table table-striped table-bordered table-condensed" ng-cloak="">
+              <thead>
+                <tr>
+                  <th>Dato</th>
+                  <th>Tid</th>
+                  <th>Kamp</th>
+                  <th>Sted</th>
+                  <th>Turnering</th>
+                  <th>Dommere</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="match in (matches | filter:search | filter:dateFilter) as filtered">
+                  <td>{"{{match.date | date:'dd.MM.yy'}}"}</td>
+                  <td>{"{{match.date | date:'HH:mm'}}"}</td>
+                  <td>
+                    <a href={"mymatches/{{match.fiksId}}/"}>{"{{match.teams}}"}</a>
+                  </td>
+                  <td>{"{{match.venue}}"}</td>
+                  <td>{"{{match.competition}}"}</td>
+                  <td>
+                    <span ng-repeat="ref in match.officials" class="official">{"({{ref.role}}) {{ref.name}}"}<span class="phone" ng-if={"isSet(ref.mobile)"}> Mobil: <a href={"tel:{{ref.mobile}}"}>{"{{ref.mobile}}"}</a></span><span class="phone" ng-if={"ref.home != null"}> Tlf: <a href={"tel:{{ref.home}}"}>{"{{ref.home}}"}</a></span></span>
+                    <a href={"mymatches/{{match.fiksId}}/yield?cancellationId={{match.cancellationId}}"} ng-if="isSet(match.cancellationId)">Meld forfall</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="filter-count" ng-cloak="">Viser {"{{filtered.length}}"} av {"{{matches.length}} kamper"}</div>
+          </div>
+          <div>
+            <div class="text-center loading" ng-if="isLoading">
+              <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+              <span>Laster kamper..</span>
+            </div>
+          </div>
+        </div>
+      </div>
   }
 
   def invoiceTableSPA = {
@@ -512,11 +564,18 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
   def invoiceScripts = {
     (<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.0/jquery.validate.min.js" type="text/javascript"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.min.js" type="text/javascript"></script>
-    <script src="/js/invoice.js" type="text/javascript"></script> ) ++lodashJS
+     ++angularJs++
+      <script src="/js/invoice.js" type="text/javascript"></script> )  ++lodashJS
   }
 
-  def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) = {
+  def matchesScripts = {
+    angularJs ++ (<script src="/js/matches.js" type="text/javascript"></script>) ++ lodashJS ++ momentJS
+  }
+
+  def angularJs = <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.min.js" type="text/javascript"></script>
+
+
+def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) = {
     <table class="table table-striped table-bordered table-condensed">
       <thead>
         <tr>
