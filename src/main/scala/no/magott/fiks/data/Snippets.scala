@@ -351,6 +351,9 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
             <div class="btn-group btn-group-sm pull-left">
               <button class="btn btn-default" ng-click="setFromDate(yearAgo())" ng-class="{active: isShowingAllMatches()}">Vis alle</button>
               <button class="btn btn-default" ng-click="setFromDate(today())" ng-class="{active: !isShowingAllMatches()}">Vis kommende</button>
+              <button class="btn btn-default" ng-click="reloadMatches()">
+                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Oppdater
+              </button>
             </div>
             <div class="pull-right">
               <input type="search" class="input-sm form-ctrol" name="search" ng-model="search" id="search" placeholder="Søk.."></input>

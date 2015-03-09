@@ -195,25 +195,25 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     )
   }
 
-  def notFound = emptyPage( <div class="alert alert-block">
+  def notFound = emptyPage( <div class="alert alert-danger">
     <h4 class="alert-heading">Auda!</h4>
     Fant ikke siden du forsøkte å gå til. Bruk menyen over for å navigere. Eller gå direkte til <a href="/login">innloggingen</a>
   </div>)
 
-  def forbidden = emptyPage( <div class="alert alert-block">
+  def forbidden = emptyPage( <div class="alert alert-danger">
     <h4 class="alert-heading">Ingen tilgang</h4>
     Du har ikke tilgang til denne siden
   </div>)
 
   def error(n:NodeSeq) = emptyPage(
-    <div class="alert alert-error">{n}</div>)
+    <div class="alert alert-danger">{n}</div>)
 
   def error(e: Exception) = {
     e.printStackTrace()
     e match {
       case ex: SocketTimeoutException => {
         emptyPage(
-          <div class="alert alert-error">
+          <div class="alert alert-danger">
             <p>
               <strong>Det tok for lang tid å hente data fra fiks:</strong> Du er allerede logget inn og trenger <strong><em>ikke</em></strong> gjøre det på nytt.
               Forhåpentligvis går det bedre om du prøver på nytt. Bruk menyen over for å prøve igjen. Eller klikk <a href="/fiks/mymatches">her</a>
@@ -224,7 +224,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
       }
       case _ => {
         emptyPage(
-          <div class="alert alert-error">
+          <div class="alert alert-danger">
             <p>
               <strong>Her skjedde det en uventet feil:</strong> Forhåpentligvis går det bedre om du prøver på nytt. Bruk menyen over for å prøve igjen.
                       Hvis ikke kan du rapportere feilen på <a href="http://www.facebook.com/dommerfiks">Facebooksidene</a>

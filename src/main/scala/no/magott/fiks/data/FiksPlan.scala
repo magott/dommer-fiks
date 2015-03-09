@@ -143,22 +143,19 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
   val myMatches = Intent {
     case r@GET(Path(Seg("fiks" :: "mymatches" :: Nil))) & SessionId(loginToken) => {
       val session = userService.userSession(loginToken).get //TODO: YOLO
-      redirectToLoginIfTimeout(r, {
         r match {
           case Accepts.Json(_) => {
-            Ok ~> JsonContent ~> ResponseString(matchservice.assignedMatches(session).map(_.asJson).jencode.nospaces)
+           unauthorizedOnTimeout(r, {
+              Ok ~> JsonContent ~> ResponseString(matchservice.assignedMatches(session).map(_.asJson).jencode.nospaces)
+            })
           }
           case _ => {
-            if (allMatches(r)) {
-              val assigned = matchservice.assignedMatches(session)
+            redirectToLoginIfTimeout(r, {
               Ok ~> Html5(Pages(r).matchesSPA)
-            } else {
-              val assigned = matchservice.upcomingAssignedMatches(session)
-              Ok ~> Html5(Pages(r).matchesSPA)
-            }
+            })
           }
         }
-      })
+
     }
     case r@GET(Path(Seg("match.ics" :: Nil))) & SessionId(sessionId) & Params(MatchIdParameter(matchId)) => redirectToLoginIfTimeout(r, {
       val session = userService.userSession(sessionId).get //TODO: YOLO
@@ -192,6 +189,18 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
 
   val about = Intent {
     case r@GET(Path(Seg("fiks" :: "about" :: Nil))) => Ok ~> Html(Pages(r).about)
+  }
+
+  def unauthorizedOnTimeout[T <: HttpServletRequest](req: HttpRequest[T], f: => ResponseFunction[Any]) = {
+    try {
+      f
+    } catch {
+      case e: SessionTimeoutException => Unauthorized ~> SetCookies(Cookie(name = "fiksToken", value = "", maxAge = Some(0)))
+      case e: Exception if(e.getCause.isInstanceOf[SessionTimeoutException])=> Unauthorized ~> SetCookies(Cookie(name = "fiksToken", value = "", maxAge = Some(0)))
+      case e: ExecutionException => GatewayTimeout ~> handleException(e, req)
+      case e: UncheckedExecutionException => GatewayTimeout ~> handleException(e, req)
+      case e: Exception => InternalServerError ~> Html5(Pages(req).error(e))
+    }
   }
 
   def redirectToLoginIfTimeout[T <: HttpServletRequest](req: HttpRequest[T], f: => ResponseFunction[Any]) = {

@@ -30,9 +30,10 @@ class StadiumPlan(stadiumService: StadiumService) extends Plan{
           Ok ~> Html5(Pages(r).submitStadium(name, matchId))
         }
         case POST(_) => {
-          val receipt = handleStadiumSubmission(r, name, matchId)
-          if(receipt.isAccepted) Ok ~> Html5(Snippets(r).emptyPage(<legend>Takk for at du gjør Dommer-FIKS bedre</legend>))
-          else InternalServerError ~> Html5(Pages(r).error(<div>Her skjedde det en feil. Feilkoden er: {"123"}</div>))
+          handleStadiumSubmission(r, name, matchId) match{
+            case MailAccepted(_) => Ok ~> Html5(Snippets(r).emptyPage(<legend>Takk for at du gjør Dommer-FIKS bedre</legend>))
+            case x: MailRejected => InternalServerError ~> Html5(Pages(r).error(<div>Her skjedde det en feil. Feilkoden er: {x.errorCode}</div>))
+          }
         }
       }
     }

@@ -1,5 +1,5 @@
 var app = angular.module('matchesapp', []);
-app.controller("ctrl", function($scope, $http, $location) {
+app.controller("ctrl", function($scope, $http, $window) {
      $scope.fromDate = moment().startOf('day');
      $scope.isLoading = true;
      $scope.matches = [];
@@ -14,25 +14,23 @@ app.controller("ctrl", function($scope, $http, $location) {
             $scope.isLoading = false;
             $scope.matches = data;
         }).error(function(data, status, headers) {
-            if(status === 302){
-                $location.path(headers().location).replace();
+            if(status === 401){
+                $window.location.href= "/login?message=sessionTimeout";
+            }else{
+                $window.location.href = "/error";
             }
         });
     };
     $scope.isSet = function(value) {
         return _.isNull(value) != true;
     }
-    $scope.count = function(col) {
-        return col.length;
-    }
     $scope.dateFilter = function(match) {
         return moment(match.date).isAfter($scope.fromDate);
     }
-
-    $scope.setFromDate = function(date) {
-        $scope.fromDate = date;
+    $scope.reloadMatches = function() {
+        $scope.isLoading = true;
+        $scope.loadMatches();
     }
-
     $scope.isShowingAllMatches = function() {
         return !($scope.fromDate.isSame($scope.today()));
     }
