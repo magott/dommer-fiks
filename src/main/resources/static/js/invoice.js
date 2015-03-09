@@ -134,12 +134,12 @@ app.controller("ctrl", function($scope, $http) {
             }else {
                 return acc;
             }
-        }, 0);
+        }, 0).toFixed(2);
     };
     $scope.sumTotal = function(fitleredInvoices) {
         return _.reduce(fitleredInvoices, function(acc, i){
            return acc + i.total;
-        }, 0);
+        }, 0).toFixed(2);
     };
     $scope.sumUnsettled = function(fitleredInvoices) {
         return _.reduce(fitleredInvoices, function(acc, i){
@@ -148,7 +148,7 @@ app.controller("ctrl", function($scope, $http) {
             }else {
                 return acc;
             }
-        }, 0);
+        }, 0).toFixed(2);
     };
 
 });
