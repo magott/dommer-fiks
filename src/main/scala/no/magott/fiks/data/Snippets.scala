@@ -349,10 +349,10 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <div ng-controller="ctrl" data-ng-init={s"loadMatches()"}>
           <div class="col-md-12 row table-filter-row">
             <div class="btn-group btn-group-sm pull-left">
-              <button class="btn btn-default" ng-click="setFromDate(yearAgo())" ng-class="{active: isShowingAllMatches()}">Vis alle</button>
-              <button class="btn btn-default" ng-click="setFromDate(today())" ng-class="{active: !isShowingAllMatches()}">Vis kommende</button>
+              <button class="btn btn-default" ng-click="setFromDate(yearAgo())" ng-class="{active: isShowingAllMatches()}">Alle</button>
+              <button class="btn btn-default" ng-click="setFromDate(today())" ng-class="{active: !isShowingAllMatches()}">Kommende</button>
               <button class="btn btn-default" ng-click="reloadMatches()">
-                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Oppdater
+                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
               </button>
             </div>
             <div class="pull-right">
