@@ -1,6 +1,5 @@
 var app = angular.module('matchesapp', []);
-app.controller("ctrl", function($scope, $http, $window) {
-     $scope.fromDate = moment().startOf('day');
+app.controller("ctrl", function($scope, $http, $window, $location) {
      $scope.isLoading = true;
      $scope.matches = [];
      $scope.loadMatches = function() {
@@ -32,17 +31,28 @@ app.controller("ctrl", function($scope, $http, $window) {
         $scope.loadMatches();
     }
     $scope.isShowingAllMatches = function() {
-        return !($scope.fromDate.isSame($scope.today()));
+        return $scope.fromDate.isBefore($scope.today());
     }
 
     $scope.setFromDate = function(from) {
+        $location.search("from", from.toISOString())
         $scope.fromDate = from;
     }
     $scope.today = function() {
         return moment().startOf('day');
     }
 
+    $scope.getFromInitValue = function() {
+         from = $location.search().from
+         fromUrl = moment(from)
+         if(fromUrl.isValid){
+            return fromUrl;
+        }else{
+            return today();
+        }
+    }
     $scope.yearAgo = function() {
         return $scope.today().subtract(1, 'year');
     }
+    $scope.fromDate = $scope.getFromInitValue();
 });
