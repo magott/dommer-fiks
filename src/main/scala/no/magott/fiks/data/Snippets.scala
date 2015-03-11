@@ -347,19 +347,21 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   def matchesSPATable: NodeSeq = {
       <div ng-app="matchesapp">
         <div ng-controller="ctrl" data-ng-init={s"loadMatches()"}>
-          <div class="col-md-12 row table-filter-row">
-            <div class="btn-group btn-group-sm pull-left">
-              <button class="btn btn-default" ng-click="setFromDate(yearAgo())" ng-class="{active: isShowingAllMatches()}">Alle</button>
-              <button class="btn btn-default" ng-click="setFromDate(today())" ng-class="{active: !isShowingAllMatches()}">Kommende</button>
-              <button class="btn btn-default" ng-click="reloadMatches()">
-                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-              </button>
-            </div>
-            <div class="pull-right">
-              <input type="search" class="input-sm form-ctrol" name="search" ng-model="search" id="search" placeholder="Søk.."></input>
+          <div class="col-md-12 col-xs-12 table-filter-row">
+            <div class="row">
+              <div class="btn-group btn-group-sm col-md-8 col-xs-7">
+                <button class="btn btn-default" ng-click="setFromDate(yearAgo())" ng-class="{active: isShowingAllMatches()}">Alle</button>
+                <button class="btn btn-default" ng-click="setFromDate(today())" ng-class="{active: !isShowingAllMatches()}">Kommende</button>
+                <button class="btn btn-default" ng-click="reloadMatches()">
+                  <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                </button>
+              </div>
+              <div class="col-md-3 col-md-offset-1 col-xs-5">
+                <input type="search" class="input-sm form-control pull-right" name="search" ng-model="search" id="search" placeholder="Søk.."></input>
+              </div>
             </div>
           </div>
-          <div class="table-responsive col-md-12 row" ng-if="!isLoading">
+          <div class="table-responsive col-md-12 col-xs-12" ng-if="!isLoading">
             <table class="table table-striped table-bordered table-condensed" ng-cloak="">
               <thead>
                 <tr>
