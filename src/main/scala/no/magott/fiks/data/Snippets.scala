@@ -348,7 +348,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       <div ng-app="matchesapp">
         <div ng-controller="ctrl" data-ng-init={s"loadMatches()"}>
           <div class="col-md-12 col-xs-12 table-filter-row">
-            <div class="row">
+            <div class="row" ng-if="isReady()">
               <div class="btn-group btn-group-sm col-md-8 col-xs-7">
                 <button class="btn btn-default" ng-click="setFromDate(yearAgo())" ng-class="{active: isShowingAllMatches()}">Alle</button>
                 <button class="btn btn-default" ng-click="setFromDate(today())" ng-class="{active: !isShowingAllMatches()}">Kommende</button>
@@ -361,7 +361,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
               </div>
             </div>
           </div>
-          <div class="table-responsive col-md-12 col-xs-12" ng-if="!isLoading">
+          <div class="table-responsive col-md-12 col-xs-12" ng-if="isReady()">
             <table class="table table-striped table-bordered table-condensed" ng-cloak="">
               <thead>
                 <tr>
@@ -395,7 +395,19 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
             <div class="text-center loading" ng-if="isLoading">
               <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
               <span>Laster kamper..</span>
+              <div data-ng-init="timer.start()">{"{{timer.seconds}}"}</div>
             </div>
+          </div>
+          <div class="alert alert-warning" ng-if="isTimeout">
+            <p><h2>Fiks sliter...</h2></p>
+             Det hender dessverre rett som det er at stedet vi henter data fra, fiks.fotball.no sliter, slik at vi ikke får hente data på 30 sekunder. Dette jobber de helt sikkert med, siden det også betyr at hele fotballnorge (også de som bruker fiks.fotball.no direkte) ikke får tilgang til data.
+             Du kan prøve på nytt ved å trykke på knappen under. Forhåpentligvis går det bedre da, men mest sannsynlig er dette et problem vi må vente på at folkene NFF bruker for å utvikle og drifte fiks.fotball.no får ryddet opp i.
+             Erfaringsmessig tar dette alt fra noen timer til noen dager.
+            <p>
+              <button type="button" class="btn btn-default" ng-click="reloadMatches()">
+                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span><span>&nbsp;Last kamper på nytt</span>
+              </button>
+            </p>
           </div>
         </div>
       </div>

@@ -1,7 +1,8 @@
 var app = angular.module('matchesapp', []);
-app.controller("ctrl", function($scope, $http, $window, $location) {
+app.controller("ctrl", function($scope, $http, $window, $location, $interval) {
      $scope.isLoading = true;
      $scope.matches = [];
+     $scope.isTimeout = false;
      $scope.loadMatches = function() {
         var httpRequest = $http({
             method: 'GET',
@@ -15,6 +16,9 @@ app.controller("ctrl", function($scope, $http, $window, $location) {
         }).error(function(data, status, headers) {
             if(status === 401){
                 $window.location.href= "/login?message=sessionTimeout";
+            }else if(status === 504){
+                $scope.isLoading = false;
+                $scope.isTimeout = true;
             }else{
                 $window.location.href = "/error";
             }
@@ -27,6 +31,7 @@ app.controller("ctrl", function($scope, $http, $window, $location) {
         return moment(match.date).isAfter($scope.fromDate);
     }
     $scope.reloadMatches = function() {
+        $scope.isTimeout = false;
         $scope.isLoading = true;
         $scope.loadMatches();
     }
@@ -55,4 +60,13 @@ app.controller("ctrl", function($scope, $http, $window, $location) {
         return $scope.today().subtract(1, 'year');
     }
     $scope.fromDate = $scope.getFromInitValue();
+
+    $scope.isReady = function(){return !$scope.isLoading && !$scope.isTimeout;}
+
+    $scope.timer = function(){
+        var seconds = 30;
+        start = function() {
+            $interval(function(){seconds = seconds -1;}, 1000);
+        }
+    }
 });
