@@ -395,10 +395,9 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
             <div class="text-center loading" ng-if="isLoading">
               <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
               <span>Laster kamper..</span>
-              <div data-ng-init="timer.start()">{"{{timer.seconds}}"}</div>
             </div>
           </div>
-          <div class="alert alert-warning" ng-if="isTimeout">
+          <div class="alert alert-warning" ng-if="isTimeout" ng-cloak="">
             <p><h2>Fiks sliter...</h2></p>
              Det hender dessverre rett som det er at stedet vi henter data fra, fiks.fotball.no sliter, slik at vi ikke får hente data på 30 sekunder. Dette jobber de helt sikkert med, siden det også betyr at hele fotballnorge (også de som bruker fiks.fotball.no direkte) ikke får tilgang til data.
              Du kan prøve på nytt ved å trykke på knappen under. Forhåpentligvis går det bedre da, men mest sannsynlig er dette et problem vi må vente på at folkene NFF bruker for å utvikle og drifte fiks.fotball.no får ryddet opp i.
