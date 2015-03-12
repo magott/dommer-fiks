@@ -25,7 +25,7 @@ class MatchScraper {
     val matchesElements = assignedMatchesDoc.select("div#divUppdrag").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
     val upcomingAssignedMatches = matchesElements.map {
       el: Element =>
-        AssignedMatch(dateTimeFormat.parseLocalDateTime(el.child(0).text).plusMonths(9).plusDays(18),
+        AssignedMatch(dateTimeFormat.parseLocalDateTime(el.child(0).text),
           el.child(1).text,
           el.child(3).getElementsByTag("a").text,
           el.child(4).text,
