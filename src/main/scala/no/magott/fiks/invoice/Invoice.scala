@@ -6,7 +6,7 @@ import scala.collection.mutable
 import scalaz._, Scalaz._
 import argonaut._, Argonaut._
 
-case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], millageAllowance:Option[Double], perDiem: Option[Int], total: Double, reminder:Option[DateTime], settled:Option[DateTime]) {
+case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], millageAllowance:Option[Double], perDiem: Option[Int], total: Double, reminder:Option[DateTime], settled:Option[DateTime], km:Option[Double], kmMultiplier:Option[Double]) {
 
   def status = if(settled.isDefined) s"Betalt ${settled.get.toString("dd.MM")}" else if(reminder.isDefined) s"Purret ${reminder.get.toString("dd.MM")}" else "Utestående"
   def rowClass = if(settled.isDefined) "success" else if(moreDaysPassedThan(10)) "danger" else if(moreDaysPassedThan(7)) "warning" else if(moreDaysPassedThan(5)) "info" else ""
@@ -21,6 +21,8 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
     )
     toll.foreach(x => map += "toll" -> x)
     millageAllowance.foreach(x => map += "millageAllowance" -> x)
+    km.foreach(x => map += "km" -> x)
+    kmMultiplier.foreach(x => map += "kmMultiplier" -> x)
     perDiem.foreach(x=> map += "perDiem" -> x)
     map
   }
@@ -54,8 +56,8 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
 }
 
 object Invoice {
-  def createNew(username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], millageAllowance:Option[Double], perDiem: Option[Int], total: Double) = {
-    Invoice(None, username, matchData, matchFee, toll, millageAllowance, perDiem, total, None, None)
+  def createNew(username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], millageAllowance:Option[Double], perDiem: Option[Int], total: Double, kms:Option[Double], kmMultiplier:Option[Double]) = {
+    Invoice(None, username, matchData, matchFee, toll, millageAllowance, perDiem, total, None, None, kms, kmMultiplier)
   }
 
   def fromMongo(m:DBObject) = {
@@ -68,8 +70,10 @@ object Invoice {
     val total = m.as[Double]("total")
     val toll = m.getAs[Double]("toll")
     val millageAllowance = m.getAs[Double]("millageAllowance")
+    val km = m.getAs[Double]("km")
+    val kmMultiplier = m.getAs[Double]("kmMultiplier")
     val perDiem = m.getAs[Int]("perDiem")
-    Invoice(Some(id), username, matchData, matchFee, toll, millageAllowance, perDiem, total, reminder, settled)
+    Invoice(Some(id), username, matchData, matchFee, toll, millageAllowance, perDiem, total, reminder, settled, km, kmMultiplier)
   }
 
   def unsettledJson = """{"buttonText":"Merk betalt", "buttonClass":"btn"}"""

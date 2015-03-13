@@ -122,9 +122,11 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
     val matchFee = params("matchFee").head.toInt
     val toll = params("toll").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val millageAllowance = params("millageAllowance").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
+    val km = params("km").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
+    val kmMultiplier = params("kmMultiplier").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val perDiem = params("perDiem").headOption.filter(_.trim.nonEmpty).map(_.toInt)
     val total = params("total").head.toDouble
-    Invoice.createNew(username, MatchData.fromAssignedMatch(m),matchFee, toll, millageAllowance, perDiem, total)
+    Invoice.createNew(username, MatchData.fromAssignedMatch(m),matchFee, toll, millageAllowance, perDiem, total, km, kmMultiplier)
   }
 
   def extractUpdatedInvoiceFromParams(username:String, invoice:Invoice, params: Map[String, Seq[String]]) = {
@@ -132,8 +134,10 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
     val toll = params("toll").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val millageAllowance = params("millageAllowance").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val perDiem = params("perDiem").headOption.filter(_.trim.nonEmpty).map(_.toInt)
+    val km = params("km").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
+    val kmMultiplier = params("kmMultiplier").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val total = params("total").head.toDouble
-    invoice.copy(matchFee = matchFee, toll = toll, millageAllowance = millageAllowance, perDiem = perDiem, total = total)
+    invoice.copy(matchFee = matchFee, toll = toll, millageAllowance = millageAllowance, perDiem = perDiem, total = total, km = km, kmMultiplier = kmMultiplier)
   }
 
   object YearParam extends Params.Extract("year", Params.first)

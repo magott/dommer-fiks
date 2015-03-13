@@ -492,10 +492,10 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       <div class="form-group">
         <label class="control-label col-sm-2" for="millageAllowance">Kilometergodtgjørelse</label>
         <div class="col-sm-2">
-          <input type="number" class="form-control" id="km" name="km" placeholder="ant km" step="0.01"/>
+          <input type="number" class="form-control" id="km" name="km" placeholder="ant km" step="0.01" value={i.flatMap(_.km.map(_.toString)).getOrElse("")}/>
         </div>
         <div class="col-sm-2">
-          <input type="number" class="form-control" id="kmMultiplier" name="kmMultiplier" value="4.10" step="0.01"/>
+          <input type="number" class="form-control" id="kmMultiplier" name="kmMultiplier" value={i.flatMap(_.kmMultiplier.map(_.toString)).getOrElse("4.10")} step="0.01"/>
         </div>
         <div class="col-sm-2">
           <input type="number" id="millageAllowance" name="millageAllowance" class="form-control" placeholder="sum" step="0.01" value={i.flatMap(_.millageAllowance.map(_.toString)).getOrElse("")}/>

@@ -31,7 +31,7 @@ class InvoiceTotalsTests extends FunSuite{
 
 
   def invoiceWith(total:Double, settled:Option[DateTime]) = {
-    Invoice(None, "foo", MatchData("fiksId", "matchId", "Dummy home", "dummy way", "dummy venue", "dummy tournament", DateTime.now), total.round.toInt, None, None, None, total, None, settled)
+    Invoice(None, "foo", MatchData("fiksId", "matchId", "Dummy home", "dummy way", "dummy venue", "dummy tournament", DateTime.now), total.round.toInt, None, None, None, total, None, settled, None, None)
   }
 
 }
