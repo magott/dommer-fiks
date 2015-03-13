@@ -110,7 +110,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         {body}
 
         <div class="refsworld">
-          <a href="http://www.refsworlduk.co.uk/"><img src="/img/refsworlduk1.gif" class="refsworld"></img></a>
+          <a href="http://www.refsworlduk.co.uk?fiks/"><img src="/img/refsworlduk1.gif" class="refsworld"></img></a>
         </div>
 
         <footer class="footer">
