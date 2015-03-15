@@ -27,6 +27,14 @@ $("#settled").click(function(){
     }
 });
 
+$('#delete').click(function() {
+    $.ajax({
+        type: 'DELETE',
+        success: function(result){
+            window.location.href="/invoice/";
+        }
+    });
+});
 $.validator.setDefaults({
     highlight: function(element) {
         $(element).closest('.form-group').addClass('has-error');
@@ -44,6 +52,7 @@ $.validator.setDefaults({
         }
     }
 });
+
 
 function invoiceAction(method, button, action){
     button.attr("disabled", "disabled");

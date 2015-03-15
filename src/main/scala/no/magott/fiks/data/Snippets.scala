@@ -439,7 +439,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
           <tbody ng-cloak="">
             <tr ng-repeat="invoice in invoices | filter:search as filtered" class={"{{invoice.rowClass}}"}>
               <td>{"{{invoice.match.date | date:'dd-MM-yyyy'}}"}</td>
-              <td><a href={"{{invoice.id}}"}>{"{{invoice.match.home}} - {{invoice.match.away}}"}</a></td>
+              <td><a href={"/invoice/{{invoice.id}}"}>{"{{invoice.match.home}} - {{invoice.match.away}}"}</a></td>
               <td>{"{{invoice.total}}"}</td>
               <td>{"{{invoice.status}}"}</td>
             </tr>
@@ -526,10 +526,10 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       <div class="form-group">
         <div class="col-sm-6 col-sm-offset-2">
           <button type="submit" class="btn btn-primary">Lagre</button>
-          {/*
+          {
             if(i.isDefined){
               <button type="button" id="delete" class="btn btn-danger"><i class="icon-trash icon-white"></i> Slett</button>
-            }*/
+            }
           }
         </div>
       </div>

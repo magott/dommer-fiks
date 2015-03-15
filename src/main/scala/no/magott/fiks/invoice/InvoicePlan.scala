@@ -47,10 +47,19 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
           val invoiceOpt= invoiceRepository.getInvoice(id)
           req match{
             case GET(_) => {
-              if(invoiceOpt.isEmpty) NotFound ~> Html5(Pages(req).notFound)
-              else if(invoiceOpt.exists(_.username == session.username)){
+              if (invoiceOpt.isEmpty) NotFound ~> Html5(Pages(req).notFound)
+              else if (invoiceOpt.exists(_.username == session.username)) {
                 val matchOpt = matchService.assignedMatches(session).find(_.fiksId == invoiceOpt.get.matchData.fiksId)
                 Ok ~> Html5(Pages(req).invoiceInfoPage(invoiceOpt, matchOpt))
+              } else {
+                Forbidden ~> Html5(Pages(req).forbidden)
+              }
+            }
+            case DELETE(_) => {
+              if(invoiceOpt.isEmpty) NotFound ~> Html5(Pages(req).notFound)
+              else if(invoiceOpt.exists(_.username == session.username)){
+                invoiceRepository.deleteInvoice(id)
+                NoContent
               }else{
                 Forbidden ~> Html5(Pages(req).forbidden)
               }
