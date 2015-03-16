@@ -348,7 +348,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       <div ng-app="matchesapp">
         <div ng-controller="ctrl" data-ng-init={s"loadMatches()"}>
           <div class="col-md-12 col-xs-12 table-filter-row">
-            <div class="row" ng-if="isReady()" ng-cloak="">
+            <div class="row" ng-show="isReady()" ng-cloak="">
               <div class="btn-group btn-group-sm col-md-8 col-xs-7">
                 <button class="btn btn-default" ng-click="setFromDate(yearAgo())" ng-class="{active: isShowingAllMatches()}">Alle</button>
                 <button class="btn btn-default" ng-click="setFromDate(today())" ng-class="{active: !isShowingAllMatches()}">Kommende</button>
