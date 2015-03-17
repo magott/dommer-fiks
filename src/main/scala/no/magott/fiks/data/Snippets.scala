@@ -559,7 +559,7 @@ def tableOfAvailableMatches = {
       <tbody>
           <tr ng-repeat="match in (matches | filter:filterByType | filter:filterByTournament)">
             <td>
-              {"{{match.date}}"}
+              {"{{match.date | date:'dd.MM.yy HH:mm'}}"}
             </td>
             <td>
               {"{{match.tournament}}"}
