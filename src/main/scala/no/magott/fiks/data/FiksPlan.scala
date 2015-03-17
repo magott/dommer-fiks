@@ -173,9 +173,17 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
       Ok ~> Html5(Pages(r).reportInterestIn(matchInfo))
     })
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & SessionId(loginToken) => redirectToLoginIfTimeout(r, {
-      val session = userService.userSession(loginToken).get //TODO: YOLO
-      val available = matchservice.availableMatches(session)
-      Ok ~> Html5(Pages(r).availableMatches(available))
+      r match {
+        case Accepts.Json(_) => {
+          unauthorizedOnTimeout(r, {
+            val session = userService.userSession(loginToken).get //TODO: YOLO
+            Ok ~> JsonContent ~> ResponseString(matchservice.availableMatches(session).map(_.asJson).jencode.nospaces)
+          })
+        }
+        case _ => {
+          Ok ~> Html5(Pages(r).availableMatches(List.empty))
+        }
+      }
     })
   }
 

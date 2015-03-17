@@ -156,70 +156,6 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
        </body>
     </html>
 
-  def tableOfAssignedMatches(assignedMatches: List[AssignedMatch]) = {
-    <small>
-      {
-        if(allMatches(req)){
-          <a href="mymatches">Skjul spilte kamper</a>
-        }else{
-          <a href="mymatches?all">Vis spilte kamper</a>
-        }
-      }
-      </small>
-    <div class="table-responsive">
-    <table class="table table-striped table-bordered table-condensed">
-      <thead>
-        <tr>
-          <th>Dato</th>
-          <th>Tid</th>
-          <th>Turnering</th>
-          <th>Kamp</th>
-          <th>Sted</th>
-          <th>Dommere</th>
-          <th>Kalender</th>
-        </tr>
-
-      </thead>
-      <tbody>
-        {assignedMatches.map {
-        m =>
-          <tr>
-            <td>
-              {m.date.toString("dd.MM.YYYY")}
-            </td>
-            <td>
-              {m.date.toString("HH:mm")}
-            </td>
-            <td>
-              {m.tournament}
-            </td>
-            <td>
-              <a href={"mymatches/"+m.fiksId+"/"}>
-                {m.teams}
-              </a>
-            </td>
-            <td>
-              {m.venue}
-            </td>
-            <td>
-              {m.refs} &nbsp;
-              {
-               m.cancellationId.map(c => <a href={s"mymatches/${m.fiksId}/yield?cancellationId=${c}"}>Meld forfall</a> ).getOrElse("")
-              }
-            </td>
-            <td>
-              {googleCalendarLink(m.date, m.teams, m.venue, m.referees)}
-              |
-              {icsLink(m.date, m.teams, m.venue, m.referees, m.matchId)}
-            </td>
-          </tr>
-      }}
-      </tbody>
-    </table>
-    </div>
-
-  }
-
   def assignedMatchDetailsTable(m:AssignedMatch) = {
     <ul class="nav nav-tabs">
       <li class="active">
@@ -584,6 +520,10 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       <script src="/js/invoice.js" type="text/javascript"></script> )  ++lodashJS
   }
 
+  def availableMatchesScripts = {
+    angularJs ++ (<script src="/js/availablematches.js" type="text/javascript"></script>) ++ lodashJS ++ momentJS
+  }
+
   def matchesScripts = {
     angularJs ++ (<script src="/js/matches.js" type="text/javascript"></script>) ++ lodashJS ++ momentJS
   }
@@ -591,47 +531,65 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   def angularJs = <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.min.js" type="text/javascript"></script>
 
 
-def tableOfAvailableMatches(availableMatches: List[AvailableMatch]) = {
-    <table class="table table-striped table-bordered table-condensed">
+def tableOfAvailableMatches = {
+  <div ng-app="availablematchesapp">
+    <div ng-controller="ctrl" data-ng-init="loadMatches()">
+      <table class="table table-striped table-bordered table-condensed" ng-show="!isLoading" ng-cloak="">
       <thead>
         <tr>
           <th>Tid</th>
-          <th>Turnering</th>
+          <th>
+            <select class="input-sm" ng-model="tournament">
+              <option selected="selected" value="">Turnering</option>
+              <option ng-repeat="t in uniqueTournaments()">{"{{t}}"}</option>
+            </select>
+          </th>
           <th>Kamp</th>
           <th>Sted</th>
-          <th>Type</th>
+          <th>
+            <select class="input-sm" name="role" ng-model="role">
+              <option selected="selected" value="">Type</option>
+              <option value="Dommer">Dommer</option>
+              <option value="AD">AD</option>
+            </select>
+          </th>
           <th>Meld interesse</th>
         </tr>
       </thead>
       <tbody>
-        {availableMatches.map {
-        m =>
-          <tr>
+          <tr ng-repeat="match in (matches | filter:filterByType | filter:filterByTournament)">
             <td>
-              {m.date.toString("dd.MM.yyyy HH:mm")}
+              {"{{match.date}}"}
             </td>
             <td>
-              {m.tournament}
+              {"{{match.tournament}}"}
             </td>
             <td>
-              {m.teams}
+              {"{{match.teams}}"}
             </td>
             <td>
-              {m.venue}
+              {"{{match.venue}}"}
             </td>
             <td>
-              {m.role}
+              {"{{match.role}}"}
             </td>
-            <td>
-              {m.availabilityId match {
-              case Some(id) => <a href={"""availablematches?matchid=""" + m.availabilityId.get + """"""}>Meld interesse</a>
-              case None => <div>Meldt inn</div>
-            }}
+            <td ng-if="_.isNull(match.availabilityId)">
+              Interesse meldt
+            </td>
+            <td ng-if="!(_.isNull(match.availabilityId))">
+              {<a href="availablematches?matchid={{match.availabilityId}}">Meld interesse</a>}
             </td>
           </tr>
-      }}
       </tbody>
     </table>
+      <div>
+        <div class="text-center loading" ng-if="isLoading">
+          <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+          <span>Henter tilgjengelige kamper..</span>
+        </div>
+      </div>
+   </div>
+  </div>
   }
 
   def loginMessages

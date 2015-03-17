@@ -100,9 +100,6 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     emptyPage(reportInterestForm(availableMatch))
   }
 
-  def assignedMatches(assignedMatches: List[AssignedMatch]) = {
-    emptyPage(tableOfAssignedMatches(assignedMatches))
-  }
 
   def assignedMatchInfo(m:AssignedMatch) = emptyPage(assignedMatchDetailsTable(m),
   Some(
@@ -123,7 +120,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
   def assignedMatchResult(r:MatchResult, inputFields: Map[String, FormField] = Map.empty) = emptyPage(assignedMatchResultForm(r, inputFields))
 
   def availableMatches(availableMatches: List[AvailableMatch]) = {
-    emptyPage(tableOfAvailableMatches(availableMatches))
+    emptyPage(tableOfAvailableMatches, Some(availableMatchesScripts))
   }
 
   def calendarSignup(missingFields: Seq[String] = Nil) = {

@@ -20,7 +20,21 @@ object ResultType extends Enumeration{
 import ResultType._
 
 case class AvailableMatch(category: String, tournament: String, date: LocalDateTime,
-                          matchId: String, teams: String, venue: String, role: String, availabilityId: Option[String])
+                          matchId: String, teams: String, venue: String, role: String, availabilityId: Option[String]){
+  def asJson = {
+    Json.obj(
+      "matchId" := matchId,
+      "category" := category,
+      "tournament" := tournament,
+      "date" := date.toString,
+      "teams" := teams,
+      "venue" := venue,
+      "role" := role,
+      "availabilityId" := availabilityId
+    )
+  }
+
+}
 
 case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String, teams:String, venue:String, referees:String, fiksId:String, cancellationId:Option[String]){
   lazy val refereeTuples : Array[(String,String)] = referees.split('(').drop(1).map(s=> (s.split(')')(0) -> s.split(')')(1).trim))
