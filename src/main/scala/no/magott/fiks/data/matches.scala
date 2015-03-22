@@ -1,7 +1,7 @@
 package no.magott.fiks.data
 
 import unfiltered.request.{HttpRequest, Params}
-import org.joda.time.{Interval, LocalDateTime}
+import org.joda.time.{DateTimeZone, Interval, LocalDateTime}
 import validation.{FormField, InputOk}
 import fix.UriString._
 import scala.xml.NodeSeq
@@ -95,6 +95,32 @@ case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String,
 
   def dismissalUrl = uri"http://www.formstack.com/forms?form=1351154&viewkey=N8yMtQ9qxb&field17868550=Offisiell%20kamp%20(serie/cup%20i%20regi%20av%20krets/NFF%20-%20kamp%20har%20kampnr.)&field17868644=$first2DigitsMatchId&field17868658=$last9DigitsMatchId&field17869114=$homeTeam&field17869126=$awayTeam&field17950255-first=$refereeFirstName&field17950255-last=$refereeLastName&field17950248M=$month3Letters&field17950248D=$day2Digits&field17950248Y=$year4Digits"
 
+}
+
+object AssignedMatch {
+  val calendarFormatString = "yyyyMMdd'T'HHmmss'Z"
+
+  def googleCalendarLink(m:AssignedMatch): NodeSeq = {
+    import m._
+    val utcStart = toUTC(date)
+    val timeString = utcStart.toString(calendarFormatString) + "/" + utcStart.plusHours(2).toString(calendarFormatString)
+    val details =
+      s"""Kampnummer:  $matchId %0A
+        |Turnering: $tournament %0A
+        |${referees.replaceAllLiterally(" (", "%0A(")}%0A
+        |Kampinfo: $externalMatchInfoUrl """.stripMargin.trim
+    val link = s"http://www.google.com/calendar/event?action=TEMPLATE&text=$teams&dates=$timeString&details=$details&location=$venue&trp=false&sprop=&sprop=name:"
+    <a href={link} target="_blank">Google Calendar</a>
+  }
+
+  private def toUTC(dateTime: LocalDateTime) = {
+    dateTime.toDateTime(DateTimeZone.forID("Europe/Oslo")).withZone(DateTimeZone.UTC).toLocalDateTime
+  }
+
+  def icsLink(m:AssignedMatch) = {
+    val url = "/match.ics?matchid="+m.matchId
+    <a href={url}>Outlook/iCal</a>
+  }
 }
 
 case class MatchResult(fiksId:String, teams:String, matchId:String, finalScore:Option[Score] = None, halfTimeScore:Option[Score] = None,

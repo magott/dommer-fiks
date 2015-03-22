@@ -11,7 +11,6 @@ import no.magott.fiks.invoice.{InvoiceTotals, MatchData, Invoice}
 
 case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
-  val calendarFormatString = "yyyyMMdd'T'HHmmss'Z"
   val isLoggedIn = SessionId.unapply(req).isDefined && SessionId.unapply(req).get.nonEmpty
   val pages = Path(req)
 
@@ -227,6 +226,10 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         </tr>
       }}
       <tr>
+        <th>Legg til i kalender</th>
+        <td>{<span>{AssignedMatch.googleCalendarLink(m)}</span> <span> | </span> <span>{AssignedMatch.icsLink(m)}</span>}</td>
+      </tr>
+      <tr>
         <th></th>
         <td>
           <a class="btn btn-primary" href="/fiks/mymatches"><i class="icon-circle-arrow-left icon-white"></i> Tilbake</a>
@@ -314,13 +317,13 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
                   <td>{"{{match.date | date:'dd.MM.yy'}}"}</td>
                   <td>{"{{match.date | date:'HH:mm'}}"}</td>
                   <td>
-                    <a href={"mymatches/{{match.fiksId}}/"}>{"{{match.teams}}"}</a>
+                    <a href={"/fiks/mymatches/{{match.fiksId}}/"}>{"{{match.teams}}"}</a>
                   </td>
                   <td>{"{{match.venue}}"}</td>
                   <td>{"{{match.competition}}"}</td>
                   <td>
                     <span ng-repeat="ref in match.officials" class="official">{"({{ref.role}}) {{ref.name}}"}<span class="phone" ng-if={"isSet(ref.mobile)"}> Mobil: <a href={"tel:{{ref.mobile}}"}>{"{{ref.mobile}}"}</a></span><span class="phone" ng-if={"ref.home != null"}> Tlf: <a href={"tel:{{ref.home}}"}>{"{{ref.home}}"}</a></span></span>
-                    <a href={"mymatches/{{match.fiksId}}/yield?cancellationId={{match.cancellationId}}"} ng-if="isSet(match.cancellationId)">Meld forfall</a>
+                    <a href={"/fiks/mymatches/{{match.fiksId}}/yield?cancellationId={{match.cancellationId}}"} ng-if="isSet(match.cancellationId)">Meld forfall</a>
                   </td>
                 </tr>
               </tbody>
@@ -539,7 +542,7 @@ def tableOfAvailableMatches = {
         <tr>
           <th>Tid</th>
           <th>
-            <select class="input-sm" ng-model="tournament">
+            <select class="input-sm form-control" ng-model="tournament">
               <option selected="selected" value="">Turnering</option>
               <option ng-repeat="t in uniqueTournaments()">{"{{t}}"}</option>
             </select>
@@ -547,7 +550,7 @@ def tableOfAvailableMatches = {
           <th>Kamp</th>
           <th>Sted</th>
           <th>
-            <select class="input-sm" name="role" ng-model="role">
+            <select class="input-sm form-control" name="role" ng-model="role">
               <option selected="selected" value="">Type</option>
               <option value="Dommer">Dommer</option>
               <option value="AD">AD</option>
@@ -791,14 +794,6 @@ def tableOfAvailableMatches = {
       </form>
   }
 
-  def googleCalendarLink
-  (start: LocalDateTime, heading: String, location: String, details: String): NodeSeq = {
-    val utcStart = toUTC(start)
-    val timeString = utcStart.toString(calendarFormatString) + "/" + utcStart.plusHours(2).toString(calendarFormatString)
-    val link = "http://www.google.com/calendar/event?action=TEMPLATE&text=%s&dates=%s&details=%s&location=%s&trp=false&sprop=&sprop=name:".format(heading,timeString,details,location)
-    <a href={link} target="_blank">Google</a>
-  }
-
   def donateButton = {
     <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
       <input type="hidden" name="cmd" value="_s-xclick" />
@@ -823,17 +818,6 @@ def tableOfAvailableMatches = {
       .replaceAllLiterally("<br>", "%0A")
       .replaceAllLiterally("</br>", "%0A")
   }
-
-  private def toUTC(dateTime: LocalDateTime) = {
-    dateTime.toDateTime(DateTimeZone.forID("Europe/Oslo")).withZone(DateTimeZone.UTC).toLocalDateTime
-  }
-
-  private def icsLink(start: LocalDateTime, heading: String, location: String, details: String, matchId:String) = {
-    val url = "/match.ics?matchid="+matchId
-    <a href={url}>Outlook/iCal</a>
-  }
-
-
 
    private def formGroup(fields:Map[String, FormField], parameterNames:String*):String = {
     if(fields.filterKeys(parameterNames.contains(_)).values.exists(_.isError)){
