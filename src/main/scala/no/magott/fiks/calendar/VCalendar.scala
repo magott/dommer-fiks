@@ -19,7 +19,7 @@ class VCalendar(assignedMatches:List[AssignedMatch]) {
   private def vevent(m:AssignedMatch) = {
     val start = toUTC(m.date)
     val desc = """Kampnummer:  %s\nTurnering: %s\n%s \nKampinfo: %s""".format(m.matchId, m.tournament ,m.referees.replaceAllLiterally(" (", " \\n("),m.externalMatchInfoUrl)
-    """BEGIN:VEVENT
+    s"""BEGIN:VEVENT
       |DTSTART:%s
       |DTEND:%s
       |DTSTAMP:%s
@@ -29,6 +29,7 @@ class VCalendar(assignedMatches:List[AssignedMatch]) {
       |SUMMARY:%s
       |DESCRIPTION:%s
       |URL;VALUE=URI:%s
+      |FREEBUSY;FBTYPE=BUSY:${start.toString(calendarFormatString)}/${start.plusHours(2).toString(calendarFormatString)}
       |END:VEVENT""".stripMargin.format(
                 start.toString(calendarFormatString),
                 start.plusHours(2).toString(calendarFormatString),
