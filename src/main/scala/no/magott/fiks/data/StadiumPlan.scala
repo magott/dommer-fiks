@@ -58,17 +58,19 @@ class StadiumPlan(stadiumService: StadiumService) extends Plan{
     val fiksEmail = "Dommer-FIKS<fiks@andersen-gott.com>"
     val Params(params) = r
     val gjermhus = stadiumService.lookupStadiumViaGjermshus(matchId)
+    val submitterEmail = params("email").headOption
     val email = MailMessage(fiksEmail, fiksEmail, "Ny stadio",
       s"""Ny stadio er sendt inn
       |Stadionavn: ${stadiumName}
       |Kamp: http://www.fotball.no/System-pages/Kampfakta/?matchId=${matchId}
-      |Avsender: ${params("email").headOption.getOrElse("Ingen e-mail")}
+      |Avsender: ${submitterEmail.getOrElse("Ingen e-mail")}
       |Beskrivelse: ${params("description").headOption.getOrElse("Ingen beskrivelse")}
       |
       |Google maps: ${gjermhus.map(_.googleMapsLink).getOrElse("")}
       |Godkjenn mapsplassering: ${gjermhus.map(_.insertLink(r)).getOrElse("")}
       |""".stripMargin)
-      mailService.sendMail(email)
+      .copy(headers = submitterEmail.map(e => Map("h:Reply-To" -> e)).getOrElse(Map.empty))
+    mailService.sendMail(email)
   }
   object StadiumNameParam extends Params.Extract("stadiumName", Params.first)
   object LatParam extends Params.Extract("lat", Params.first)
