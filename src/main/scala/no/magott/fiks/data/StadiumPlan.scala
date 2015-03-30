@@ -31,7 +31,7 @@ class StadiumPlan(stadiumService: StadiumService) extends Plan{
         }
         case POST(_) => {
           handleStadiumSubmission(r, name, matchId) match{
-            case MailAccepted(_) => Ok ~> Html5(Snippets(r).emptyPage(<legend>Takk for at du gjør Dommer-FIKS bedre</legend>))
+            case MailAccepted(_) => Ok ~> Html5(Snippets(r).emptyPage(<legend>Takk for at du gjør Dommer-FIKS bedre</legend> <p><a href="/fiks/mymatches"> Gå tilbake til kamp oversikten</a></p>))
             case x: MailRejected => InternalServerError ~> Html5(Pages(r).error(<div>Her skjedde det en feil. Feilkoden er: {x.errorCode}</div>))
           }
         }
