@@ -46,6 +46,30 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
         case Path( Seg( "invoice" :: id :: Nil) ) => {
           val invoiceOpt= invoiceRepository.getInvoice(id)
           req match{
+            case Params(ActionParameter("reminder")) if(invoiceOpt.isDefined) => req match {
+              case POST(_)  => {
+                val ok = invoiceRepository.reminderSent(id, DateTime.now)
+                if(ok) Ok ~> JsonContent ~> ResponseString(Invoice.remindedJson)
+                else InternalServerError
+              }
+              case DELETE(_) => {
+                val ok = invoiceRepository.unsetReminder(id)
+                if(ok)Ok ~> JsonContent ~> ResponseString(Invoice.notRemindedJson)
+                else InternalServerError
+              }
+            }
+            case Params(ActionParameter("settled")) if(invoiceOpt.isDefined) => req match {
+              case POST(_) => {
+                val ok = invoiceRepository.invoiceSettled(id, DateTime.now)
+                if(ok) Ok ~> JsonContent ~> ResponseString(Invoice.settledJson)
+                else InternalServerError
+              }
+              case DELETE(_) => {
+                val ok = invoiceRepository.unsetSettled(id)
+                if(ok) Ok ~> JsonContent ~> ResponseString(Invoice.unsettledJson)
+                else InternalServerError
+              }
+            }
             case GET(_) => {
               if (invoiceOpt.isEmpty) NotFound ~> Html5(Pages(req).notFound)
               else if (invoiceOpt.exists(_.username == session.username)) {
@@ -63,30 +87,6 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
               }else{
                 Forbidden ~> Html5(Pages(req).forbidden)
               }
-            }
-            case Params(ActionParameter("reminder")) if(invoiceOpt.isDefined) => req match {
-                case POST(_)  => {
-                  val ok = invoiceRepository.reminderSent(id, DateTime.now)
-                  if(ok) Ok ~> JsonContent ~> ResponseString(Invoice.remindedJson)
-                  else InternalServerError
-                }
-                case DELETE(_) => {
-                  val ok = invoiceRepository.unsetReminder(id)
-                  if(ok)Ok ~> JsonContent ~> ResponseString(Invoice.notRemindedJson)
-                  else InternalServerError
-                }
-            }
-            case Params(ActionParameter("settled")) if(invoiceOpt.isDefined) => req match {
-                case POST(_) => {
-                  val ok = invoiceRepository.invoiceSettled(id, DateTime.now)
-                  if(ok) Ok ~> JsonContent ~> ResponseString(Invoice.settledJson)
-                  else InternalServerError
-                }
-                case DELETE(_) => {
-                  val ok = invoiceRepository.unsetSettled(id)
-                  if(ok) Ok ~> JsonContent ~> ResponseString(Invoice.unsettledJson)
-                  else InternalServerError
-                }
             }
             case POST(_) & Params(p)=> {
               if(invoiceOpt.isEmpty) NotFound ~> Html5(Pages(req).notFound)
