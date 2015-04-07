@@ -9,6 +9,6 @@ import org.joda.time.format.DateTimeFormat
  */
 package object data {
 
-  val norwegianLongFormat = DateTimeFormat.forPattern("EEEE d. MMMM yyyy").withLocale(new Locale("nb_NO"))
+  val norwegianLongFormat = DateTimeFormat.forPattern("EEEE d. MMMM yyyy").withLocale(new Locale("nb","NO"))
 
 }
