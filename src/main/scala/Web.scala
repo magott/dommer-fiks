@@ -13,7 +13,7 @@ object Web {
   def main(args: Array[String]) {
     RegisterJodaTimeConversionHelpers()
     System.setProperty("user.timezone", "Europe/Oslo")
-    Locale.setDefault(new Locale("no_NO"))
+    Locale.setDefault(new Locale("nb_NO"))
     val matchscraper = new MatchScraper
     val matchservice = new MatchService(matchscraper)
     val calendarservice = new CalendarService(matchscraper)
