@@ -178,7 +178,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       </tr>
       <tr>
         <th>Dato</th>
-        <td>{m.date.toString("dd.MM.yyyy")}</td>
+        <td>{m.date.toString(norwegianLongFormat).capitalize}</td>
       </tr>
       <tr>
         <th>Tidspunkt</th>
