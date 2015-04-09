@@ -3,6 +3,10 @@ package no.magott.fiks.data
 import geo.LatLong
 import org.scalatest._
 import org.scalatest.matchers._
+
+
+import scalaz.{-\/, \/-}
+
 class StadiumServiceTest extends FlatSpec with Matchers{
 
   "StadiumService" should "read file " in{
@@ -22,16 +26,19 @@ class StadiumServiceTest extends FlatSpec with Matchers{
   }
 
   it should "parse valid json from Gjermshus" in {
-    val json = """{"name":"Bislett stadion","latLong":{"lat":59.9249984454,"long":10.7323990904}}"""
+    val json = """{"Name":"Bislett stadion","LatLong":{"Lat":59.9249984454,"Long":10.7323990904}}"""
     val response = new StadiumService().parseGjermshusResponse(json)
-    import org.scalatest.OptionValues._
-    response.value shouldBe MongoStadium("Bislett stadion", LatLong(59.9249984454, 10.7323990904))
+    response.isRight shouldBe (true)
+    response match {
+      case \/-(r) => r shouldBe MongoStadium("Bislett stadion", LatLong(59.9249984454, 10.7323990904))
+      case -\/(e) => println(e)
+    }
   }
 
   it should "handle gurba from Gjermshus gracefully" in {
     val fckedJson = "<html><h1>I am HTML, NOT JSON!!</h1><html>"
     val response = new StadiumService().parseGjermshusResponse(fckedJson)
-    response shouldBe (None)
+    response.isLeft shouldBe(true)
   }
 
 }

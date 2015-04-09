@@ -1,5 +1,8 @@
 package no.magott.fiks.data
 
+import argonaut.{DecodeJson, Parse}
+import no.magott.fiks.data
+
 import scala.io.Source
 import geo.{LatLong, CoordinateConversion}
 import com.google.common.cache.{Cache, LoadingCache, CacheBuilder}
@@ -12,6 +15,10 @@ import dispatch.{Http, as, url}
 import scala.concurrent.Future
 import unfiltered.request.{Host, HttpRequest}
 import no.magott.fiks.HerokuRedirect.XForwardProto
+import scalaz.Scalaz._
+
+
+import scalaz.\/
 
 class StadiumService {
 
@@ -57,18 +64,23 @@ class StadiumService {
     FileStadium(tokens(0), tokens(2), tokens(3), tokens(16).toInt, tokens(17).toInt, tokens(18).toInt)
   }
 
-  def lookupStadiumViaGjermshus(matchId:String) = {
+  def lookupStadiumViaGjermshus(matchId:String) : String \/ data.MongoStadium = {
     import dispatch._, Defaults._
-    val gjermhusService = url("http://services.gjermshus.net/f-arena.php") <<? Map("k" -> matchId)
-    val http = Http(gjermhusService OK as.String).option
-    http().flatMap(parseGjermshusResponse)
+    import scalaz.Scalaz._
+    val gjermhusService = url(s"http://fiksservice.littinnsikt.no/Farena/Farena/$matchId")
+    val http = Http(gjermhusService OK as.String).either //.map(_.disjunction)
+    http() match {
+      case Right(s) => parseGjermshusResponse(s)
+      case Left(e) => {
+        e.printStackTrace()
+        e.getMessage.left
+      }
+    }
   }
 
-  def parseGjermshusResponse(http: String) : Option[MongoStadium] = {
-      import org.json4s._
-      implicit val format = DefaultFormats
-      import org.json4s.native.JsonMethods._
-      parseOpt(http).map(_.extract[MongoStadium])
+  def parseGjermshusResponse(http: String) : String \/ MongoStadium = {
+      val either = Parse.decodeEither[MongoStadium](http)
+      either
   }
 }
 
@@ -98,4 +110,12 @@ case class MongoStadium(name:String,latLong: LatLong) extends Stadium {
 
 object MongoStadium{
   def fromMongo(m:MongoDBObject) = MongoStadium(m.as[String]("name"), m.getAs[DBObject]("latLong").map(LatLong.fromMongo(_)).get)
+  implicit val clickEventDecoder: DecodeJson[MongoStadium] = DecodeJson(
+    c => for {
+      name <- (c --\ "Name").as[String]
+      latLong <- (c --\ "LatLong").as[LatLong]
+    } yield {
+      MongoStadium(name, latLong)
+    }
+  )
 }

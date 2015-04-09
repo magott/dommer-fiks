@@ -27,6 +27,5 @@ libraryDependencies ++=
     "bouncycastle" % "bcprov-jdk16" % "140",
     "org.jasypt" % "jasypt" % "1.9.0",
     "no.arktekk" %% "uri-template" % "1.0.1",
-    "org.json4s" %% "json4s-native" % "3.2.4",
     "org.constretto" %% "constretto-scala" % "1.1"
   )
