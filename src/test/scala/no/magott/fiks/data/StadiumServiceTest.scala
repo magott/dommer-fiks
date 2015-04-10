@@ -1,5 +1,6 @@
 package no.magott.fiks.data
 
+import argonaut.Parse
 import geo.LatLong
 import org.scalatest._
 import org.scalatest.matchers._
@@ -27,7 +28,7 @@ class StadiumServiceTest extends FlatSpec with Matchers{
 
   it should "parse valid json from Gjermshus" in {
     val json = """{"Name":"Bislett stadion","LatLong":{"Lat":59.9249984454,"Long":10.7323990904}}"""
-    val response = new StadiumService().parseGjermshusResponse(json)
+    val response = Parse.decodeEither[MongoStadium](json)
     response.isRight shouldBe (true)
     response match {
       case \/-(r) => r shouldBe MongoStadium("Bislett stadion", LatLong(59.9249984454, 10.7323990904))
@@ -37,7 +38,7 @@ class StadiumServiceTest extends FlatSpec with Matchers{
 
   it should "handle gurba from Gjermshus gracefully" in {
     val fckedJson = "<html><h1>I am HTML, NOT JSON!!</h1><html>"
-    val response = new StadiumService().parseGjermshusResponse(fckedJson)
+    val response = Parse.decodeEither[MongoStadium](fckedJson)
     response.isLeft shouldBe(true)
   }
 

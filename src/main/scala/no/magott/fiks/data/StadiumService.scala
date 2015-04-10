@@ -68,19 +68,12 @@ class StadiumService {
     import dispatch._, Defaults._
     import scalaz.Scalaz._
     val gjermhusService = url(s"http://fiksservice.littinnsikt.no/Farena/Farena/$matchId")
-    val http = Http(gjermhusService OK as.String).either //.map(_.disjunction)
-    http() match {
-      case Right(s) => parseGjermshusResponse(s)
-      case Left(e) => {
-        e.printStackTrace()
-        e.getMessage.left
-      }
-    }
-  }
+    val http = Http(gjermhusService OK as.String).either.map(_.disjunction.leftMap(_.getMessage))
+    for {
+      jsonString <- http()
+      parsed <- Parse.decodeEither[MongoStadium](jsonString)
+    } yield parsed
 
-  def parseGjermshusResponse(http: String) : String \/ MongoStadium = {
-      val either = Parse.decodeEither[MongoStadium](http)
-      either
   }
 }
 
