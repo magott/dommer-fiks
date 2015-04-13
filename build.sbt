@@ -26,6 +26,6 @@ libraryDependencies ++=
     "org.mongodb" % "mongo-java-driver" % "2.10.1",
     "bouncycastle" % "bcprov-jdk16" % "140",
     "org.jasypt" % "jasypt" % "1.9.0",
-    "no.arktekk" %% "uri-template" % "1.0.1",
-    "org.constretto" %% "constretto-scala" % "1.1"
+    "org.constretto" %% "constretto-scala" % "1.1",
+    "org.apache.poi" % "poi-ooxml" % "3.12-beta1"
   )

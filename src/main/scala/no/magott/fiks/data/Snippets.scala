@@ -1,5 +1,7 @@
 package no.magott.fiks.data
 
+import no.magott.fiks.user.User
+
 import xml.{XML, NodeSeq}
 import org.joda.time.{LocalDate, DateTimeZone, DateTime, LocalDateTime}
 import unfiltered.request.{Path, Seg, HttpRequest}
@@ -41,8 +43,12 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
             {
 
              if(isLoggedIn){
-               <li class={if (pages.contains("calendar")) "active" else "inactive"}>
-                 <a href="/calendar/mycal">Kalender</a>
+               <li class={if (List("calendar","user").exists(pages.contains(_))) "dropdown active" else "dropdown inactive"}>
+                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Bruker <span class="caret"></span></a>
+                 <ul class="dropdown-menu" role="menu">
+                   <li><a href="/user"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Min bruker</a></li>
+                   <li><a href="/calendar/mycal"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Kalender</a></li>
+                 </ul>
                </li>
                  <li class={if (pages.contains("invoice")) "active" else "inactive"}>
                    <a href="/invoice/">Dommerregning</a>
@@ -467,7 +473,9 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
           <button type="submit" class="btn btn-primary">Lagre</button>
           {
             if(i.isDefined){
-              <button type="button" id="delete" class="btn btn-danger"><i class="icon-trash icon-white"></i> Slett</button>
+              (
+              <button type="button" id="delete" class="btn btn-danger"><i class="glyphicon glyphicon-trash icon-white"></i> Slett</button>
+              )
             }
           }
         </div>
@@ -479,7 +487,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
               if(i.get.reminder.isDefined)
                 <button type="button" id="reminder" class="btn btn-warning">Purret</button>
               else
-                <button type="button" id="reminder" class="btn btn-inverse">Merk purret</button>
+                <button type="button" id="reminder" class="btn btn-default">Merk purret</button>
             }
           }
           {
@@ -487,11 +495,33 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
               if(i.get.settled.isDefined)
                 <button type="button" id="settled" class="btn btn-success">Betalt</button>
               else
-                <button type="button" id="settled" class="btn">Merk betalt</button>
+                <button type="button" id="settled" class="btn btn-default">Merk betalt</button>
             }
           }
           </div>
         </div>
+      {if(i.isDefined) {
+        <div class="form-group">
+          <div class="col-sm-6 col-sm-offset-2">
+            <div class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Last ned <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li>
+                  <a href={s"/invoice/${i.get.id.get.toString}?export=nffbredde"}>NFF Bredderegning (xslx)</a>
+                </li>
+                <li>
+                  <a href={s"/invoice/${i.get.id.get.toString}?export=ofk"}>OFK Bredderegning (xslx)</a>
+                </li>
+                <li>
+                  <a href={s"/invoice/${i.get.id.get.toString}?export=nfftopp"}>NFF Toppfotball (xslx)</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    }}
     </form>
   }
 
@@ -801,6 +831,132 @@ def tableOfAvailableMatches = {
       <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
       <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" />
     </form>
+  }
+
+  def userForm(user: Option[User], errors:Option[List[String]]) = {
+    val name = user.flatMap(_.invoiceData.flatMap(_.name)).getOrElse("")
+    val adr = user.flatMap(_.invoiceData.flatMap(_.address)).getOrElse("")
+    val zip = user.flatMap(_.invoiceData.flatMap(_.postalCode)).getOrElse("")
+    val city = user.flatMap(_.invoiceData.flatMap(_.city)).getOrElse("")
+    val account = user.flatMap(_.invoiceData.flatMap(_.accountNumber)).getOrElse("")
+    val mun = user.flatMap(_.invoiceData.flatMap(_.taxMuncipal)).getOrElse("")
+    val email = user.map(_.email).getOrElse("")
+    val pwd = user.flatMap(_.password).getOrElse("")
+    val phone = user.map(_.phoneForInvoice).getOrElse("")
+
+    (
+    <div class="col-md-6">
+      <legend>Om brukerprofil</legend>
+      <div>
+      Her kan du legge inn informasjon om deg selv. Du trenger ikke å legge inn noe her for å bruke Dommer-FIKS, men
+        det vil kunne gi deg ekstra funksjonalitet.
+        Personalia brukes får å fylle inn mer informasjon når du laster ned dommerregning
+        Passord trengs kun dersom du ønsker å bruke kalenderfunksjonaliteten
+      </div>
+    </div>
+    <div class="col-md-6">
+    <form class="form-horizontal" method="post">
+      <fieldset>
+        <!-- Form Name -->
+        <legend>Informasjon for dommerregning</legend>
+
+        {if(errors.isDefined)
+        <div class="alert alert-danger" role="alert">
+          <ul>
+          {errors.get.map(e => <li>{e}</li>)}
+          </ul>
+        </div>
+        }
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="name">Navn</label>
+          <div class="col-md-4">
+            <input id="name" name="name" type="text" placeholder="Fullt navn" class="form-control input-md" value={name}></input>
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="address">Hjemmeadresse</label>
+          <div class="col-md-4">
+            <input id="address" name="address" type="text" placeholder="Gatenavn og nummer" value={adr} class="form-control
+            input-md"></input>
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="zip">Postnummer</label>
+          <div class="col-md-4">
+            <input id="zip" name="zip" type="text" placeholder=" " class="form-control input-md" value={zip}></input>
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="city">Poststed</label>
+          <div class="col-md-4">
+            <input id="city" name="city" type="text" placeholder=" " class="form-control input-md" value={city}></input>
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="email">Telefonnummer</label>
+          <div class="col-md-4">
+            <input id="phone" name="phone" type="tel" placeholder=" " class="form-control input-md" value={phone} required="
+            "></input>
+          </div>
+        </div>
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="email">E-post</label>
+          <div class="col-md-4">
+            <input id="email" name="email" type="text" placeholder=" " class="form-control input-md" value={email} required="
+            "></input>
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="accountno">Kontonummer</label>
+          <div class="col-md-4">
+            <input id="accountNo" name="accountNo" type="text" placeholder=" " value={account} class="form-control input-md"></input>
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="taxMuncipal">Skattekommune</label>
+          <div class="col-md-4">
+            <input id="taxMuncipal" name="taxMuncipal" type="text" placeholder=" " value={mun} class="form-control
+            input-md"></input>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Informasjon for kalender</legend>
+        <!-- Password input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="password">FIKS passord</label>
+          <div class="col-md-4">
+            <input id="password" name="password" type="password" placeholder=" " value={pwd} class="form-control input-md"></input>
+            <span class="help-block">Passord trengs kun dersom du ønsker å sette opp kalender med automatiske
+              oppdateringer</span>
+          </div>
+        </div>
+      </fieldset>
+      <div class="form-group">
+        <div class="col-md-4 col-md-offset-4">
+          <button id="submit" class="btn btn-default" name="submit">Lagre</button>
+        </div>
+      </div>
+    </form>
+    </div>)
   }
 
 

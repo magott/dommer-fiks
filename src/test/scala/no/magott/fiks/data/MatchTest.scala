@@ -1,8 +1,6 @@
 package no.magott.fiks.data
-import uritemplate.Syntax._
 import org.scalatest.FunSuite
 import org.joda.time.LocalDateTime
-import uritemplate.URITemplate
 
 class MatchTest extends FunSuite{
 

@@ -129,6 +129,23 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     )
   }
 
+  def calendarSignUpInfo = {
+    emptyPage(
+      (
+    <legend>Kalender</legend>
+    <div class="col-md-6">
+      <p>
+      Dommer-FIKS tilbyr funksjonalitet der kamper legges automatisk inn i din kalender på telefon og/eller på PC.
+    </p>
+    <p>
+      For å kunne lage en kalender du kan legge til på telefonen din, i Outlook eller iCalendar, trengs det litt informasjon om deg.
+      Dette legger du inn under din <a href="/user">brukerprofil</a>. Når du har gjort dette, gå til denne siden.
+      Du vil da se knapper du kan trykke på for å legge til kalenderen automatisk på din telefon.
+    </p>
+    </div>)
+    )
+  }
+
   def calendarInfo(calendarId:String) = {
     val Host(host) = req
     val scheme = XForwardProto.unapply(req)

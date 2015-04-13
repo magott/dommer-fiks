@@ -40,7 +40,7 @@ class StadiumPlan(stadiumService: StadiumService) extends Plan{
     case r@Path(Seg("stadium" :: "new" :: Nil)) => {
       r match {
         case GET(_) => r match{
-          case LoggedOnUser(User("morten.andersen.gott",_,_,_,_)) => {
+          case LoggedOnUser(User("morten.andersen.gott",_,_,_,_,_)) => {
             val Params(StadiumNameParam(name)) = r
             val Params(LatParam(lat)) = r
             val Params(LongParam(long)) = r

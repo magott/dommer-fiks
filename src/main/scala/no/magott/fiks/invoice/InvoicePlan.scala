@@ -3,7 +3,7 @@ package no.magott.fiks.invoice
 import unfiltered.filter.Plan
 import unfiltered.request._
 import unfiltered.response._
-import no.magott.fiks.{ActionParameter, HerokuRedirect, MatchIdParameter}
+import no.magott.fiks.{ExportParameter, ActionParameter, HerokuRedirect, MatchIdParameter}
 import no.magott.fiks.data.{AssignedMatch, MatchService, Pages, SessionId}
 import no.magott.fiks.user.UserService
 import unfiltered.response.ResponseString
@@ -69,6 +69,24 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
                 if(ok) Ok ~> JsonContent ~> ResponseString(Invoice.unsettledJson)
                 else InternalServerError
               }
+            }
+            case Params(ExportParameter(xslxFormat)) => xslxFormat match {
+              case "nffbredde" => {
+                val userOpt = userService.byUsername(session.username)
+                val invoice = InvoiceGenerator.generateNffBreddeInvoice(invoiceOpt.get, userOpt)
+                Ok ~> ContentDisposition(s"""filename="${invoiceOpt.get.matchData.teams}.xlsx"""") ~> XslxResponse(invoice)
+              }
+              case "nfftopp" => {
+                val userOpt = userService.byUsername(session.username)
+                val invoice = InvoiceGenerator.generateNffToppInvoice(invoiceOpt.get, userOpt)
+                Ok ~> ContentDisposition(s"""filename="${invoiceOpt.get.matchData.teams}.xlsx"""") ~> XslxResponse(invoice)
+              }
+              case "ofk" => {
+                val userOpt = userService.byUsername(session.username)
+                val invoice = InvoiceGenerator.generateOfkInvoice(invoiceOpt.get, userOpt)
+                Ok ~> ContentDisposition(s"""filename="${invoiceOpt.get.matchData.teams}.xlsx"""") ~> XslxResponse(invoice)
+              }
+              case _ => BadRequest ~> Html5(Pages(req).error(<div>Ukjent regningstype</div>))
             }
             case GET(_) => {
               if (invoiceOpt.isEmpty) NotFound ~> Html5(Pages(req).notFound)
@@ -151,5 +169,6 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
 
   object YearParam extends Params.Extract("year", Params.first)
 
+  object ContentDisposition extends HeaderName("Content-Disposition")
 
 }

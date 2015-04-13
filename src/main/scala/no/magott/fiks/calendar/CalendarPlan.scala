@@ -23,9 +23,9 @@ class CalendarPlan(calendarService: CalendarService, userservice: UserService) e
       userservice.userForSession(token) match {
         case Some(user) => user.calendarId match {
           case Some(calendarId) => Html5(Pages(r).calendarInfo(calendarId))
-          case None => Html5(Pages(r).calendarSignup())
+          case None => Html5(Pages(r).calendarSignUpInfo)
         }
-        case None => Html5(Pages(r).calendarSignup())
+        case None => Html5(Pages(r).calendarSignUpInfo)
       }
     }
   }

@@ -3,12 +3,9 @@ package no.magott.fiks.data
 import unfiltered.request.{Cookies, HttpRequest}
 
 object SessionId {
-  def unapply[T](req: HttpRequest[T]) = {
+  def unapply[T](req: HttpRequest[T]) : Option[String] = {
     val cookies = Cookies.unapply(req).get
-    cookies("fiksToken") match {
-      case Some(c) => Some(c.value)
-      case None => None
-    }
+    cookies("fiksToken").map(_.value)
   }
 
 }

@@ -4,7 +4,7 @@ import no.magott.fiks.calendar.{CalendarService, CalendarPlan}
 import no.magott.fiks.data._
 import no.magott.fiks.FallbackPlan
 import no.magott.fiks.invoice.{InvoiceRepository, InvoicePlan}
-import no.magott.fiks.user.UserService
+import no.magott.fiks.user.{UserPlan, UserService}
 import org.joda.time.{Weeks, DateTimeUtils}
 import scala.util.Properties
 import unfiltered.jetty
@@ -29,6 +29,7 @@ object Web {
       .plan(new CalendarPlan(calendarservice,userservice))
       .plan(new StadiumPlan(stadiumservice))
       .plan(new InvoicePlan(matchservice, userservice, invoiceRepository))
+      .plan(new UserPlan(userservice))
       .plan(new FallbackPlan)
     .run()
   }

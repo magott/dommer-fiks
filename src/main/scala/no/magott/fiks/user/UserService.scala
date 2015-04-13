@@ -41,6 +41,7 @@ class UserService {
     }
   }
 
+  @deprecated("use saveUser")
   def newUser(username: String, password: String, email:String) = {
     val calendarId = UUID.randomUUID.toString
     db("users").update(where("username"->username), $set(Seq("calid" -> calendarId, "username" -> username, "password" -> cipher.encrypt(password), "email" -> email)), true, false)
@@ -57,6 +58,11 @@ class UserService {
   def save(userSession:UserSession) = {
     val update = db("sessions").update(where("id"->userSession.id), userSession.asMongoDbObject, true, false)
     update
+  }
+
+  def saveUser(user:User) = {
+    val encryptedPassword = user.password.map(cipher.encrypt(_))
+    db("users").update(where("username"->user.username), user.copy(password = encryptedPassword).toMongo, true, false)
   }
 
   def userSession(sessionId:String) = {
