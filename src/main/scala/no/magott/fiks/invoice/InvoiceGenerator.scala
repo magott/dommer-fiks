@@ -97,8 +97,10 @@ object InvoiceGenerator {
   def withTemplate(filename:String)(f: XSSFWorkbook => XSSFWorkbook) = {
     val stream = getClass.getResourceAsStream(filename)
     val template = new XSSFWorkbook(stream)
+    val modified = f(template)
+    modified.getCreationHelper().createFormulaEvaluator().evaluateAll()
     stream.close()
-    f(template)
+    modified
   }
 
 
