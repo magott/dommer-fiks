@@ -48,9 +48,22 @@ object InvoiceGenerator {
         sheet(15)('D').setString(userOpt.map(_.addressForInvoice))
       }
     }
+    invoice.passengerAllowance.foreach{ passengerAllowance =>
+      import passengerAllowance._
+      sheet(19)('F').setCellValue(km)
+      if(pax > 1){
+        sheet(19)('G').setCellValue(s"x $pax,00")
+        sheet(19)('H').setCellFormula(s"F19*$pax")
+      }
+    }
     invoice.toll.foreach { toll =>
       sheet(44)('D').setCellValue("Bompenger")
       sheet(44)('F').setCellValue(toll)
+    }
+
+    invoice.otherExpenses.foreach{ otherExpenses =>
+      val row = 44 + (if(invoice.toll.isDefined) 1 else 0)
+      sheet(row)('F').setCellValue(otherExpenses)
     }
 
     invoice.perDiem.foreach { perDiem =>
@@ -91,16 +104,21 @@ object InvoiceGenerator {
     sheet(27)('J').setDouble(invoice.km)
     sheet(30)('H').setDouble(invoice.km)
     sheet(32)('H').setCellValue(invoice.matchFee)
-    sheet(33)('R').setDouble(invoice.toll)
+    sheet(33)('H').setDouble(invoice.toll)
+    sheet(34)('H').setDouble(invoice.otherExpenses)
+    invoice.passengerAllowance.foreach{ passengerAllowance =>
+      sheet(31)('H').setCellValue(passengerAllowance.km)
+      sheet(31)('J').setCellValue(passengerAllowance.pax)
+    }
   }
 
   def withTemplate(filename:String)(f: XSSFWorkbook => XSSFWorkbook) = {
     val stream = getClass.getResourceAsStream(filename)
     val template = new XSSFWorkbook(stream)
-    val modified = f(template)
-    modified.getCreationHelper().createFormulaEvaluator().evaluateAll()
+    f(template)
+    template.getCreationHelper().createFormulaEvaluator().evaluateAll()
     stream.close()
-    modified
+    template
   }
 
 

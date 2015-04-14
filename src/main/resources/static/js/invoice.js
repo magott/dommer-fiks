@@ -1,8 +1,18 @@
-$( "#km, #kmMultiplier").keyup(function(e) {
-    var kmMultiplier = parseFloat($("#kmMultiplier").val());
+$("#km").keyup(function(e) {
+    var kmMultiplier = 4.10
     var km = parseFloat($("#km").val());
-    if(_.isFinite(kmMultiplier) && _.isFinite(km)){
+    if(_.isFinite(km)){
         $("#millageAllowance").val(Number(km * kmMultiplier).toFixed(2));
+    }
+});
+
+$("#millageAllowance").keyup(function(e) {
+    var millageAllowance = parseFloat($("#millageAllowance").val())
+    var kmMultiplier = 4.10
+    if(_.isFinite(millageAllowance)){
+        $("#km").val(Number(millageAllowance / kmMultiplier).toFixed(2));
+    } else {
+        $("#km").val("");
     }
 });
 
@@ -68,8 +78,10 @@ function calculateTotal(){
     var matchFee = orZero($("#matchFee"));
     var millageAllowance = orZero($("#millageAllowance"));
     var toll = orZero($("#toll"));
+    var otherExpenses = orZero($("#otherExpenses"));
     var perDiem = orZero($("#perDiem"));
-    $("#total").val(Number(matchFee + millageAllowance + toll + perDiem).toFixed(2));
+    var passenger = Number(orZero($("#passengers")) * orZero($("#passengerKm")));
+    $("#total").val(Number(matchFee + millageAllowance + toll + perDiem + otherExpenses +passenger));
 }
 $('#invoice').validate({
     rules:{

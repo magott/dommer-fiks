@@ -440,10 +440,17 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
           <input type="number" class="form-control" id="km" name="km" placeholder="ant km" step="0.01" value={i.flatMap(_.km.map(_.toString)).getOrElse("")}/>
         </div>
         <div class="col-sm-2">
-          <input type="number" class="form-control" id="kmMultiplier" name="kmMultiplier" value={i.flatMap(_.kmMultiplier.map(_.toString)).getOrElse("4.10")} step="0.01"/>
+          <input type="number" id="millageAllowance" name="millageAllowance" class="form-control" placeholder="sum" step="0.01" value={i.flatMap(_.millageAllowance.map(_.toString)).getOrElse("")}/>
+        </div>
+        <p class="help-block"></p>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="millageAllowance">Passasjertillegg</label>
+        <div class="col-sm-2">
+          <input type="number" class="form-control" id="passengers" name="passengers" placeholder="Antall passasjerer" step="1" value={i.flatMap(_.passengerAllowance.map(_.pax.toString)).getOrElse("")}/>
         </div>
         <div class="col-sm-2">
-          <input type="number" id="millageAllowance" name="millageAllowance" class="form-control" placeholder="sum" step="0.01" value={i.flatMap(_.millageAllowance.map(_.toString)).getOrElse("")}/>
+          <input type="number" id="passengerKm" name="passengerKm" class="form-control" placeholder="Kilometer" step="0.01" value={i.flatMap(_.passengerAllowance.map(_.km.toString)).getOrElse("")}/>
         </div>
         <p class="help-block"></p>
       </div>
@@ -451,6 +458,13 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <label class="control-label col-sm-2" for="toll">Bompenger</label>
         <div class="col-sm-2">
           <input type="number" step="0.01" id="toll" placeholder=" " name="toll" class="form-control" value={i.flatMap(_.toll.map(_.toString)).getOrElse("")}/>
+        </div>
+        <p class="help-block"></p>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="otherExpenses">Andre utlegg (parkering, ferge etc)</label>
+        <div class="col-sm-2">
+          <input type="number" step="0.01" id="otherExpenses" placeholder=" " name="otherExpenses" class="form-control" value={i.flatMap(_.otherExpenses.map(_.toString)).getOrElse("")}/>
         </div>
         <p class="help-block"></p>
       </div>
@@ -502,7 +516,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         </div>
       {if(i.isDefined) {
         <div class="form-group">
-          <div class="col-sm-6 col-sm-offset-2">
+          <div class="col-sm-8 col-sm-offset-2">
             <div class="btn-group">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Last ned <span class="caret"></span>
@@ -520,6 +534,10 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
               </ul>
             </div>
           </div>
+        </div>
+        <div class="col-sm-8 col-sm-offset-2">
+          <span class="badge">NB!</span> Legg inn mer informasjon om deg selv i din <a href="/user">brukerprofil</a>
+          for å få den automatisk lagt inn i dommerregningen du laster ned.
         </div>
     }}
     </form>
@@ -845,16 +863,18 @@ def tableOfAvailableMatches = {
     val phone = user.map(_.phoneForInvoice).getOrElse("")
 
     (
-    <div class="col-md-6">
+    <div class="col-md-8">
       <legend>Om brukerprofil</legend>
-      <div>
+      <p>
       Her kan du legge inn informasjon om deg selv. Du trenger ikke å legge inn noe her for å bruke Dommer-FIKS, men
-        det vil kunne gi deg ekstra funksjonalitet.
-        Personalia brukes får å fylle inn mer informasjon når du laster ned dommerregning
-        Passord trengs kun dersom du ønsker å bruke kalenderfunksjonaliteten
-      </div>
+        det vil gi deg ekstra funksjonalitet.
+      </p>
+      <p>
+      Personalia brukes får å fylle inn mer informasjon når du laster ned dommerregning.
+      Passord trengs kun dersom du ønsker å bruke kalenderfunksjonaliteten
+      </p>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-8">
     <form class="form-horizontal" method="post">
       <fieldset>
         <!-- Form Name -->

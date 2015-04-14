@@ -1,17 +1,19 @@
 package no.magott.fiks.invoice
 
+import no.magott.fiks.invoice.Invoice.PassengerAllowance
 import org.joda.time.{LocalDate, DateTime}
 import com.mongodb.casbah.query.Imports._
 import scala.collection.mutable
 import scalaz._, Scalaz._
 import argonaut._, Argonaut._
 
-case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], millageAllowance:Option[Double], perDiem: Option[Int], total: Double, reminder:Option[DateTime], settled:Option[DateTime], km:Option[Double], kmMultiplier:Option[Double]) {
+case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], millageAllowance:Option[Double], perDiem: Option[Int], total: Double, reminder:Option[DateTime], settled:Option[DateTime], km:Option[Double], otherExpenses:Option[Double], passengerAllowance: Option[PassengerAllowance]) {
 
   def status = if(settled.isDefined) s"Betalt ${settled.get.toString("dd.MM")}" else if(reminder.isDefined) s"Purret ${reminder.get.toString("dd.MM")}" else "Utestående"
   def rowClass = if(settled.isDefined) "success" else if(moreDaysPassedThan(10)) "danger" else if(moreDaysPassedThan(7)) "warning" else if(moreDaysPassedThan(5)) "info" else ""
 
   def isNew = id.isEmpty
+
   private def asMap = {
     val map = mutable.Map[String, Any](
       "username" -> username,
@@ -22,8 +24,9 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
     toll.foreach(x => map += "toll" -> x)
     millageAllowance.foreach(x => map += "millageAllowance" -> x)
     km.foreach(x => map += "km" -> x)
-    kmMultiplier.foreach(x => map += "kmMultiplier" -> x)
+    otherExpenses.foreach(x => map += "otherExpenses" -> x)
     perDiem.foreach(x=> map += "perDiem" -> x)
+    passengerAllowance.foreach(map += "passengerAllowance" -> _.toMongo)
     map
   }
 
@@ -33,6 +36,12 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
 
   def asMongoInsert: DBObject = {
     MongoDBObject(asMap.toList:_*)
+  }
+  
+  def calculatedKmMultiplier = {
+    otherExpenses.getOrElse{
+      millageAllowance.map(allowance => allowance / km.getOrElse(allowance * 4.10) )
+    }
   }
 
   def updateClause : MongoDBObject = MongoDBObject("_id" -> id.get)
@@ -45,7 +54,7 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
       "match" := matchData.toJson,
       "matchFee" := matchFee,
       "toll" := toll,
-      "millageAllowance" := toll,
+      "millageAllowance" := millageAllowance,
       "perDiem" := perDiem,
       "total" := total,
       "rowClass" := rowClass,
@@ -53,11 +62,13 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
       "settled" := settled.isDefined
     )
   }
+
 }
 
+
 object Invoice {
-  def createNew(username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], millageAllowance:Option[Double], perDiem: Option[Int], total: Double, kms:Option[Double], kmMultiplier:Option[Double]) = {
-    Invoice(None, username, matchData, matchFee, toll, millageAllowance, perDiem, total, None, None, kms, kmMultiplier)
+  def createNew(username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], millageAllowance:Option[Double], perDiem: Option[Int], total: Double, kms:Option[Double], otherExpenses:Option[Double], passengerAllowance:Option[PassengerAllowance]) = {
+    Invoice(None, username, matchData, matchFee, toll, millageAllowance, perDiem, total, None, None, kms, otherExpenses, passengerAllowance)
   }
 
   def fromMongo(m:DBObject) = {
@@ -71,9 +82,10 @@ object Invoice {
     val toll = m.getAs[Double]("toll")
     val millageAllowance = m.getAs[Double]("millageAllowance")
     val km = m.getAs[Double]("km")
-    val kmMultiplier = m.getAs[Double]("kmMultiplier")
+    val otherExpenses = m.getAs[Double]("otherExpenses")
     val perDiem = m.getAs[Int]("perDiem")
-    Invoice(Some(id), username, matchData, matchFee, toll, millageAllowance, perDiem, total, reminder, settled, km, kmMultiplier)
+    val passAllowance = m.getAs[DBObject]("passengerAllowance").map(PassengerAllowance.fromMongo(_))
+    Invoice(Some(id), username, matchData, matchFee, toll, millageAllowance, perDiem, total, reminder, settled, km, otherExpenses, passAllowance)
   }
 
   def unsettledJson = """{"buttonText":"Merk betalt", "buttonClass":"btn"}"""
@@ -82,5 +94,24 @@ object Invoice {
   def notRemindedJson = """{"buttonText":"Merk purret", "buttonClass":"btn btn-inverse"}"""
 
 
+  case class PassengerAllowance(pax: Int, km:Double){
+    def toMongo = {
+      MongoDBObject("pax" -> pax, "km" -> km)
+    }
+  }
+
+  object PassengerAllowance{
+    def fromMongo(m:DBObject) = {
+      PassengerAllowance(m.as[Int]("pax"), m.as[Double]("km"))
+    }
+
+    def fromWeb(paxOpt:Option[Int], kmOpt:Option[Double]) = {
+      if(paxOpt.isDefined && kmOpt.isDefined){
+        Some(PassengerAllowance(paxOpt.get, kmOpt.get))
+      }else None
+    }
+  }
 }
+
+
 

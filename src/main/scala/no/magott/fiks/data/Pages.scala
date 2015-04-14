@@ -142,6 +142,9 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
       Dette legger du inn under din <a href="/user">brukerprofil</a>. Når du har gjort dette, gå til denne siden.
       Du vil da se knapper du kan trykke på for å legge til kalenderen automatisk på din telefon.
     </p>
+      <p>
+        <a class="btn btn-default" href="/user" role="button">Opprett kalender <span aria-hidden="true">&rarr;</span></a>
+      </p>
     </div>)
     )
   }

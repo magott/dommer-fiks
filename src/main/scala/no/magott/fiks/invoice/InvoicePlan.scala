@@ -1,5 +1,6 @@
 package no.magott.fiks.invoice
 
+import no.magott.fiks.invoice.Invoice.PassengerAllowance
 import unfiltered.filter.Plan
 import unfiltered.request._
 import unfiltered.response._
@@ -140,31 +141,38 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
             }
           }
         }
-
         case _ => Pass
       }
     }
   }
   def extractNewInvoiceFromParams(username:String, m:AssignedMatch, params: Map[String, Seq[String]]) = {
+    import no.magott.fiks.ParameterImplicits._
     val matchFee = params("matchFee").head.toInt
     val toll = params("toll").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val millageAllowance = params("millageAllowance").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val km = params("km").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
-    val kmMultiplier = params("kmMultiplier").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
+    val otherExpenses = params("otherExpenses").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val perDiem = params("perDiem").headOption.filter(_.trim.nonEmpty).map(_.toInt)
     val total = params("total").head.toDouble
-    Invoice.createNew(username, MatchData.fromAssignedMatch(m),matchFee, toll, millageAllowance, perDiem, total, km, kmMultiplier)
+    val pass = params.valueOrNone("passengers").map(_.toInt)
+    val passKm = params.valueOrNone("passengerKm").map(_.toDouble)
+    val passengerAllowance = PassengerAllowance.fromWeb(pass, passKm)
+    Invoice.createNew(username, MatchData.fromAssignedMatch(m),matchFee, toll, millageAllowance, perDiem, total, km, otherExpenses, passengerAllowance)
   }
 
   def extractUpdatedInvoiceFromParams(username:String, invoice:Invoice, params: Map[String, Seq[String]]) = {
+    import no.magott.fiks.ParameterImplicits._
     val matchFee = params("matchFee").head.toInt
     val toll = params("toll").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val millageAllowance = params("millageAllowance").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val perDiem = params("perDiem").headOption.filter(_.trim.nonEmpty).map(_.toInt)
     val km = params("km").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
-    val kmMultiplier = params("kmMultiplier").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
+    val otherExpenses = params("otherExpenses").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val total = params("total").head.toDouble
-    invoice.copy(matchFee = matchFee, toll = toll, millageAllowance = millageAllowance, perDiem = perDiem, total = total, km = km, kmMultiplier = kmMultiplier)
+    val pass = params.valueOrNone("passengers").map(_.toInt)
+    val passKm = params.valueOrNone("passengerKm").map(_.toDouble)
+    val passengerAllowance = PassengerAllowance.fromWeb(pass, passKm)
+    invoice.copy(matchFee = matchFee, toll = toll, millageAllowance = millageAllowance, perDiem = perDiem, total = total, km = km, otherExpenses = otherExpenses, passengerAllowance = passengerAllowance)
   }
 
   object YearParam extends Params.Extract("year", Params.first)
