@@ -13,6 +13,7 @@ import scala.collection.JavaConverters._
  *
  */
 object InvoiceGenerator {
+  import XlsxImplicits._
 
   def generateOfkInvoice(invoice:Invoice, userOpt: Option[User]) = withTemplate("/Dommerregning-2015-OFK_2.xlsx"){template =>
     applyToOfkSpreadsheet(template, invoice, userOpt)
@@ -21,6 +22,7 @@ object InvoiceGenerator {
   def generateNffToppInvoice(invoice:Invoice, userOpt: Option[User]) =
     withTemplate("/Dommerregning-reise_topp_2015_rev3.xlsx"){ template =>
       applyToNffSpreadsheet(template, invoice, userOpt)
+      template.getSheetAt(0)(18)('F').setDouble(invoice.km) //No km formula in NFF Topp
       template
   }
 
@@ -30,7 +32,6 @@ object InvoiceGenerator {
       template
   }
 
-  import XlsxImplicits._
   private def applyToNffSpreadsheet(template: XSSFWorkbook, invoice: Invoice, userOpt: Option[User]) = {
     val sheet = template.getSheetAt(0)
     userOpt.foreach { user =>

@@ -10,15 +10,37 @@ import org.scalatest.{Matchers, FlatSpec}
 /**
  *
  */
+import InvoiceGenerator.XlsxImplicits._
 class InvoiceGeneratorTest extends FlatSpec with Matchers{
 
   "NFF-bredde" should "be generated" in {
     val nffBreddeInvoice = InvoiceGenerator.generateNffBreddeInvoice(createInvoice, Some(createUser))
-    val output =new FileOutputStream("/tmp/bredde.xlsx");
+    val output = new FileOutputStream("/tmp/nffbredde.xlsx")
     //write changes
     nffBreddeInvoice.write(output)
     //close the stream
     output.close()
+    val spreadsheetTotal = nffBreddeInvoice.getSheetAt(0)(51)('H').getNumericCellValue
+    spreadsheetTotal shouldBe(createInvoice.calculateTotal)
+  }
+
+  "NFF-topp" should "be generated" in {
+    val nffTopp = InvoiceGenerator.generateNffToppInvoice(createInvoice, Some(createUser))
+    val output = new FileOutputStream("/tmp/nfftopp.xlsx")
+    nffTopp.write(output)
+    output.close()
+    val spreadsheetTotal = nffTopp.getSheetAt(0)(53)('H').getNumericCellValue
+    spreadsheetTotal shouldBe(createInvoice.calculateTotal)
+  }
+
+  "OFK-bredde" should "be generated" in {
+    val ofkbreddeInvoice = createInvoice
+    val ofkBredde = InvoiceGenerator.generateOfkInvoice(ofkbreddeInvoice, Some(createUser))
+    val output = new FileOutputStream("/tmp/ofkbredde.xlsx")
+    ofkBredde.write(output)
+    output.close()
+    val spreadsheetTotal = ofkBredde.getSheetAt(0)(35)('R').getNumericCellValue
+    spreadsheetTotal shouldBe(ofkbreddeInvoice.calculateTotal - ofkbreddeInvoice.perDiem.getOrElse(0))
   }
 
   def createUser = {

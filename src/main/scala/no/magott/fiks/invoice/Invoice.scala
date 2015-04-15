@@ -37,11 +37,9 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
   def asMongoInsert: DBObject = {
     MongoDBObject(asMap.toList:_*)
   }
-  
-  def calculatedKmMultiplier = {
-    otherExpenses.getOrElse{
-      millageAllowance.map(allowance => allowance / km.getOrElse(allowance * 4.10) )
-    }
+
+  def calculateTotal = {
+    matchFee + perDiem.getOrElse(0) + toll.getOrElse(0d) + otherExpenses.getOrElse(0d) + km.map(_ * 4.10).getOrElse(0d) + passengerAllowance.map(_.getTotal).getOrElse(0d)
   }
 
   def updateClause : MongoDBObject = MongoDBObject("_id" -> id.get)
@@ -98,6 +96,8 @@ object Invoice {
     def toMongo = {
       MongoDBObject("pax" -> pax, "km" -> km)
     }
+
+    def getTotal:Double = pax * km
   }
 
   object PassengerAllowance{
