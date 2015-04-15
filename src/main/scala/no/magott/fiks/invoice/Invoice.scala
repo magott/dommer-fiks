@@ -30,8 +30,20 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
     map
   }
 
+  def unsetList = {
+    val unsets = mutable.MutableList.empty[String]
+    if(toll.isEmpty) unsets += "toll"
+    if(millageAllowance.isEmpty) unsets += "millageAllowance"
+    if(passengerAllowance.isEmpty) unsets += "passengerAllowance"
+    if(perDiem.isEmpty) unsets += "perDiem"
+    if(otherExpenses.isEmpty) unsets += "otherExpenses"
+    if(km.isEmpty) unsets += "km"
+
+    unsets
+  }
+
   def asMongoUpdate:DBObject = {
-    $set(Seq(asMap.toSeq:_*))
+    $set(Seq(asMap.toSeq:_*)) ++ $unset(Seq(unsetList:_*))
   }
 
   def asMongoInsert: DBObject = {
