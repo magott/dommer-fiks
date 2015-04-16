@@ -17,9 +17,10 @@ class MatchScraper {
   val cancelIdPattern = """.*\((.*)\).*""".r
   val dateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm")
   val matchReportUrl = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchDomarrapport.aspx?matchId=s%"
-  val VIEWSTATE = "_VIEWSTATE"
+  val VIEWSTATE = "__VIEWSTATE"
   val EVENTVALIDATION = "__EVENTVALIDATION"
   val EVENTTARGET = "__EVENTTARGET"
+  val VIEWSTATEGENERATOR = "__VIEWSTATEGENERATOR"
 
   def scrapeAssignedMatches(session: UserSession) = {
     val assignedMatchesDoc = withAutomaticReAuth(session, doScrapeAssignedMatches)
@@ -141,15 +142,18 @@ class MatchScraper {
   def postInterestForm(availabilityId: String, comment:String, session:UserSession) {
     val url = "https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=" + availabilityId
     val reportInterestForm = withAutomaticReAuth(session, doScrapeReportInterestForm(url))
-    Jsoup.connect(url)
+    val req = Jsoup.connect(url)
       .method(Method.POST)
       .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
       .data("btnAnmal","Meld inn")
       .data("tbKommentar",comment)
       .data(VIEWSTATE, reportInterestForm.valueOfElement(VIEWSTATE))
-      .data(EVENTTARGET, reportInterestForm.valueOfElement(EVENTTARGET))
+      .data(EVENTTARGET, "btnAnmal")
+      .data(VIEWSTATEGENERATOR, reportInterestForm.valueOfElement(VIEWSTATEGENERATOR))
+      .data("__EVENTARGUMENT", "")
       .data(EVENTVALIDATION, reportInterestForm.valueOfElement(EVENTVALIDATION)).referrer(url)
-      .cookie(COOKIE_NAME,session.sessionToken).followRedirects(false).timeout(25000).execute()
+      .cookie(COOKIE_NAME,session.sessionToken).followRedirects(false).timeout(25000)
+      req.execute()
   }
 
   private def withAutomaticReAuth(session:UserSession, f: UserSession => Document):Document = {
