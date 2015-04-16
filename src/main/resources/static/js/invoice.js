@@ -1,20 +1,21 @@
 $("#km").keyup(function(e) {
-    var kmMultiplier = 4.10
-    var km = parseFloat($("#km").val());
-    if(_.isFinite(km)){
-        $("#millageAllowance").val(Number(km * kmMultiplier).toFixed(2));
+    var m = calculateMillageAllowance();
+    if(m > 0){
+        $("#millageAllowance").val(Number(m).toFixed(2));
+    }else{
+        $("#millageAllowance").val("");
     }
 });
 
-$("#millageAllowance").keyup(function(e) {
-    var millageAllowance = parseFloat($("#millageAllowance").val())
-    var kmMultiplier = 4.10
-    if(_.isFinite(millageAllowance)){
-        $("#km").val(Number(millageAllowance / kmMultiplier).toFixed(2));
-    } else {
-        $("#km").val("");
+function calculateMillageAllowance(){
+    var kmMultiplier = 4.10;
+    var km = parseFloat($("#km").val());
+    var millageAllowance = 0.00;
+    if(_.isFinite(km)){
+        millageAllowance = Number(km * kmMultiplier);
     }
-});
+    return millageAllowance;
+}
 
 $("#invoice").change(function(){
     if($("#invoice").valid()){
@@ -55,7 +56,7 @@ $.validator.setDefaults({
     errorElement: 'p',
     errorClass: 'help-block',
     errorPlacement: function(error, element) {
-        if(element.parent('.input-group').length) {
+        if(element.parent('.form-group').length) {
             error.insertAfter(element.parent());
         } else {
             error.insertAfter(element);
@@ -76,12 +77,12 @@ function invoiceAction(method, button, action){
 
 function calculateTotal(){
     var matchFee = orZero($("#matchFee"));
-    var millageAllowance = orZero($("#millageAllowance"));
+    var millageAllowance = calculateMillageAllowance();
     var toll = orZero($("#toll"));
     var otherExpenses = orZero($("#otherExpenses"));
     var perDiem = orZero($("#perDiem"));
     var passenger = Number(orZero($("#passengers")) * orZero($("#passengerKm")));
-    $("#total").val(Number(matchFee + millageAllowance + toll + perDiem + otherExpenses +passenger));
+    $("#total").val(Number(matchFee + millageAllowance + toll + perDiem + otherExpenses +passenger).toFixed(2));
 }
 $('#invoice').validate({
     rules:{
@@ -95,17 +96,14 @@ $('#invoice').validate({
         km:{
             number:true
         },
-        kmMultiplier:{
-            number:true
-        },
         millageAllowance:{
             number:true
         },
         perDiem:{
             digits:true
         },
-        total:{
-            number:true
+        passengers:{
+            digits:true
         }
     },
     messages:{
@@ -113,10 +111,12 @@ $('#invoice').validate({
             required: "Kamphonorar må fylles ut",
             digits: "Kamphonorar må være et heltall"
         },
-        millageAllowance: "Kilometergodtgjørelse (sum) må være et tall",
+        km: "Kilometer må være et tall",
         perDiem: "Diett må være heltall",
         toll: "Bompenger må være et tall",
-        total: "Total må være et tall"
+        passengers: "Antall passasjerer må være et heltall",
+        passengerKm: "Antall kilometer for passasjerer må være et tall",
+        otherExpenses: "Feltet må være tomt eller et tall"
     }
 });
 

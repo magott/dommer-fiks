@@ -149,30 +149,26 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
     import no.magott.fiks.ParameterImplicits._
     val matchFee = params("matchFee").head.toInt
     val toll = params("toll").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
-    val millageAllowance = params("millageAllowance").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val km = params("km").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val otherExpenses = params("otherExpenses").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val perDiem = params("perDiem").headOption.filter(_.trim.nonEmpty).map(_.toInt)
-    val total = params("total").head.toDouble
     val pass = params.valueOrNone("passengers").map(_.toInt)
     val passKm = params.valueOrNone("passengerKm").map(_.toDouble)
     val passengerAllowance = PassengerAllowance.fromWeb(pass, passKm)
-    Invoice.createNew(username, MatchData.fromAssignedMatch(m),matchFee, toll, millageAllowance, perDiem, total, km, otherExpenses, passengerAllowance)
+    Invoice.createNew(username, MatchData.fromAssignedMatch(m),matchFee, toll, perDiem, km, otherExpenses, passengerAllowance)
   }
 
   def extractUpdatedInvoiceFromParams(username:String, invoice:Invoice, params: Map[String, Seq[String]]) = {
     import no.magott.fiks.ParameterImplicits._
     val matchFee = params("matchFee").head.toInt
     val toll = params("toll").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
-    val millageAllowance = params("millageAllowance").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val perDiem = params("perDiem").headOption.filter(_.trim.nonEmpty).map(_.toInt)
     val km = params("km").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val otherExpenses = params("otherExpenses").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
-    val total = params("total").head.toDouble
     val pass = params.valueOrNone("passengers").map(_.toInt)
     val passKm = params.valueOrNone("passengerKm").map(_.toDouble)
     val passengerAllowance = PassengerAllowance.fromWeb(pass, passKm)
-    invoice.copy(matchFee = matchFee, toll = toll, millageAllowance = millageAllowance, perDiem = perDiem, total = total, km = km, otherExpenses = otherExpenses, passengerAllowance = passengerAllowance)
+    invoice.copy(matchFee = matchFee, toll = toll, perDiem = perDiem, km = km, otherExpenses = otherExpenses, passengerAllowance = passengerAllowance)
   }
 
   object YearParam extends Params.Extract("year", Params.first)

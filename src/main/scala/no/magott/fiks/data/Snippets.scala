@@ -440,12 +440,12 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
           <input type="number" class="form-control" id="km" name="km" placeholder="ant km" step="0.01" value={i.flatMap(_.km.map(_.toString)).getOrElse("")}/>
         </div>
         <div class="col-sm-2">
-          <input type="number" id="millageAllowance" name="millageAllowance" class="form-control" placeholder="sum" step="0.01" value={i.flatMap(_.millageAllowance.map(_.toString)).getOrElse("")}/>
+          <input type="number" id="millageAllowance" name="millageAllowance" disabled="" class="form-control" placeholder="sum" step="0.01" value={i.flatMap(_.millageAllowance.map(_.toString)).getOrElse("")}/>
         </div>
         <p class="help-block"></p>
       </div>
       <div class="form-group">
-        <label class="control-label col-sm-2" for="millageAllowance">Passasjertillegg</label>
+        <label class="control-label col-sm-2" for="passengers">Passasjertillegg</label>
         <div class="col-sm-2">
           <input type="number" class="form-control" id="passengers" name="passengers" placeholder="Antall passasjerer" step="1" value={i.flatMap(_.passengerAllowance.map(_.pax.toString)).getOrElse("")}/>
         </div>
@@ -478,7 +478,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       <div class="form-group">
         <label class="control-label col-sm-2" for="total">Total</label>
         <div class="col-sm-2">
-          <input type="number" step="0.01" id="total" placeholder=" " name="total" class="form-control" value={i.map(_.total.toString).getOrElse("")}/>
+          <input type="number" step="0.01" disabled="" id="total" placeholder=" " name="total" class="form-control" value={i.map(_.total.toString).getOrElse("")}/>
         </div>
         <p class="help-block"></p>
       </div>
@@ -566,7 +566,9 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
 
   def invoiceScripts = {
-    (<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.0/jquery.validate.min.js" type="text/javascript"></script>
+    (
+      <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/jquery.validate.min.js" type="text/javascript"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/additional-methods.min.js" type="text/javascript"></script>
      ++angularJs++
       <script src="/js/invoice.js" type="text/javascript"></script> )  ++lodashJS
   }
@@ -580,7 +582,6 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
   }
 
   def angularJs = <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.min.js" type="text/javascript"></script>
-
 
 def tableOfAvailableMatches = {
   <div ng-app="availablematchesapp">
