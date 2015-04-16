@@ -1,7 +1,7 @@
 package no.magott.fiks.user
 
 import no.magott.fiks.HerokuRedirect
-import no.magott.fiks.data.{SessionId, Snippets}
+import no.magott.fiks.data.{Pages, SessionId, Snippets}
 import unfiltered.filter.Plan
 import unfiltered.filter.Plan.Intent
 import unfiltered.request._
@@ -20,7 +20,7 @@ class UserPlan(userService: UserService) extends Plan{
     case r@Path(Seg("user" :: Nil)) & SessionId(sessionId) => r match {
       case GET(_) => {
         val userOpt = userService.userForSession(sessionId)
-        Ok ~> Html5(Snippets(r).emptyPage(Snippets(r).userForm(userOpt, None)))
+        Ok ~> Html5(Pages(r).userProfile(userOpt, None))
       }
       case POST(_) & Params(p) & SessionId(sessionId)=> {
         val sessionOpt = userService.userSession(sessionId)
@@ -32,7 +32,7 @@ class UserPlan(userService: UserService) extends Plan{
             HerokuRedirect(r, "/user")
           }
           case -\/(errors) => {
-            BadRequest ~> Html5(Snippets(r).emptyPage(Snippets(r).userForm(user, Some(errors.list))))
+            BadRequest ~> Html5(Pages(r).userProfile(user, Some(errors.list)))
           }
         }
 

@@ -564,6 +564,9 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     </table>
   }
 
+  def userProfileScripts = {
+    <script src="/js/user.js" type="text/javascript"></script>
+  }
 
   def invoiceScripts = {
     (

@@ -1,6 +1,8 @@
 package no.magott.fiks.data
 
 import javax.servlet.http.HttpServletRequest
+import no.magott.fiks.user.User
+
 import xml.NodeSeq
 import unfiltered.request.{Host, HttpRequest}
 import no.magott.fiks.HerokuRedirect.XForwardProto
@@ -127,6 +129,10 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
     emptyPage(
       calendarSignupForm(missingFields)
     )
+  }
+
+  def userProfile(userOpt: Option[User], errors:Option[List[String]]) = {
+    emptyPage(userForm(userOpt, errors), Some(userProfileScripts))
   }
 
   def calendarSignUpInfo = {
