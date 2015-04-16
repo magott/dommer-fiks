@@ -19,6 +19,7 @@ class MatchScraper {
   val matchReportUrl = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchDomarrapport.aspx?matchId=s%"
   val VIEWSTATE = "_VIEWSTATE"
   val EVENTVALIDATION = "__EVENTVALIDATION"
+  val EVENTTARGET = "__EVENTTARGET"
 
   def scrapeAssignedMatches(session: UserSession) = {
     val assignedMatchesDoc = withAutomaticReAuth(session, doScrapeAssignedMatches)
@@ -146,6 +147,7 @@ class MatchScraper {
       .data("btnAnmal","Meld inn")
       .data("tbKommentar",comment)
       .data(VIEWSTATE, reportInterestForm.valueOfElement(VIEWSTATE))
+      .data(EVENTTARGET, reportInterestForm.valueOfElement(EVENTTARGET))
       .data(EVENTVALIDATION, reportInterestForm.valueOfElement(EVENTVALIDATION)).referrer(url)
       .cookie(COOKIE_NAME,session.sessionToken).followRedirects(false).timeout(25000).execute()
   }
