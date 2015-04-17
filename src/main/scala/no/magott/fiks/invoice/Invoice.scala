@@ -14,8 +14,10 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
 
   def isNew = id.isEmpty
 
-  def millageAllowance = {
-    km.map(_ * Invoice.kmMultiplierFor(matchData.date))
+  def millageAllowance : Option[Double] = {
+    km.map{k =>
+      (BigDecimal.valueOf(k) * Invoice.kmMultiplierFor(matchData.date)).toDouble
+    }
   }
 
   private def asMap = {
@@ -31,6 +33,7 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
     otherExpenses.foreach(x => map += "otherExpenses" -> x)
     perDiem.foreach(x=> map += "perDiem" -> x)
     passengerAllowance.foreach(map += "passengerAllowance" -> _.toMongo)
+    map += "updated" -> DateTime.now
     map
   }
 
@@ -104,8 +107,8 @@ object Invoice {
 
   def kmMultiplierFor(date:DateTime) = {
     date.getYear match {
-      case 2014 => 4.05
-      case 2015 => 4.10
+      case 2014 => BigDecimal("4.05")
+      case 2015 => BigDecimal("4.10")
     }
   }
 
