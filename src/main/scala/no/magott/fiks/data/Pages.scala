@@ -31,13 +31,13 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
           <div class="form-group">
             <label class="col-sm-2 control-label" for="username">Brukernavn</label>
             <div class="col-sm-6">
-              <input type="text" name="username" placeholder="Brukernavn"/>
+              <input type="text" name="username" placeholder="Brukernavn" required=""/>
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label" for="password">Password</label>
             <div class="col-sm-6">
-              <input type="password" name="password" placeholder="Passord"/>
+              <input type="password" name="password" placeholder="Passord" required=""/>
             </div>
           </div>
             <div class="form-group">
