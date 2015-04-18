@@ -1,0 +1,2 @@
+ cursor = db.invoice.find({},{"matchData.matchId":1, "matchData.tournament":1, "_id":0});
+ while(cursor.hasNext()){jsonObject = cursor.next(); print(jsonObject.matchData.matchId +" : "+ jsonObject.matchData.tournament);}
