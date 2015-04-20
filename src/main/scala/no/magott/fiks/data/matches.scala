@@ -33,7 +33,22 @@ case class AvailableMatch(category: String, tournament: String, date: LocalDateT
       "availabilityId" := availabilityId
     )
   }
+}
 
+case class AppointmentInfo(fiksId:String, ref:Option[String], ass1:Option[String], ass2:Option[String], fourth:Option[String]){
+  def roles = List(ref.map("Dommer" -> _), ass1.map("AD1" -> _), ass2.map("AD2" -> _))
+  def asJson = Json.obj(
+    "fiksId" := fiksId,
+    "ref" := ref,
+    "ass1" := ass1,
+    "ass2" := ass2,
+    "fourth" := fourth,
+    "roles" := roles.flatMap(_.map(role => Json.obj(
+        "role" := role._1,
+        "name" := role._2
+      ))
+    )
+  )
 }
 
 case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String, teams:String, venue:String, referees:String, fiksId:String, cancellationId:Option[String]){

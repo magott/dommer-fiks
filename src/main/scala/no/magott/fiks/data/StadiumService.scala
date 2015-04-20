@@ -103,7 +103,7 @@ case class MongoStadium(name:String,latLong: LatLong) extends Stadium {
 
 object MongoStadium{
   def fromMongo(m:MongoDBObject) = MongoStadium(m.as[String]("name"), m.getAs[DBObject]("latLong").map(LatLong.fromMongo(_)).get)
-  implicit val clickEventDecoder: DecodeJson[MongoStadium] = DecodeJson(
+  implicit val mongoStadiumDecoder: DecodeJson[MongoStadium] = DecodeJson(
     c => for {
       name <- (c --\ "Name").as[String]
       latLong <- (c --\ "LatLong").as[LatLong]

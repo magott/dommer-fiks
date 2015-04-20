@@ -99,7 +99,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
   }
 
   def reportInterestIn(availableMatch: AvailableMatch) = {
-    emptyPage(reportInterestForm(availableMatch))
+    emptyPage(reportInterestForm(availableMatch), Some(reportInterestScripts))
   }
 
 

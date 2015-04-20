@@ -1,11 +1,16 @@
 package no.magott.fiks.data
 
+import argonaut.{DecodeJson, Parse}
+import geo.LatLong
+
 import scala.concurrent.ops.spawn
 import java.util.concurrent.{TimeUnit}
 import util.Properties
 import com.google.common.cache.{LoadingCache, Cache, CacheLoader, CacheBuilder}
 import org.joda.time.{DateTimeZone, LocalDateTime, LocalDate}
 import no.magott.fiks.user.UserSession
+
+import scalaz.\/
 
 class MatchService(val matchscraper:MatchScraper) {
 
@@ -70,6 +75,29 @@ class MatchService(val matchscraper:MatchScraper) {
   def matchResult(matchId:String, session:UserSession):MatchResult = {
     matchscraper.scrapeMatchResult(matchId, session)
   }
+
+  def appointmentInfoForMatchId(matchId: String) : String \/ AppointmentInfo= {
+    import dispatch._, Defaults._
+    import scalaz.Scalaz._
+    val gjermhusService = url(s"http://fiksservice.littinnsikt.no/Farena/WhoIsReferee/$matchId")
+    val http = Http(gjermhusService OK as.String).either.map(_.disjunction.leftMap(_.getMessage))
+    for {
+      jsonString <- http()
+      parsed <- Parse.decodeEither[AppointmentInfo](jsonString)
+    } yield parsed
+  }
+
+  implicit val appointmentInfoDecoder: DecodeJson[AppointmentInfo] = DecodeJson(
+    c => for {
+      fiksid <- (c --\ "FiksId").as[String]
+      ref <- (c --\ "Dommer").as[Option[String]]
+      ad1 <- (c --\ "Ad1").as[Option[String]]
+      ad2 <- (c --\ "Ad2").as[Option[String]]
+      fourth <- (c --\ "Fjerdedommer").as[Option[String]]
+    } yield {
+      AppointmentInfo(fiksid, ref, ad1, ad2, fourth)
+    }
+  )
 
   private def upcomingFilter(m:AssignedMatch)  =
     m.date.toLocalDate.isAfter(LocalDate.now(DateTimeZone.forID("Europe/Oslo")).minusDays(1))

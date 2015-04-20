@@ -168,23 +168,32 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
 
   val availableMatches = Intent {
     case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & Params(MatchIdParameter(matchId)) & SessionId(loginToken) => redirectToLoginIfTimeout(r, {
-      val session = userService.userSession(loginToken).get //TODO: YOLO
-      val matchInfo = matchservice.availableMatchInfo(matchId, session)
-      Ok ~> Html5(Pages(r).reportInterestIn(matchInfo))
-    })
-    case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & SessionId(loginToken) => redirectToLoginIfTimeout(r, {
       r match {
         case Accepts.Json(_) => {
-          unauthorizedOnTimeout(r, {
-            val session = userService.userSession(loginToken).get //TODO: YOLO
-            Ok ~> JsonContent ~> ResponseString(matchservice.availableMatches(session).map(_.asJson).jencode.nospaces)
-          })
+          val session = userService.userSession(loginToken).get //TODO: YOLO
+          val matchInfo = matchservice.availableMatchInfo(matchId, session)
+          Ok ~> JsonContent ~> ResponseString(matchInfo.asJson.nospaces)
         }
         case _ => {
-          Ok ~> Html5(Pages(r).availableMatches(List.empty))
+          val session = userService.userSession(loginToken).get //TODO: YOLO
+          val matchInfo = matchservice.availableMatchInfo(matchId, session)
+          Ok ~> Html5(Pages(r).reportInterestIn(matchInfo))
         }
       }
     })
+    case r@GET(Path(Seg("fiks" :: "availablematches" :: Nil))) & SessionId(loginToken) => r match {
+      case Accepts.Json(_) => {
+        unauthorizedOnTimeout(r, {
+          val session = userService.userSession(loginToken).get //TODO: YOLO
+          Ok ~> JsonContent ~> ResponseString(matchservice.availableMatches(session).map(_.asJson).jencode.nospaces)
+        })
+      }
+      case _ => {
+        redirectToLoginIfTimeout(r, {
+          Ok ~> Html5(Pages(r).availableMatches(List.empty))
+        })
+      }
+    }
   }
 
   val reportInterest = Intent {
@@ -193,6 +202,15 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
       matchservice.reportInterest(matchId, comment, session)
       HerokuRedirect(r, "/fiks/availablematches")
     })
+    case r@GET(Path(Seg("fiks"::"availabilityinfo" :: Nil))) & Params(MatchIdParameter(matchId)) & SessionId(loginToken) => {
+      matchservice.appointmentInfoForMatchId(matchId).fold(
+        errors => {
+          println("Error while fetching availabilityinfo: "+errors)
+          GatewayTimeout ~> ResponseString(errors.mkString)
+        },
+        matchInfo => Ok ~> JsonContent ~> ResponseString(matchInfo.asJson.nospaces)
+      )
+    }
   }
 
   val about = Intent {

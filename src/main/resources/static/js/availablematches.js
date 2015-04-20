@@ -4,7 +4,7 @@ app.controller("ctrl", function($scope, $http, $window) {
      $scope.matches = [];
      $scope.isTimeout = false;
      $scope.role=""
-     $scope.tournament=""
+     $scope.category=""
      $scope.loadMatches = function() {
         var httpRequest = $http({
             method: 'GET',
@@ -27,15 +27,15 @@ app.controller("ctrl", function($scope, $http, $window) {
         });
     };
 
-    $scope.uniqueTournaments = function(){
-        return _.map(_.uniq($scope.matches, 'tournament'), 'tournament');
+    $scope.uniqueCategories = function(){
+        return _.map(_.uniq($scope.matches, 'category'), 'category');
     }
 
     $scope.filterByType = function(match){
         return _.startsWith(match.role, $scope.role);
     }
 
-    $scope.filterByTournament = function(match){
-        return _.startsWith(match.tournament, $scope.tournament);
+    $scope.filterByCategory = function(match){
+        return _.startsWith(match.category, $scope.category);
     }
 });

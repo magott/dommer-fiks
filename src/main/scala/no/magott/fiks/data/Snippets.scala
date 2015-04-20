@@ -580,6 +580,10 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     angularJs ++ (<script src="/js/availablematches.js" type="text/javascript"></script>) ++ lodashJS ++ momentJS
   }
 
+  def reportInterestScripts = {
+    angularJs ++ (<script src="/js/reportinterest.js" type="text/javascript"></script>) ++ lodashJS
+  }
+
   def matchesScripts = {
     angularJs ++ (<script src="/js/matches.js" type="text/javascript"></script>) ++ lodashJS ++ momentJS
   }
@@ -594,15 +598,15 @@ def tableOfAvailableMatches = {
         <tr>
           <th>Tid</th>
           <th>
-            <select class="input-sm form-control" ng-model="tournament">
-              <option selected="selected" value="">Turnering</option>
-              <option ng-repeat="t in uniqueTournaments()">{"{{t}}"}</option>
+            <select class="input-sm" ng-model="category">
+              <option selected="selected" value="">Kategori</option>
+              <option ng-repeat="t in uniqueCategories()">{"{{t}}"}</option>
             </select>
           </th>
           <th>Kamp</th>
           <th>Sted</th>
           <th>
-            <select class="input-sm form-control" name="role" ng-model="role">
+            <select class="input-sm" name="role" ng-model="role">
               <option selected="selected" value="">Type</option>
               <option value="Dommer">Dommer</option>
               <option value="AD">AD</option>
@@ -612,12 +616,12 @@ def tableOfAvailableMatches = {
         </tr>
       </thead>
       <tbody>
-          <tr ng-repeat="match in (matches | filter:filterByType | filter:filterByTournament)">
+          <tr ng-repeat="match in (matches | filter:filterByType | filter:filterByCategory)">
             <td>
               {"{{match.date | date:'dd.MM.yy HH:mm'}}"}
             </td>
             <td>
-              {"{{match.tournament}}"}
+              {"{{match.category}}"}
             </td>
             <td>
               {"{{match.teams}}"}
@@ -711,52 +715,71 @@ def tableOfAvailableMatches = {
   }
 
   def reportInterestForm(availableMatch: AvailableMatch) = {
-    <table class="table table-striped table-bordered table-condensed">
-      <tr>
-        <th>Oppdrag</th>
-        <td>
-          {availableMatch.role}
-        </td>
-      </tr>
-      <tr>
-        <th>Kamp</th>
-        <td>
-          {availableMatch.teams}
-        </td>
-      </tr>
-      <tr>
-        <th>Tidspunkt</th>
-        <td>
-          {availableMatch.date.toString("dd.MM.yyyy HH:mm")}
-        </td>
-      </tr>
-      <tr>
-        <th>Bane</th>
-        <td>
-          {availableMatch.venue}
-        </td>
-      </tr>
-      <tr>
-        <th>Turnering</th>
-        <td>
-          {availableMatch.tournament}
-        </td>
-      </tr>
-      <form class="well" action={"""availablematches?matchid=""" + availableMatch.availabilityId.get} method="post">
+    <div ng-app="reportinterest">
+      <span class="kampnummer" hidden="hidden">{availableMatch.matchId}</span>
+      <div ng-controller="ctrl" data-ng-init="loadMatchInfo()">
+        <table class="table table-striped table-bordered table-condensed">
         <tr>
-          <th>Kommentarer</th>
+          <th>Oppdrag</th>
           <td>
-              <textarea name="comment" id="comment"></textarea>
+            {availableMatch.role}
           </td>
         </tr>
         <tr>
-          <td></td>
+          <th>Kamp</th>
           <td>
-            <button type="submit" class="btn btn-primary">Meld interesse</button>
+            {availableMatch.teams}
           </td>
         </tr>
-      </form>
-    </table>
+        <tr>
+          <th>Kampnummer</th>
+          <td>
+            {availableMatch.matchId}
+          </td>
+        </tr>
+        <tr>
+          <th>Tidspunkt</th>
+          <td>
+            {availableMatch.date.toString("dd.MM.yyyy HH:mm")}
+          </td>
+        </tr>
+        <tr>
+          <th>Bane</th>
+          <td>
+            {availableMatch.venue}
+          </td>
+        </tr>
+        <tr>
+          <th>Turnering</th>
+          <td>
+            {availableMatch.tournament}
+          </td>
+        </tr>
+        <tr ng-show="matchInfo" ng-cloak="">
+          <th>Kampinformasjon</th>
+          <td><a href="http://www.fotball.no/fotballdata/Kampfakta/?matchId={{matchInfo.fiksId}}" target="_blank">fotball.no</a></td>
+        </tr>
+        <tr ng-repeat="ref in matchInfo.roles" ng-cloak="">
+          <th>{"{{ref.role}}"}</th>
+          <td>{"{{ref.name}}"}</td>
+        </tr>
+        <form class="well" action={"""availablematches?matchid=""" + availableMatch.availabilityId.get} method="post">
+          <tr>
+            <th>Kommentarer</th>
+            <td>
+                <textarea name="comment" id="comment"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <button type="submit" class="btn btn-primary">Meld interesse</button>
+            </td>
+          </tr>
+        </form>
+      </table>
+    </div>
+    </div>
   }
 
   def calendarSignupForm(validationErrors: Seq[String]) = {
