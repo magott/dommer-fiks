@@ -1,0 +1,913 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+
+<html>
+<head><script type="text/javascript">window.NREUM||(NREUM={});NREUM.info = {"beacon":"bam.nr-data.net","errorBeacon":"bam.nr-data.net","licenseKey":"18083db3e4","applicationID":"2430379","transactionName":"NVFbNhRVWEtTBxYPXgwbeDE2G3BXVQ0RIl4PVUspCl1TVkZLERJQEEAWERJVRExeAQYPVgNBSRICRldfXg0RElBMVUoSHg==","queueTime":0,"applicationTime":2219,"ttGuid":"EBA9898702F47D5B","agent":"js-agent.newrelic.com/nr-632.min.js"}</script><script type="text/javascript">window.NREUM||(NREUM={}),__nr_require=function(e,n,t){function r(t){if(!n[t]){var o=n[t]={exports:{}};e[t][0].call(o.exports,function(n){var o=e[t][1][n];return r(o?o:n)},o,o.exports)}return n[t].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<t.length;o++)r(t[o]);return r}({QJf3ax:[function(e,n){function t(e){function n(n,t,a){e&&e(n,t,a),a||(a={});for(var u=c(n),f=u.length,s=i(a,o,r),p=0;f>p;p++)u[p].apply(s,t);return s}function a(e,n){f[e]=c(e).concat(n)}function c(e){return f[e]||[]}function u(){return t(n)}var f={};return{on:a,emit:n,create:u,listeners:c,_events:f}}function r(){return{}}var o="nr@context",i=e("gos");n.exports=t()},{gos:"7eSDFh"}],ee:[function(e,n){n.exports=e("QJf3ax")},{}],3:[function(e,n){function t(e){return function(){r(e,[(new Date).getTime()].concat(i(arguments)))}}var r=e("handle"),o=e(1),i=e(2);"undefined"==typeof window.newrelic&&(newrelic=window.NREUM);var a=["setPageViewName","addPageAction","setCustomAttribute","finished","addToTrace","inlineHit","noticeError"];o(a,function(e,n){window.NREUM[n]=t("api-"+n)}),n.exports=window.NREUM},{1:12,2:13,handle:"D5DuLP"}],"7eSDFh":[function(e,n){function t(e,n,t){if(r.call(e,n))return e[n];var o=t();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,n,{value:o,writable:!0,enumerable:!1}),o}catch(i){}return e[n]=o,o}var r=Object.prototype.hasOwnProperty;n.exports=t},{}],gos:[function(e,n){n.exports=e("7eSDFh")},{}],handle:[function(e,n){n.exports=e("D5DuLP")},{}],D5DuLP:[function(e,n){function t(e,n,t){return r.listeners(e).length?r.emit(e,n,t):(o[e]||(o[e]=[]),void o[e].push(n))}var r=e("ee").create(),o={};n.exports=t,t.ee=r,r.q=o},{ee:"QJf3ax"}],id:[function(e,n){n.exports=e("XL7HBI")},{}],XL7HBI:[function(e,n){function t(e){var n=typeof e;return!e||"object"!==n&&"function"!==n?-1:e===window?0:i(e,o,function(){return r++})}var r=1,o="nr@id",i=e("gos");n.exports=t},{gos:"7eSDFh"}],G9z0Bl:[function(e,n){function t(){var e=d.info=NREUM.info,n=f.getElementsByTagName("script")[0];if(e&&e.licenseKey&&e.applicationID&&n){c(p,function(n,t){n in e||(e[n]=t)});var t="https"===s.split(":")[0]||e.sslForHttp;d.proto=t?"https://":"http://",a("mark",["onload",i()]);var r=f.createElement("script");r.src=d.proto+e.agent,n.parentNode.insertBefore(r,n)}}function r(){"complete"===f.readyState&&o()}function o(){a("mark",["domContent",i()])}function i(){return(new Date).getTime()}var a=e("handle"),c=e(1),u=(e(2),window),f=u.document,s=(""+location).split("?")[0],p={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-632.min.js"},d=n.exports={offset:i(),origin:s,features:{}};f.addEventListener?(f.addEventListener("DOMContentLoaded",o,!1),u.addEventListener("load",t,!1)):(f.attachEvent("onreadystatechange",r),u.attachEvent("onload",t)),a("mark",["firstbyte",i()])},{1:12,2:3,handle:"D5DuLP"}],loader:[function(e,n){n.exports=e("G9z0Bl")},{}],12:[function(e,n){function t(e,n){var t=[],o="",i=0;for(o in e)r.call(e,o)&&(t[i]=n(o,e[o]),i+=1);return t}var r=Object.prototype.hasOwnProperty;n.exports=t},{}],13:[function(e,n){function t(e,n,t){n||(n=0),"undefined"==typeof t&&(t=e?e.length:0);for(var r=-1,o=t-n||0,i=Array(0>o?0:o);++r<o;)i[r]=e[n+r];return i}n.exports=t},{}]},{},["G9z0Bl"]);</script>
+    <title>StartLedigaUppdragLista</title>
+    <meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1" />
+    <meta name="CODE_LANGUAGE" content="C#" />
+    <meta name="vs_defaultClientScript" content="JavaScript" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <link href="../Css/layers.css" type="text/css" rel="stylesheet" />
+    <link href="../Css/styles.css" type="text/css" rel="stylesheet" />
+
+    <script language="javascript" type="text/javascript">
+		//Funktionen sorterar tabellen med lediga uppdrag beroende på vilken kolumn man valt.
+		function toggleSorteringLedigaUppdrag(sorteringstyp)
+		{
+			var sorteringsordningGammal = new String();
+			var sorteringsRiktningFallande = false;
+			sorteringsordningGammal = document.getElementById("Form1").hiddenSorteringsordningLedigaUppdrag.value;
+
+			// Om vi sorterar på samma kolumn som innan....
+			if (sorteringsordningGammal == sorteringstyp)
+			{
+				//Vi har redan den här sorteringsordningen och ska byta riktning
+				if (document.getElementById("Form1").hiddenSorteringsRiktningFallandeLedigaUppdrag.value == 'True')
+					sorteringsRiktningFallande = true;
+				// Byt riktnig
+				sorteringsRiktningFallande  = !sorteringsRiktningFallande;
+			}
+			else
+			{
+				// Vi har inte haft någon explicit sortering på denna
+				// sorteringsordning innan.
+				// Default: Stigande
+				sorteringsRiktningFallande = false;
+			}
+
+			// Skicka den nya sorteringen till servern. Bind först till
+			// de gömda fälten.
+			document.getElementById("Form1").hiddenSorteringsordningLedigaUppdrag.value = sorteringstyp;
+			if (sorteringsRiktningFallande)
+			{
+				document.getElementById("Form1").hiddenSorteringsRiktningFallandeLedigaUppdrag.value = 'True';
+			}
+			else
+			{
+				document.getElementById("Form1").hiddenSorteringsRiktningFallandeLedigaUppdrag.value = 'False';
+			}
+			document.getElementById("Form1").submit();
+		}
+		</script>
+
+</head>
+<body>
+<form method="post" action="StartLedigaUppdragLista.aspx?sparaflik=1&amp;valjejflik=1" id="Form1">
+    <div class="aspNetHidden">
+        <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTg0MTQ2MjEyMA9kFgICAQ9kFgYCAw9kFghmDxYCHgdvbmNsaWNrBWJkb2N1bWVudC5sb2NhdGlvbi5ocmVmPScuLi9TdGFydC9TdGFydE1lZGRlbGFuZGVMaXN0YS5hc3B4P3NwYXJhZmxpaz0xJnZhbGplamZsaWs9MSc7IHJldHVybiBmYWxzZRYEAgEPDxYCHgtOYXZpZ2F0ZVVybAU7Li4vU3RhcnQvU3RhcnRNZWRkZWxhbmRlTGlzdGEuYXNweD9zcGFyYWZsaWs9MSZ2YWxqZWpmbGlrPTFkZAIDDw8WAh4EVGV4dAUBMGRkAgIPFgIfAAVlZG9jdW1lbnQubG9jYXRpb24uaHJlZj0nLi4vU3RhcnQvU3RhcnRMZWRpZ2FVcHBkcmFnTGlzdGEuYXNweD9zcGFyYWZsaWs9MSZ2YWxqZWpmbGlrPTEnOyByZXR1cm4gZmFsc2UWBAIBDw8WAh8BBT4uLi9TdGFydC9TdGFydExlZGlnYVVwcGRyYWdMaXN0YS5hc3B4P3NwYXJhZmxpaz0xJnZhbGplamZsaWs9MWRkAgMPDxYCHwIFATBkZAIEDxYCHwAFa2RvY3VtZW50LmxvY2F0aW9uLmhyZWY9Jy4uL1N0YXJ0L1N0YXJ0RWpCZWtyYWZ0YWRlVXBwZHJhZ0xpc3RhLmFzcHg/c3BhcmFmbGlrPTEmdmFsamVqZmxpaz0xJzsgcmV0dXJuIGZhbHNlFgQCAQ8PFgIfAQVELi4vU3RhcnQvU3RhcnRFakJla3JhZnRhZGVVcHBkcmFnTGlzdGEuYXNweD9zcGFyYWZsaWs9MSZ2YWxqZWpmbGlrPTFkZAIDDw8WAh8CBQEwZGQCBg8WAh8ABWZkb2N1bWVudC5sb2NhdGlvbi5ocmVmPScuLi9TdGFydC9TdGFydERvbWFycmFwcG9ydGVyTGlzdGEuYXNweD9zcGFyYWZsaWs9MSZ2YWxqZWpmbGlrPTEnOyByZXR1cm4gZmFsc2UWBAIBDw8WAh8BBT8uLi9TdGFydC9TdGFydERvbWFycmFwcG9ydGVyTGlzdGEuYXNweD9zcGFyYWZsaWs9MSZ2YWxqZWpmbGlrPTFkZAIDDw8WAh8CBQEwZGQCCQ8WAh4FY2xhc3MFDWFrdGl2U3RpZ2FuZGVkAhUPFgIeC18hSXRlbUNvdW50Aj8WfmYPZBYCZg8VChBOYXNqb25hbCBHMTYgw6VyGE5hc2pvbmFsIEcxNiB2w6VyIGF2ZCAwMRAyMDE1LTA1LTE2IDEyOjMwATMLMDMxMTY5OTEwMDkYQm9kw7gvR2xpbXQgRzE2IG5hc2pvbmFsHVN0csO4bXNnb2RzZXQgVEYgRzE2IG5hc2pvbmFsD05vcmRsYW5kc2hhbGxlbg5Eb21tZXJ2ZWlsZWRlclI8YSBocmVmPSIuLi9VcHBkcmFnL1VwcGRyYWdMZWRpZ3RVcHBkcmFnLmFzcHg/ZG9tYXJ1cHBkcmFnSWQ9MzU1MjI0OCI+TWVsZCBpbm48L2E+ZAIBD2QWAmYPFQoQMy4gZGl2aXNqb24gTWVubhczLiBkaXZpc2pvbiBhdmRlbGluZyAwMRAyMDE1LTA1LTE2IDE2OjAwATYLMDExMjAzMDEwNDEWTmVzb2RkZW4gTWVubiBTZW5pb3IgQRRPcHBzYWwgTWVubiBTZW5pb3IgQQ5CZXJnZXIgc3RhZGlvbgNBRDJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTMzNDM1NDUiPk1lbGQgaW5uPC9hPmQCAg9kFgJmDxUKDkd1dHRlciAxNiDDpXIgGkd1dHRlciAxNiDDpXIgMS5kaXYgYXZkIDAyEDIwMTUtMDUtMTYgMTg6MDABNgswMzExNjEwMjAyOQtSZWFkeSBHMTYgMQtTa2VpZCBHMTYuMhVHcmVzc2JhbmVuIGt1bnN0Z3Jlc3MGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zNDM4MDM4Ij5NZWxkIGlubjwvYT5kAgMPZBYCZg8VCgo4LmRpdiBNZW5uETguZGl2IE1lbm4gYXZkIDAxEDIwMTUtMDUtMTggMTg6MzABMwswMzEyMDgwMTAyMhVSb21zw6VzIE1lbm4gU2VuaW9yIEITQW5kZXMgTWVubiBTZW5pb3IgQR5CasO4csOlc2VuIGt1bnN0Z3Jlc3MgMTFlci85ZXIORG9tbWVydmVpbGVkZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTM1NTA5MTEiPk1lbGQgaW5uPC9hPmQCBA9kFgJmDxUKDkd1dHRlciAxNiDDpXIgGkd1dHRlciAxNiDDpXIgMS5kaXYgYXZkIDAxEDIwMTUtMDUtMTggMTg6MzABNgswMzExNjEwMTAyNgxIZW1pbmcgRzE2IDEQVsOlbGVyZW5nYSBHMTYgMhFIZW1pbmcga3Vuc3RncmVzcwZEb21tZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTM0MzY4NTYiPk1lbGQgaW5uPC9hPmQCBQ9kFgJmDxUKCjguZGl2IE1lbm4ROC5kaXYgTWVubiBhdmQgMDEQMjAxNS0wNS0xOCAyMDoxNQEzCzAzMTIwODAxMDIwD1JvbW1lbiBTZW5pb3IgQgxWw6VsZXJlbmdhIDMXUm9tbWVuc2xldHRhIGt1bnN0Z3Jlc3MORG9tbWVydmVpbGVkZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTM1NDk3NzQiPk1lbGQgaW5uPC9hPmQCBg9kFgJmDxUKDkd1dHRlciAxNiDDpXIgGEd1dHRlciAxNiDDpXIgaW50ZXJrcmV0cxAyMDE1LTA1LTE5IDIwOjE1ATgLMDMxMTYwMDEwNTQNU3RhYsOmayBHMTYgMQtBc2tlciBHMTYgMRVOYWRkZXJ1ZCBrdW5zdGdyZXNzIDIGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zMzkyMjgzIj5NZWxkIGlubjwvYT5kAgcPZBYCZg8VCg5HdXR0ZXIgMTkgw6VyIBpHdXR0ZXIgMTkgw6VyIDMuZGl2IGF2ZCAwMxAyMDE1LTA1LTI1IDE2OjAwATMLMDMxMTkzMDMwMTgMSGFzbHVtIEcxOSAyCFN0ZXJsaW5nEUhhc2x1bSBrdW5zdGdyZXNzBkRvbW1lclI8YSBocmVmPSIuLi9VcHBkcmFnL1VwcGRyYWdMZWRpZ3RVcHBkcmFnLmFzcHg/ZG9tYXJ1cHBkcmFnSWQ9MzQ2MjAxNyI+TWVsZCBpbm48L2E+ZAIID2QWAmYPFQoOR3V0dGVyIDE2IMOlciAbR3V0dGVyIDE2IMOlciAyLmRpdiBhdmQgIDAxEDIwMTUtMDUtMjYgMjA6MTUBNgswMzExNjIwMTAyOQtSZWFkeSBHMTYgMgxVbGxlcm4gRzE2IDMRVm9rc2VuIGt1bnN0Z3Jlc3MGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zNDU0NDUxIj5NZWxkIGlubjwvYT5kAgkPZBYCZg8VCg9NZW5uIDMzIMOlciA3ZXIVTWVubiAzMyDDpXIgN2VyIDIuZGl2EDIwMTUtMDUtMjcgMjA6MTUBNAswMzEzMzcyMTAyORRBYmlsZHPDuCBJTCBPbGQgQm95cxBMaW5kZXJ1ZCBNMzMgN2VyGEFiaWxkc8O4IGt1bnN0Zy4gOS83ZXIgQQZEb21tZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTM1NTIzNTUiPk1lbGQgaW5uPC9hPmQCCg9kFgJmDxUKDkd1dHRlciAxNSDDpXIgG0d1dHRlciAxNSDDpXIgMy5kaXYgYXZkIDAxIBAyMDE1LTA1LTI4IDIwOjE1ATcLMDMxMTUzMDUwMzUVw5h2cmV2b2xsIEhvc2xlIEcxNS0zDFVsbGVybiBHMTUgMhJKYXJteXJhIGt1bnN0Z3Jlc3MGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zNDU5NjY5Ij5NZWxkIGlubjwvYT5kAgsPZBYCZg8VCgo4LmRpdiBNZW5uETguZGl2IE1lbm4gYXZkIDAyEDIwMTUtMDUtMjkgMTg6MzABNQswMzEyMDgwMjA0MhFIYXVrZXRvIElGIE1lbm4gMhJGcmVtYWQgRmFtYWd1c3RhIDITUHJpbnNkYWwga3Vuc3RncmVzcwZEb21tZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTM0NjMzODgiPk1lbGQgaW5uPC9hPmQCDA9kFgJmDxUKEDMuIGRpdmlzam9uIE1lbm4XMy4gZGl2aXNqb24gYXZkZWxpbmcgMDMQMjAxNS0wNS0zMCAxNjowMAE5CzAxMTIwMzAzMDYzF09sZGVuYm9yZyBNZW5uIFNlbmlvciBBGkhhc2xlLUzDuHJlbiBNZW5uIFNlbmlvciBBFVTDuHJ0ZWJlcmcga3Vuc3RncmVzcwZEb21tZXLCATxzcGFuIGNsYXNzPSJhbm1hbGQiIHRpdGxlPSJNZWxkdCBpbm46IDIwMTUtMDUtMTMNCktvbW1lbnRhcjogSGFyIDMwLjUgLSA4LjYgaSByYW1tZXBsYW4gZm9yIDMgZGl2LiBEZXJzb20gZGV0IGVyIHBsYW5sYWd0IDguNiBmb3IgbWVnLCBrYW4gamVnIGdqZXJuZSB0YSBldCBla3N0cmEgb3BwZHJhZyAzMC41LiI+TWVsZHQgaW5uPC9hPjogZAIND2QWAmYPFQoQMy4gZGl2aXNqb24gTWVubhczLiBkaXZpc2pvbiBhdmRlbGluZyAwMxAyMDE1LTA1LTMwIDE2OjAwATkLMDExMjAzMDMwNjMXT2xkZW5ib3JnIE1lbm4gU2VuaW9yIEEaSGFzbGUtTMO4cmVuIE1lbm4gU2VuaW9yIEEVVMO4cnRlYmVyZyBrdW5zdGdyZXNzA0FEMVI8YSBocmVmPSIuLi9VcHBkcmFnL1VwcGRyYWdMZWRpZ3RVcHBkcmFnLmFzcHg/ZG9tYXJ1cHBkcmFnSWQ9MzM0NTc5NSI+TWVsZCBpbm48L2E+ZAIOD2QWAmYPFQoQMy4gZGl2aXNqb24gTWVubhczLiBkaXZpc2pvbiBhdmRlbGluZyAwMxAyMDE1LTA1LTMwIDE2OjAwATkLMDExMjAzMDMwNjMXT2xkZW5ib3JnIE1lbm4gU2VuaW9yIEEaSGFzbGUtTMO4cmVuIE1lbm4gU2VuaW9yIEEVVMO4cnRlYmVyZyBrdW5zdGdyZXNzA0FEMlI8YSBocmVmPSIuLi9VcHBkcmFnL1VwcGRyYWdMZWRpZ3RVcHBkcmFnLmFzcHg/ZG9tYXJ1cHBkcmFnSWQ9MzM0NTc5NiI+TWVsZCBpbm48L2E+ZAIPD2QWAmYPFQoOR3V0dGVyIDE5IMOlciAaR3V0dGVyIDE5IMOlciAzLmRpdiBhdmQgMDEQMjAxNS0wNS0zMSAyMDoxNQE0CzAzMTE5MzAxMDI3CUh1ayBHMTkgMRJMaW5kZWJlcmcgSnVuaW9yIDIQQmrDuGxzZW5mZWx0ZXQgMQZEb21tZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTM0NjA5NDIiPk1lbGQgaW5uPC9hPmQCEA9kFgJmDxUKDkd1dHRlciAxMyDDpXIgGkd1dHRlciAxMyDDpXIgMi5kaXYgYXZkIDA2EDIwMTUtMDYtMDIgMTg6NDUBOAswMzExMzIwNjA0MA1Ta2kgRzEzIDIgTWl4EktvbGJvdG4gRzEzLjMgcsO4ZBhTa2kga3Vuc3RncmVzcyAyIDkvN2VyIEEGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zNTE3MjUxIj5NZWxkIGlubjwvYT5kAhEPZBYCZg8VCg5HdXR0ZXIgMTYgw6VyIBtHdXR0ZXIgMTYgw6VyIDIuZGl2IGF2ZCAgMDEQMjAxNS0wNi0wMiAxODo0NQE3CzAzMTE2MjAxMDM1CUx5biBHMTYgMgxVbGxlcm4gRzE2IDMUS3JpbmdzasOlIGt1bnN0Z3Jlc3MGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zNDU0NDY5Ij5NZWxkIGlubjwvYT5kAhIPZBYCZg8VCg5HdXR0ZXIgMTMgw6VyIBpHdXR0ZXIgMTMgw6VyIDIuZGl2IGF2ZCAwMxAyMDE1LTA2LTAyIDIwOjA1ATYLMDMxMTMyMDMwMjQVw5h2cmV2b2xsIEhvc2xlIEcxMy0yB0h1ayBHMDMaSmFybXlyYSBrdW5zdGdyZXNzIDkvN2VyIEIGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zNTE3OTEyIj5NZWxkIGlubjwvYT5kAhMPZBYCZg8VCg1HdXR0ZXIgMTQgw6VyGkd1dHRlciAxNCDDpXIgMi5kaXYgYXZkIDA1EDIwMTUtMDYtMDMgMTg6NDUBOAswMzExNDIwNTAzOAxTaWdnZXJ1ZCBHMTQNSG9sbWxpYSBHMTMtMRJMYW5naHVzIGt1bnN0Z3Jlc3MGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zNTEzOTY3Ij5NZWxkIGlubjwvYT5kAhQPZBYCZg8VChBOYXNqb25hbCBHMTYgw6VyGE5hc2pvbmFsIEcxNiB2w6VyIGF2ZCAwMhAyMDE1LTA2LTA1IDE2OjAwATYLMDMxMTY5OTIwMjESU3RhcnQgRzE2IG5hc2pvbmFsFUFhbGVzdW5kIEcxNiBuYXNqb25hbBZTcGFyZWJhbmtlbiBTw7hyIEFyZW5hA0FEMVI8YSBocmVmPSIuLi9VcHBkcmFnL1VwcGRyYWdMZWRpZ3RVcHBkcmFnLmFzcHg/ZG9tYXJ1cHBkcmFnSWQ9MzU1MDEyMiI+TWVsZCBpbm48L2E+ZAIVD2QWAmYPFQoQTmFzam9uYWwgRzE2IMOlchhOYXNqb25hbCBHMTYgdsOlciBhdmQgMDIQMjAxNS0wNi0wNSAxNjowMAE2CzAzMTE2OTkyMDIxElN0YXJ0IEcxNiBuYXNqb25hbBVBYWxlc3VuZCBHMTYgbmFzam9uYWwWU3BhcmViYW5rZW4gU8O4ciBBcmVuYQNBRDJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTM1NTAxMjMiPk1lbGQgaW5uPC9hPmQCFg9kFgJmDxUKCjguZGl2IE1lbm4ROC5kaXYgTWVubiBhdmQgMDMQMjAxNS0wNi0wNSAxODozMAE3CzAzMTIwODAzMDMyG0ZyaWdnIE9zbG8gRksgTWVubiBTZW5pb3IgNBZLb3Jzdm9sbCBNZW5uIFNlbmlvciBEEkZyb2duZXIga3Vuc3RncmVzcw5Eb21tZXJ2ZWlsZWRlclI8YSBocmVmPSIuLi9VcHBkcmFnL1VwcGRyYWdMZWRpZ3RVcHBkcmFnLmFzcHg/ZG9tYXJ1cHBkcmFnSWQ9MzU1MTg5MCI+TWVsZCBpbm48L2E+ZAIXD2QWAmYPFQoOR3V0dGVyIDE2IMOlciAaR3V0dGVyIDE2IMOlciAxLmRpdiBhdmQgMDEQMjAxNS0wNi0wNSAxODozMAE4CzAzMTE2MTAxMDM4CkLDuGxlciBHMTYZQsOmcnVtcyBWZXJrIEhhdWdlciBHMTYtMRVIYXJhbMO4a2thIGt1bnN0Z3Jlc3MORG9tbWVydmVpbGVkZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTM1NTE4OTIiPk1lbGQgaW5uPC9hPmQCGA9kFgJmDxUKEDMuIGRpdmlzam9uIE1lbm4XMy4gZGl2aXNqb24gYXZkZWxpbmcgMDMQMjAxNS0wNi0wNiAxNjowMAIxMAswMTEyMDMwMzA2NxJHcmVpIE1lbm4gU2VuaW9yIEEYVmFsZHJlcyBGSyBNZW5uIFNlbmlvciBBD0dyZWkga3Vuc3RncmVzcwNBRDJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTMzNDU4MDgiPk1lbGQgaW5uPC9hPmQCGQ9kFgJmDxUKDkd1dHRlciAxOSDDpXIgGkd1dHRlciAxOSDDpXIgMy5kaXYgYXZkIDAzEDIwMTUtMDYtMDcgMTg6MjABNQswMzExOTMwMzAzORFSZWFkeSBHMTkgUmVrcnV0dAxWb2xsZW4gRzE5IDERVm9rc2VuIGt1bnN0Z3Jlc3MORG9tbWVydmVpbGVkZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTM1NTE4ODkiPk1lbGQgaW5uPC9hPmQCGg9kFgJmDxUKC0t2aW5uZXIgN2VyEUt2aW5uZXIgN2VyIDIuZGl2EDIwMTUtMDYtMDggMTg6MDABNwswMzIyMDcyMTA1Nh9CSSBBdGhsZXRpY3MgS3Zpbm5lciBTZW5pb3IgN2VyGUZyaWdnIE9zbG8gRksgS3Zpbm5lciA3ZXIUQmrDuGxzZW5mZWx0ZXQgN2VyIEEGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zNTQ5NDAxIj5NZWxkIGlubjwvYT5kAhsPZBYCZg8VCg1KZW50ZXIgMTMgw6VyG0plbnRlciAxMyDDpXIgMS5kaXYgYXZkIDAyIBAyMDE1LTA2LTA5IDE4OjQ1ATgLMDMyMTMxMDIwMzcMTmVzb2RkZW4gSjEzDEhlbWluZyBKMTMgMQhKYWVyIDdlcgZEb21tZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTM1MjE1NTAiPk1lbGQgaW5uPC9hPmQCHA9kFgJmDxUKDkplbnRlciAxNiDDpXIgDkplbnRlciAxNiDDpXIgEDIwMTUtMDYtMDkgMjA6MTUBOAswMzIxNjIwMTA1NQ1PcHBlZ8OlcmQgSjE2C1NrZWlkIEoxNi4xE8OYc3RyZSBHcmV2ZXJ1ZCBrZy4GRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zNDk1NjIxIj5NZWxkIGlubjwvYT5kAh0PZBYCZg8VCg9NZW5uIDMzIMOlciA3ZXIVTWVubiAzMyDDpXIgN2VyIDIuZGl2EDIwMTUtMDYtMTAgMjA6MTUBNgswMzEzMzcyMTA0NBRBYmlsZHPDuCBJTCBPbGQgQm95cw9WZWl0dmV0IE9sZEJveXMYQWJpbGRzw7gga3Vuc3RnLiA5LzdlciBBBkRvbW1lclI8YSBocmVmPSIuLi9VcHBkcmFnL1VwcGRyYWdMZWRpZ3RVcHBkcmFnLmFzcHg/ZG9tYXJ1cHBkcmFnSWQ9MzU1MjM1NiI+TWVsZCBpbm48L2E+ZAIeD2QWAmYPFQoOR3V0dGVyIDE1IMOlciAbR3V0dGVyIDE1IMOlciAzLmRpdiBhdmQgMDEgEDIwMTUtMDYtMTEgMTg6NDUBOQswMzExNTMwNTA0NApKYXJkYXIgRzE1FExvbW1lZGFsZW5zIElMIEcxNSAyF0Jqw7hybmVnw6VyZCBrdW5zdGdyZXNzBkRvbW1lclI8YSBocmVmPSIuLi9VcHBkcmFnL1VwcGRyYWdMZWRpZ3RVcHBkcmFnLmFzcHg/ZG9tYXJ1cHBkcmFnSWQ9MzQ1OTY5NiI+TWVsZCBpbm48L2E+ZAIfD2QWAmYPFQoOR3V0dGVyIDE2IMOlciAaR3V0dGVyIDE2IMOlciAxLmRpdiBhdmQgMDEQMjAxNS0wNi0xMyAxNTowMAE5CzAzMTE2MTAxMDQzDEZvc3N1bSBHMTYgMQxVbGxlcm4gRzE2IDIRRm9zc3VtIGt1bnN0Z3Jlc3MORG9tbWVydmVpbGVkZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTM1NTE4OTMiPk1lbGQgaW5uPC9hPmQCIA9kFgJmDxUKDkd1dHRlciAxNiDDpXIgGkd1dHRlciAxNiDDpXIgMS5kaXYgYXZkIDAyEDIwMTUtMDYtMTMgMTU6MDABOQswMzExNjEwMjA0Mg1Lb2xib3RuIEcxNiAxC1JlYWR5IEcxNiAxE1NvZmllbXlyIGt1bnN0Z3Jlc3MGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zNDM4MDc3Ij5NZWxkIGlubjwvYT5kAiEPZBYCZg8VCg5HdXR0ZXIgMTMgw6VyIBpHdXR0ZXIgMTMgw6VyIDEuZGl2IGF2ZCAwMRAyMDE1LTA2LTE0IDE4OjQwATkLMDMxMTMxMDEwNDEZQsOmcnVtcyBWZXJrIEhhdWdlciBHMTMtMQtSZWFkeSBHMTMgMRpHb21tZXJ1ZCBrdW5zdGcuIDllci83ZXIgQQZEb21tZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTM1MTQ4OTgiPk1lbGQgaW5uPC9hPmQCIg9kFgJmDxUKEDMuIGRpdmlzam9uIE1lbm4XMy4gZGl2aXNqb24gYXZkZWxpbmcgMDEQMjAxNS0wNi0xNSAxODozMAIxMQswMTEyMDMwMTA3NBVUcm9zdmlrIE1lbm4gU2VuaW9yIEEZRnJlZHJpa3N0YWQgTWVubiBTZW5pb3IgQgxUcm9zdmlrYmFuZW4GRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRy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Z2VyIEpyLTIIU3RlcmxpbmcOUnVkIGt1bnN0Z3Jlc3MGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zNDYyMTE5Ij5NZWxkIGlubjwvYT5kAjMPZBYCZg8VCg1HdXR0ZXIgMTcgw6VyDkd1dHRlciAxNyDDpXIgEDIwMTUtMDYtMjIgMjA6MTUBOQswMzExNzEwMTA0Mw1IYXNsdW0gR185OCAxEkxhbWJlcnRzZXRlciBHMTYgMRFIYXNsdW0ga3Vuc3RncmVzcwZEb21tZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTM0NTM5MTQiPk1lbGQgaW5uPC9hPmQCNA9kFgJmDxUKDUd1dHRlciAxNyDDpXIOR3V0dGVyIDE3IMOlciAQMjAxNS0wNi0yNCAyMDoxNQE5CzAzMTE3MTAxMDQxD0LDpmtrZWxhZ2V0IEcxNwlTa2VpZCBHMTcURWtlYmVyZyBrdW5zdGdyZXNzIDIGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zNDUzOTA4Ij5NZWxkIGlubjwvYT5kAjUPZBYCZg8VCg9NZW5uIDMzIMOlciA3ZXIVTWVubiAzMyDDpXIgN2VyIDIuZGl2EDIwMTUtMDYtMjQgMjA6MTUBOAswMzEzMzcyMTA1ORRBYmlsZHPDuCBJTCBPbGQgQm95cxVBbG5hIE1lbm4gU2VuaW9yIDcnZXIYQWJpbGRzw7gga3Vuc3RnLiA5LzdlciBBBkRvbW1lclI8YSBocmVmPSIuLi9VcHBkcmFnL1VwcGRyYWdMZWRpZ3RVcHBkcmFnLmFzcHg/ZG9tYXJ1cHBkcmFnSWQ9MzU1MjM1OCI+TWVsZCBpbm48L2E+ZAI2D2QWAmYPFQoQMy4gZGl2aXNqb24gTWVubhczLiBkaXZpc2pvbiBhdmRlbGluZyAwMRAyMDE1LTA2LTI3IDE2OjAwAjEzCzAxMTIwMzAxMDg5DUJvcmdhciBNRU4gMDEZRnJlZHJpa3N0YWQgTWVubiBTZW5pb3IgQgtCb3JnYXJiYW5lbgZEb21tZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTMzNDM2ODciPk1lbGQgaW5uPC9hPmQCNw9kFgJmDxUKCjMuZGl2IE1lbm4RMy5kaXYgTWVubiBhdmQgMDQQMjAxNS0wNi0zMCAxOTowMAIxMgswNjEyMDMwNDA4MhtCaXJrZWJlaW5lcmVuIE1lbm4gU2VuaW9yIEEbU3Ryw7htc2dvZHNldCBNZW5uIFNlbmlvciBDE8OFcmJvZ2VuIEt1bnN0Z3Jlc3MGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zMzQ5MDE2Ij5NZWxkIGlubjwvYT5kAjgPZBYCZg8VChAzLiBkaXZpc2pvbiBNZW5uFzMuIGRpdmlzam9uIGF2ZGVsaW5nIDAxEDIwMTUtMDgtMDMgMTg6MzACMTQLMDExMjAzMDEwOTYVVHJvc3ZpayBNZW5uIFNlbmlvciBBE1NhcnBzYm9yZyAwOCBNRU4gMDIMVHJvc3Zpa2JhbmVuBkRvbW1lclI8YSBocmVmPSIuLi9VcHBkcmFnL1VwcGRyYWdMZWRpZ3RVcHBkcmFnLmFzcHg/ZG9tYXJ1cHBkcmFnSWQ9MzM0MzcwOCI+TWVsZCBpbm48L2E+ZAI5D2QWAmYPFQoQMy4gZGl2aXNqb24gTWVubhczLiBkaXZpc2pvbiBhdmRlbGluZyAwMRAyMDE1LTA4LTAzIDE4OjMwAjE0CzAxMTIwMzAxMDk4EMOYc3RzaWRlbiBNRU4gMDERS3LDpWtlcsO4eSBNRU4gMDEWw5hzdHNpZGVuIGlkcmV0dHNwbGFzcwZEb21tZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTMzNDM3MTQiPk1lbGQgaW5uPC9hPmQCOg9kFgJmDxUKEDMuIGRpdmlzam9uIE1lbm4XMy4gZGl2aXNqb24gYXZkZWxpbmcgMDEQMjAxNS0wOC0xMCAxOTowMAIxNQswMTEyMDMwMTEwNRFLcsOla2Vyw7h5IE1FTiAwMRNGb2xsbyBNZW5uIFNlbmlvciBCEEtyw6VrZXLDuHkgc3QgS0cGRG9tbWVyUjxhIGhyZWY9Ii4uL1VwcGRyYWcvVXBwZHJhZ0xlZGlndFVwcGRyYWcuYXNweD9kb21hcnVwcGRyYWdJZD0zMzQzNzM1Ij5NZWxkIGlubjwvYT5kAjsPZBYCZg8VChAzLiBkaXZpc2pvbiBNZW5uFzMuIGRpdmlzam9uIGF2ZGVsaW5nIDAxEDIwMTUtMDgtMTAgMTk6MzACMTULMDExMjAzMDEwOTkURHLDuGJhay1Gcm9nbiBNRU4gMDEbU2tlaWQgRm90YmFsbCBNZW5uIFNlbmlvciBCEVNlaWVyc3RlbiBzdGFkaW9uBkRvbW1lclI8YSBocmVmPSIuLi9VcHBkcmFnL1VwcGRyYWdMZWRpZ3RVcHBkcmFnLmFzcHg/ZG9tYXJ1cHBkcmFnSWQ9MzM0MzcxNyI+TWVsZCBpbm48L2E+ZAI8D2QWAmYPFQoQMy4gZGl2aXNqb24gTWVubhczLiBkaXZpc2pvbiBhdmRlbGluZyAwMRAyMDE1LTA4LTEwIDE5OjMwAjE1CzAxMTIwMzAxMTAxE1NhcnBzYm9yZyAwOCBNRU4gMDISR3JvcnVkIElMIFNlbmlvciBCD1NhcnBzYm9yZyBzdCBLRwZEb21tZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTMzNDM3MjMiPk1lbGQgaW5uPC9hPmQCPQ9kFgJmDxUKEDMuIGRpdmlzam9uIE1lbm4XMy4gZGl2aXNqb24gYXZkZWxpbmcgMDEQMjAxNS0wOC0xNSAxNjowMAIxNgswMTEyMDMwMTEwNhVUcm9zdmlrIE1lbm4gU2VuaW9yIEEURHLDuGJhay1Gcm9nbiBNRU4gMDEMVHJvc3Zpa2JhbmVuBkRvbW1lclI8YSBocmVmPSIuLi9VcHBkcmFnL1VwcGRyYWdMZWRpZ3RVcHBkcmFnLmFzcHg/ZG9tYXJ1cHBkcmFnSWQ9MzM0MzczOCI+TWVsZCBpbm48L2E+ZAI+D2QWAmYPFQoQMy4gZGl2aXNqb24gTWVubhczLiBkaXZpc2pvbiBhdmRlbGluZyAwMRAyMDE1LTA4LTE3IDE5OjAwAjE2CzAxMTIwMzAxMTEyGUZyZWRyaWtzdGFkIE1lbm4gU2VuaW9yIEIRS3LDpWtlcsO4eSBNRU4gMDETRnJlZHJpa3N0YWQgc3RhZGlvbgZEb21tZXJSPGEgaHJlZj0iLi4vVXBwZHJhZy9VcHBkcmFnTGVkaWd0VXBwZHJhZy5hc3B4P2RvbWFydXBwZHJhZ0lkPTMzNDM3NTYiPk1lbGQgaW5uPC9hPmRkFciIOZoYrR7FQgoThYCMl1GMV1g=" />
+    </div>
+
+    <script language="javascript" type="text/javascript" src="../JS/tabSelect.js"></script>
+    <div class="aspNetHidden">
+
+        <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="A74A0BF6" />
+    </div>
+    <div id="divPageContainer" class="divPageContainerClass">
+        <div id="divMain" class="divMainClass">
+            <div id="divError">
+                <span id="lblError"></span>
+            </div>
+            <div id="divHorisontalMenu">
+                <div id="divHorisontalMenuContainer" class="divHorisontalMenuContainerClass"><div id="StartMeny1_divStartMeddelandenTab" class="tabAktiv120" onclick="document.location.href=&#39;../Start/StartMeddelandeLista.aspx?sparaflik=1&amp;valjejflik=1&#39;; return false">
+                    <a id="StartMeny1_linkStartMeddelanden" class="tabMenyLank" href="StartMeddelandeLista.aspx?sparaflik=1&amp;valjejflik=1">Meldinger</a> <!--(<span id="StartMeny1_lblAntalMeddelande">0</span>)--></div>
+                    <div id="StartMeny1_divStartLedigaUppdragTab" class="tabInaktiv140" onclick="document.location.href=&#39;../Start/StartLedigaUppdragLista.aspx?sparaflik=1&amp;valjejflik=1&#39;; return false">
+                        <a id="StartMeny1_linkStartLedigaUppdrag" class="tabMenyLank" href="StartLedigaUppdragLista.aspx?sparaflik=1&amp;valjejflik=1">Ledige oppdrag</a> <!--(<span id="StartMeny1_lblAntalLedigaUppdrag">0</span>)--></div>
+                    <div id="StartMeny1_divStartEjBekraftadeUppdragTab" class="tabInaktiv180" onclick="document.location.href=&#39;../Start/StartEjBekraftadeUppdragLista.aspx?sparaflik=1&amp;valjejflik=1&#39;; return false">
+                        <a id="StartMeny1_linkStartEjBekraftadeUppdrag" class="tabMenyLank" href="StartEjBekraftadeUppdragLista.aspx?sparaflik=1&amp;valjejflik=1">Ubekreftede oppdrag</a> <!--(<span id="StartMeny1_lblAntalEjBekraftadeUppdrag">0</span>)--></div>
+                    <div id="StartMeny1_divStartDomarrapporterTab" class="tabInaktiv200" onclick="document.location.href=&#39;../Start/StartDomarrapporterLista.aspx?sparaflik=1&amp;valjejflik=1&#39;; return false">
+                        <a id="StartMeny1_linkStartDomarrapporter" class="tabMenyLank" href="StartDomarrapporterLista.aspx?sparaflik=1&amp;valjejflik=1">Manglende kamprapporter</a> <!--(<span id="StartMeny1_lblAntalDomarrapporter">0</span>)--></div>
+                    <div class="menySlut"></div></div>
+            </div>
+            <div id="divMainContent" class="divMainContentClass">
+                <table class="fogisInfoTable">
+                    <tr>
+                        <th id="thTavlingskategoriLedigaUppdrag" class="inaktiv" onclick="toggleSorteringLedigaUppdrag(&#39;TavlingskategoriLedigaUppdrag&#39;); return false">
+                            Turneringskategori</th>
+
+                        <th id="thTavlingLedigaUppdrag" class="inaktiv" onclick="toggleSorteringLedigaUppdrag(&#39;TavlingLedigaUppdrag&#39;); return false">
+                            Turnering</th>
+
+                        <th id="thTidLedigaUppdrag" class="aktivStigande" onclick="toggleSorteringLedigaUppdrag(&#39;TidLedigaUppdrag&#39;); return false">
+                            Tid</th>
+
+                        <th id="thOmgangLedigaUppdrag" class="inaktiv" onclick="toggleSorteringLedigaUppdrag(&#39;OmgangLedigaUppdrag&#39;); return false">
+                            Run</th>
+
+                        <th id="thMatchnrLedigaUppdrag" class="inaktiv" onclick="toggleSorteringLedigaUppdrag(&#39;MatchnrLedigaUppdrag&#39;); return false">
+                            Kampnr.</th>
+
+                        <th id="thMatchLedigaUppdrag" class="inaktiv" onclick="toggleSorteringLedigaUppdrag(&#39;MatchLedigaUppdrag&#39;); return false">
+                            Kamp</th>
+
+                        <th id="thAnlaggningLedigaUppdrag" class="inaktiv" onclick="toggleSorteringLedigaUppdrag(&#39;AnlaggningLedigaUppdrag&#39;); return false">
+                            Anlegg</th>
+
+                        <th id="thTypLedigaUppdrag" class="inaktiv" onclick="toggleSorteringLedigaUppdrag(&#39;TypLedigaUppdrag&#39;); return false">
+                            Type</th>
+
+                        <th class="inaktivEjKlickbar"></th>
+                    </tr>
+
+                    <tr>
+                        <td>Nasjonal G16 år</td>
+                        <td>Nasjonal G16 vår avd 01</td>
+                        <td>2015-05-16 12:30</td>
+                        <td class="hogerJusterad">3</td>
+                        <td>03116991009</td>
+                        <td>Bodø/Glimt G16 nasjonal&nbsp;-&nbsp;Strømsgodset TF G16 nasjonal</td>
+                        <td>Nordlandshallen</td>
+                        <td>Dommerveileder</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3552248">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 01</td>
+                        <td>2015-05-16 16:00</td>
+                        <td class="hogerJusterad">6</td>
+                        <td>01120301041</td>
+                        <td>Nesodden Menn Senior A&nbsp;-&nbsp;Oppsal Menn Senior A</td>
+                        <td>Berger stadion</td>
+                        <td>AD2</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3343545">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 16 år </td>
+                        <td>Gutter 16 år 1.div avd 02</td>
+                        <td>2015-05-16 18:00</td>
+                        <td class="hogerJusterad">6</td>
+                        <td>03116102029</td>
+                        <td>Ready G16 1&nbsp;-&nbsp;Skeid G16.2</td>
+                        <td>Gressbanen kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3438038">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>8.div Menn</td>
+                        <td>8.div Menn avd 01</td>
+                        <td>2015-05-18 18:30</td>
+                        <td class="hogerJusterad">3</td>
+                        <td>03120801022</td>
+                        <td>Romsås Menn Senior B&nbsp;-&nbsp;Andes Menn Senior A</td>
+                        <td>Bjøråsen kunstgress 11er/9er</td>
+                        <td>Dommerveileder</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3550911">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 16 år </td>
+                        <td>Gutter 16 år 1.div avd 01</td>
+                        <td>2015-05-18 18:30</td>
+                        <td class="hogerJusterad">6</td>
+                        <td>03116101026</td>
+                        <td>Heming G16 1&nbsp;-&nbsp;Vålerenga G16 2</td>
+                        <td>Heming kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3436856">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>8.div Menn</td>
+                        <td>8.div Menn avd 01</td>
+                        <td>2015-05-18 20:15</td>
+                        <td class="hogerJusterad">3</td>
+                        <td>03120801020</td>
+                        <td>Rommen Senior B&nbsp;-&nbsp;Vålerenga 3</td>
+                        <td>Rommensletta kunstgress</td>
+                        <td>Dommerveileder</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3549774">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 16 år </td>
+                        <td>Gutter 16 år interkrets</td>
+                        <td>2015-05-19 20:15</td>
+                        <td class="hogerJusterad">8</td>
+                        <td>03116001054</td>
+                        <td>Stabæk G16 1&nbsp;-&nbsp;Asker G16 1</td>
+                        <td>Nadderud kunstgress 2</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3392283">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Gutter 19 år </td>
+                        <td>Gutter 19 år 3.div avd 03</td>
+                        <td>2015-05-25 16:00</td>
+                        <td class="hogerJusterad">3</td>
+                        <td>03119303018</td>
+                        <td>Haslum G19 2&nbsp;-&nbsp;Sterling</td>
+                        <td>Haslum kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3462017">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 16 år </td>
+                        <td>Gutter 16 år 2.div avd  01</td>
+                        <td>2015-05-26 20:15</td>
+                        <td class="hogerJusterad">6</td>
+                        <td>03116201029</td>
+                        <td>Ready G16 2&nbsp;-&nbsp;Ullern G16 3</td>
+                        <td>Voksen kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3454451">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Menn 33 år 7er</td>
+                        <td>Menn 33 år 7er 2.div</td>
+                        <td>2015-05-27 20:15</td>
+                        <td class="hogerJusterad">4</td>
+                        <td>03133721029</td>
+                        <td>Abildsø IL Old Boys&nbsp;-&nbsp;Linderud M33 7er</td>
+                        <td>Abildsø kunstg. 9/7er A</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3552355">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 15 år </td>
+                        <td>Gutter 15 år 3.div avd 01 </td>
+                        <td>2015-05-28 20:15</td>
+                        <td class="hogerJusterad">7</td>
+                        <td>03115305035</td>
+                        <td>Øvrevoll Hosle G15-3&nbsp;-&nbsp;Ullern G15 2</td>
+                        <td>Jarmyra kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3459669">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>8.div Menn</td>
+                        <td>8.div Menn avd 02</td>
+                        <td>2015-05-29 18:30</td>
+                        <td class="hogerJusterad">5</td>
+                        <td>03120802042</td>
+                        <td>Hauketo IF Menn 2&nbsp;-&nbsp;Fremad Famagusta 2</td>
+                        <td>Prinsdal kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3463388">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 03</td>
+                        <td>2015-05-30 16:00</td>
+                        <td class="hogerJusterad">9</td>
+                        <td>01120303063</td>
+                        <td>Oldenborg Menn Senior A&nbsp;-&nbsp;Hasle-Løren Menn Senior A</td>
+                        <td>Tørteberg kunstgress</td>
+                        <td>Dommer</td>
+                        <td><span class="anmald" title="Meldt inn: 2015-05-13
+Kommentar: Har 30.5 - 8.6 i rammeplan for 3 div. Dersom det er planlagt 8.6 for meg, kan jeg gjerne ta et ekstra oppdrag 30.5.">Meldt inn</a>: </td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 03</td>
+                        <td>2015-05-30 16:00</td>
+                        <td class="hogerJusterad">9</td>
+                        <td>01120303063</td>
+                        <td>Oldenborg Menn Senior A&nbsp;-&nbsp;Hasle-Løren Menn Senior A</td>
+                        <td>Tørteberg kunstgress</td>
+                        <td>AD1</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3345795">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 03</td>
+                        <td>2015-05-30 16:00</td>
+                        <td class="hogerJusterad">9</td>
+                        <td>01120303063</td>
+                        <td>Oldenborg Menn Senior A&nbsp;-&nbsp;Hasle-Løren Menn Senior A</td>
+                        <td>Tørteberg kunstgress</td>
+                        <td>AD2</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3345796">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Gutter 19 år </td>
+                        <td>Gutter 19 år 3.div avd 01</td>
+                        <td>2015-05-31 20:15</td>
+                        <td class="hogerJusterad">4</td>
+                        <td>03119301027</td>
+                        <td>Huk G19 1&nbsp;-&nbsp;Lindeberg Junior 2</td>
+                        <td>Bjølsenfeltet 1</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3460942">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 13 år </td>
+                        <td>Gutter 13 år 2.div avd 06</td>
+                        <td>2015-06-02 18:45</td>
+                        <td class="hogerJusterad">8</td>
+                        <td>03113206040</td>
+                        <td>Ski G13 2 Mix&nbsp;-&nbsp;Kolbotn G13.3 rød</td>
+                        <td>Ski kunstgress 2 9/7er A</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3517251">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Gutter 16 år </td>
+                        <td>Gutter 16 år 2.div avd  01</td>
+                        <td>2015-06-02 18:45</td>
+                        <td class="hogerJusterad">7</td>
+                        <td>03116201035</td>
+                        <td>Lyn G16 2&nbsp;-&nbsp;Ullern G16 3</td>
+                        <td>Kringsjå kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3454469">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 13 år </td>
+                        <td>Gutter 13 år 2.div avd 03</td>
+                        <td>2015-06-02 20:05</td>
+                        <td class="hogerJusterad">6</td>
+                        <td>03113203024</td>
+                        <td>Øvrevoll Hosle G13-2&nbsp;-&nbsp;Huk G03</td>
+                        <td>Jarmyra kunstgress 9/7er B</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3517912">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Gutter 14 år</td>
+                        <td>Gutter 14 år 2.div avd 05</td>
+                        <td>2015-06-03 18:45</td>
+                        <td class="hogerJusterad">8</td>
+                        <td>03114205038</td>
+                        <td>Siggerud G14&nbsp;-&nbsp;Holmlia G13-1</td>
+                        <td>Langhus kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3513967">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Nasjonal G16 år</td>
+                        <td>Nasjonal G16 vår avd 02</td>
+                        <td>2015-06-05 16:00</td>
+                        <td class="hogerJusterad">6</td>
+                        <td>03116992021</td>
+                        <td>Start G16 nasjonal&nbsp;-&nbsp;Aalesund G16 nasjonal</td>
+                        <td>Sparebanken Sør Arena</td>
+                        <td>AD1</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3550122">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Nasjonal G16 år</td>
+                        <td>Nasjonal G16 vår avd 02</td>
+                        <td>2015-06-05 16:00</td>
+                        <td class="hogerJusterad">6</td>
+                        <td>03116992021</td>
+                        <td>Start G16 nasjonal&nbsp;-&nbsp;Aalesund G16 nasjonal</td>
+                        <td>Sparebanken Sør Arena</td>
+                        <td>AD2</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3550123">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>8.div Menn</td>
+                        <td>8.div Menn avd 03</td>
+                        <td>2015-06-05 18:30</td>
+                        <td class="hogerJusterad">7</td>
+                        <td>03120803032</td>
+                        <td>Frigg Oslo FK Menn Senior 4&nbsp;-&nbsp;Korsvoll Menn Senior D</td>
+                        <td>Frogner kunstgress</td>
+                        <td>Dommerveileder</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3551890">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Gutter 16 år </td>
+                        <td>Gutter 16 år 1.div avd 01</td>
+                        <td>2015-06-05 18:30</td>
+                        <td class="hogerJusterad">8</td>
+                        <td>03116101038</td>
+                        <td>Bøler G16&nbsp;-&nbsp;Bærums Verk Hauger G16-1</td>
+                        <td>Haraløkka kunstgress</td>
+                        <td>Dommerveileder</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3551892">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 03</td>
+                        <td>2015-06-06 16:00</td>
+                        <td class="hogerJusterad">10</td>
+                        <td>01120303067</td>
+                        <td>Grei Menn Senior A&nbsp;-&nbsp;Valdres FK Menn Senior A</td>
+                        <td>Grei kunstgress</td>
+                        <td>AD2</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3345808">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Gutter 19 år </td>
+                        <td>Gutter 19 år 3.div avd 03</td>
+                        <td>2015-06-07 18:20</td>
+                        <td class="hogerJusterad">5</td>
+                        <td>03119303039</td>
+                        <td>Ready G19 Rekrutt&nbsp;-&nbsp;Vollen G19 1</td>
+                        <td>Voksen kunstgress</td>
+                        <td>Dommerveileder</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3551889">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Kvinner 7er</td>
+                        <td>Kvinner 7er 2.div</td>
+                        <td>2015-06-08 18:00</td>
+                        <td class="hogerJusterad">7</td>
+                        <td>03220721056</td>
+                        <td>BI Athletics Kvinner Senior 7er&nbsp;-&nbsp;Frigg Oslo FK Kvinner 7er</td>
+                        <td>Bjølsenfeltet 7er A</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3549401">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Jenter 13 år</td>
+                        <td>Jenter 13 år 1.div avd 02 </td>
+                        <td>2015-06-09 18:45</td>
+                        <td class="hogerJusterad">8</td>
+                        <td>03213102037</td>
+                        <td>Nesodden J13&nbsp;-&nbsp;Heming J13 1</td>
+                        <td>Jaer 7er</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3521550">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Jenter 16 år </td>
+                        <td>Jenter 16 år </td>
+                        <td>2015-06-09 20:15</td>
+                        <td class="hogerJusterad">8</td>
+                        <td>03216201055</td>
+                        <td>Oppegård J16&nbsp;-&nbsp;Skeid J16.1</td>
+                        <td>Østre Greverud kg.</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3495621">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Menn 33 år 7er</td>
+                        <td>Menn 33 år 7er 2.div</td>
+                        <td>2015-06-10 20:15</td>
+                        <td class="hogerJusterad">6</td>
+                        <td>03133721044</td>
+                        <td>Abildsø IL Old Boys&nbsp;-&nbsp;Veitvet OldBoys</td>
+                        <td>Abildsø kunstg. 9/7er A</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3552356">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 15 år </td>
+                        <td>Gutter 15 år 3.div avd 01 </td>
+                        <td>2015-06-11 18:45</td>
+                        <td class="hogerJusterad">9</td>
+                        <td>03115305044</td>
+                        <td>Jardar G15&nbsp;-&nbsp;Lommedalens IL G15 2</td>
+                        <td>Bjørnegård kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3459696">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Gutter 16 år </td>
+                        <td>Gutter 16 år 1.div avd 01</td>
+                        <td>2015-06-13 15:00</td>
+                        <td class="hogerJusterad">9</td>
+                        <td>03116101043</td>
+                        <td>Fossum G16 1&nbsp;-&nbsp;Ullern G16 2</td>
+                        <td>Fossum kunstgress</td>
+                        <td>Dommerveileder</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3551893">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 16 år </td>
+                        <td>Gutter 16 år 1.div avd 02</td>
+                        <td>2015-06-13 15:00</td>
+                        <td class="hogerJusterad">9</td>
+                        <td>03116102042</td>
+                        <td>Kolbotn G16 1&nbsp;-&nbsp;Ready G16 1</td>
+                        <td>Sofiemyr kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3438077">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Gutter 13 år </td>
+                        <td>Gutter 13 år 1.div avd 01</td>
+                        <td>2015-06-14 18:40</td>
+                        <td class="hogerJusterad">9</td>
+                        <td>03113101041</td>
+                        <td>Bærums Verk Hauger G13-1&nbsp;-&nbsp;Ready G13 1</td>
+                        <td>Gommerud kunstg. 9er/7er A</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3514898">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 01</td>
+                        <td>2015-06-15 18:30</td>
+                        <td class="hogerJusterad">11</td>
+                        <td>01120301074</td>
+                        <td>Trosvik Menn Senior A&nbsp;-&nbsp;Fredrikstad Menn Senior B</td>
+                        <td>Trosvikbanen</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3343642">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 01</td>
+                        <td>2015-06-15 19:30</td>
+                        <td class="hogerJusterad">11</td>
+                        <td>01120301071</td>
+                        <td>Drøbak-Frogn MEN 01&nbsp;-&nbsp;Sarpsborg 08 MEN 02</td>
+                        <td>Frogn KG</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3343633">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 16 år </td>
+                        <td>Gutter 16 år 2.div avd 02</td>
+                        <td>2015-06-16 18:45</td>
+                        <td class="hogerJusterad">9</td>
+                        <td>03116202044</td>
+                        <td>Langhus IL Fotball G16 1&nbsp;-&nbsp;Ski G16 1</td>
+                        <td>Langhus kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3454931">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Gutter 14 år</td>
+                        <td>Gutter 14 år 2.div avd 04</td>
+                        <td>2015-06-17 18:45</td>
+                        <td class="hogerJusterad">8</td>
+                        <td>03114204031</td>
+                        <td>Holmlia G14 2&nbsp;-&nbsp;Nordstrand G14 2</td>
+                        <td>Lusetjern kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3513613">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 14 år</td>
+                        <td>Gutter 14 år 2.div avd 05</td>
+                        <td>2015-06-17 18:45</td>
+                        <td class="hogerJusterad">10</td>
+                        <td>03114205047</td>
+                        <td>Langhus IL Fotball G14 1&nbsp;-&nbsp;Oppegård G14 2</td>
+                        <td>Langhus kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3513994">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Jenter 13 år</td>
+                        <td>Jenter 13 år 2.div avd 03</td>
+                        <td>2015-06-17 18:45</td>
+                        <td class="hogerJusterad">10</td>
+                        <td>03213203049</td>
+                        <td>Haslum J_02 1&nbsp;-&nbsp;Øvrevoll Hosle J13-4</td>
+                        <td>Haslum kunstgress 9er/7er B</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3523526">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 14 år</td>
+                        <td>Gutter 14 år 2.div avd 05</td>
+                        <td>2015-06-17 20:05</td>
+                        <td class="hogerJusterad">10</td>
+                        <td>03114205046</td>
+                        <td>Holmlia G13-1&nbsp;-&nbsp;Driv G14 1</td>
+                        <td>Lusetjern kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3513991">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Nasjonal G16 år</td>
+                        <td>Nasjonal G16 vår avd 01</td>
+                        <td>2015-06-19 17:00</td>
+                        <td class="hogerJusterad">7</td>
+                        <td>03116991025</td>
+                        <td>Bodø/Glimt G16 nasjonal&nbsp;-&nbsp;Sarpsborg 08 G16 nasjonal</td>
+                        <td>Aspmyra stadion</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3548908">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Nasjonal G16 år</td>
+                        <td>Nasjonal G16 vår avd 01</td>
+                        <td>2015-06-19 17:00</td>
+                        <td class="hogerJusterad">7</td>
+                        <td>03116991025</td>
+                        <td>Bodø/Glimt G16 nasjonal&nbsp;-&nbsp;Sarpsborg 08 G16 nasjonal</td>
+                        <td>Aspmyra stadion</td>
+                        <td>AD1</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3548909">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Nasjonal G16 år</td>
+                        <td>Nasjonal G16 vår avd 01</td>
+                        <td>2015-06-19 17:00</td>
+                        <td class="hogerJusterad">7</td>
+                        <td>03116991025</td>
+                        <td>Bodø/Glimt G16 nasjonal&nbsp;-&nbsp;Sarpsborg 08 G16 nasjonal</td>
+                        <td>Aspmyra stadion</td>
+                        <td>AD2</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3548910">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Jenter 13 år</td>
+                        <td>Jenter 13 år 1.div avd 02 </td>
+                        <td>2015-06-20 13:00</td>
+                        <td class="hogerJusterad">8</td>
+                        <td>03213102038</td>
+                        <td>Oppsal J02/03&nbsp;-&nbsp;Grei J2002</td>
+                        <td>Trasop kunstgress 9er B</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3521553">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 01</td>
+                        <td>2015-06-20 16:00</td>
+                        <td class="hogerJusterad">12</td>
+                        <td>01120301083</td>
+                        <td>Selbak MEN 01&nbsp;-&nbsp;Drøbak-Frogn MEN 01</td>
+                        <td>Selbak stadion</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3343669">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 14 år</td>
+                        <td>Gutter 14 år 1.div avd 04</td>
+                        <td>2015-06-20 16:30</td>
+                        <td class="hogerJusterad">10</td>
+                        <td>03114104046</td>
+                        <td>Follo G14 1&nbsp;-&nbsp;Vålerenga G2001-2</td>
+                        <td>Langhus kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3510065">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Gutter 13 år </td>
+                        <td>Gutter 13 år 1.div avd 03</td>
+                        <td>2015-06-21 18:00</td>
+                        <td class="hogerJusterad">10</td>
+                        <td>03113103049</td>
+                        <td>KFUM G13 2&nbsp;-&nbsp;Ski G13 1</td>
+                        <td>Ekeberg  kunstgress 7er/9er A</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3515696">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Jenter 13 år</td>
+                        <td>Jenter 13 år 1.div avd 02 </td>
+                        <td>2015-06-21 18:00</td>
+                        <td class="hogerJusterad">10</td>
+                        <td>03213102047</td>
+                        <td>Langhus IL Fotball J13 1&nbsp;-&nbsp;Nesodden J13</td>
+                        <td>Langhus kunstgr. 2 7/9 er 1</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3521580">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Jenter 14 år</td>
+                        <td>Jenter 14 år 2.div avd 03</td>
+                        <td>2015-06-21 18:45</td>
+                        <td class="hogerJusterad">10</td>
+                        <td>03214203040</td>
+                        <td>Manglerud Star&nbsp;-&nbsp;Langhus IL Fotball J14</td>
+                        <td>Manglerud kunstgr.</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3506249">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 19 år </td>
+                        <td>Gutter 19 år 3.div avd 03</td>
+                        <td>2015-06-21 20:15</td>
+                        <td class="hogerJusterad">7</td>
+                        <td>03119303052</td>
+                        <td>Bærums Verk Hauger Jr-2&nbsp;-&nbsp;Sterling</td>
+                        <td>Rud kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3462119">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Gutter 17 år</td>
+                        <td>Gutter 17 år </td>
+                        <td>2015-06-22 20:15</td>
+                        <td class="hogerJusterad">9</td>
+                        <td>03117101043</td>
+                        <td>Haslum G_98 1&nbsp;-&nbsp;Lambertseter G16 1</td>
+                        <td>Haslum kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3453914">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>Gutter 17 år</td>
+                        <td>Gutter 17 år </td>
+                        <td>2015-06-24 20:15</td>
+                        <td class="hogerJusterad">9</td>
+                        <td>03117101041</td>
+                        <td>Bækkelaget G17&nbsp;-&nbsp;Skeid G17</td>
+                        <td>Ekeberg kunstgress 2</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3453908">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>Menn 33 år 7er</td>
+                        <td>Menn 33 år 7er 2.div</td>
+                        <td>2015-06-24 20:15</td>
+                        <td class="hogerJusterad">8</td>
+                        <td>03133721059</td>
+                        <td>Abildsø IL Old Boys&nbsp;-&nbsp;Alna Menn Senior 7'er</td>
+                        <td>Abildsø kunstg. 9/7er A</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3552358">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 01</td>
+                        <td>2015-06-27 16:00</td>
+                        <td class="hogerJusterad">13</td>
+                        <td>01120301089</td>
+                        <td>Borgar MEN 01&nbsp;-&nbsp;Fredrikstad Menn Senior B</td>
+                        <td>Borgarbanen</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3343687">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>3.div Menn</td>
+                        <td>3.div Menn avd 04</td>
+                        <td>2015-06-30 19:00</td>
+                        <td class="hogerJusterad">12</td>
+                        <td>06120304082</td>
+                        <td>Birkebeineren Menn Senior A&nbsp;-&nbsp;Strømsgodset Menn Senior C</td>
+                        <td>Årbogen Kunstgress</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3349016">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 01</td>
+                        <td>2015-08-03 18:30</td>
+                        <td class="hogerJusterad">14</td>
+                        <td>01120301096</td>
+                        <td>Trosvik Menn Senior A&nbsp;-&nbsp;Sarpsborg 08 MEN 02</td>
+                        <td>Trosvikbanen</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3343708">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 01</td>
+                        <td>2015-08-03 18:30</td>
+                        <td class="hogerJusterad">14</td>
+                        <td>01120301098</td>
+                        <td>Østsiden MEN 01&nbsp;-&nbsp;Kråkerøy MEN 01</td>
+                        <td>Østsiden idrettsplass</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3343714">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 01</td>
+                        <td>2015-08-10 19:00</td>
+                        <td class="hogerJusterad">15</td>
+                        <td>01120301105</td>
+                        <td>Kråkerøy MEN 01&nbsp;-&nbsp;Follo Menn Senior B</td>
+                        <td>Kråkerøy st KG</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3343735">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 01</td>
+                        <td>2015-08-10 19:30</td>
+                        <td class="hogerJusterad">15</td>
+                        <td>01120301099</td>
+                        <td>Drøbak-Frogn MEN 01&nbsp;-&nbsp;Skeid Fotball Menn Senior B</td>
+                        <td>Seiersten stadion</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3343717">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 01</td>
+                        <td>2015-08-10 19:30</td>
+                        <td class="hogerJusterad">15</td>
+                        <td>01120301101</td>
+                        <td>Sarpsborg 08 MEN 02&nbsp;-&nbsp;Grorud IL Senior B</td>
+                        <td>Sarpsborg st KG</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3343723">Meld inn</a></td>
+
+                    </tr>
+
+                    <tr class="alternate">
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 01</td>
+                        <td>2015-08-15 16:00</td>
+                        <td class="hogerJusterad">16</td>
+                        <td>01120301106</td>
+                        <td>Trosvik Menn Senior A&nbsp;-&nbsp;Drøbak-Frogn MEN 01</td>
+                        <td>Trosvikbanen</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3343738">Meld inn</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>3. divisjon Menn</td>
+                        <td>3. divisjon avdeling 01</td>
+                        <td>2015-08-17 19:00</td>
+                        <td class="hogerJusterad">16</td>
+                        <td>01120301112</td>
+                        <td>Fredrikstad Menn Senior B&nbsp;-&nbsp;Kråkerøy MEN 01</td>
+                        <td>Fredrikstad stadion</td>
+                        <td>Dommer</td>
+                        <td><a href="../Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=3343756">Meld inn</a></td>
+
+                    </tr>
+
+                </table>
+                <input name="hiddenSorteringsordningLedigaUppdrag" type="hidden" id="hiddenSorteringsordningLedigaUppdrag" value="Tid" />
+                <input name="hiddenSorteringsRiktningFallandeLedigaUppdrag" type="hidden" id="hiddenSorteringsRiktningFallandeLedigaUppdrag" value="False" />
+            </div>
+        </div>
+    </div>
+
+    <script language='javascript' src='../JS/generellaFunktioner.js'></script><script language='javascript'>hideMsgDiv();</script><script language="javascript" type="text/javascript">
+setLinks(2);
+</script></form>
+</body>
+</html>

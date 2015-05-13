@@ -42,8 +42,11 @@ class MatchScraper {
 
   def scrapeAvailableMatches(session: UserSession) = {
     val availableMatchesDoc = withAutomaticReAuth(session, doScrapeAvailableMatches)
-    val matchElements = availableMatchesDoc.select("div#divMainContent").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
+    parseAvailableMatches(availableMatchesDoc)
+  }
 
+  def parseAvailableMatches(availableMatchesDoc:Document) = {
+    val matchElements = availableMatchesDoc.select("div#divMainContent").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
     matchElements.map {
       el: Element =>
         AvailableMatch(el.child(0).text,

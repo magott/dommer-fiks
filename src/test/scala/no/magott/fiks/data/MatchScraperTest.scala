@@ -18,5 +18,11 @@ class MatchScraperTest extends FunSuite{
     assert(resultReport(ResultType.HalfTime).isDefined)
   }
 
+  test("Available matches is parsed correctly"){
+    val doc = Jsoup.parse(getClass.getResourceAsStream("/availableMatches.html"), "UTF-8","")
+    val matches: List[AvailableMatch] = scraper.parseAvailableMatches(doc)
+    matches
+  }
+
 
 }
