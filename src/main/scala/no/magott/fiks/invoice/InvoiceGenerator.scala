@@ -15,7 +15,7 @@ import scala.collection.JavaConverters._
 object InvoiceGenerator {
   import XlsxImplicits._
 
-  def generateOfkInvoice(invoice:Invoice, userOpt: Option[User]) = withTemplate("/Dommerregning-2015-OFK_2.xlsx"){template =>
+  def generateOfkInvoice(invoice:Invoice, userOpt: Option[User]) = withTemplate("/Dommerregning-2015-OFK_Gjermshus.xlsx"){template =>
     applyToOfkSpreadsheet(template, invoice, userOpt)
     template
   }
