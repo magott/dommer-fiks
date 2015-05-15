@@ -25,8 +25,9 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
         case Path( Seg( "invoice" :: "new" :: Nil)) & Params(MatchIdParameter(matchId)) => req match{
           case GET(_) => {
             val matchOpt = matchService.assignedMatches(session).find(_.fiksId == matchId)
+            val userOpt = userService.byUsername(session.username)
             if (matchOpt.isDefined) {
-              Ok ~> Html5(Pages(req).invoiceInfoPage(None, matchOpt))
+              Ok ~> Html5(Pages(req).invoiceInfoPage(None, matchOpt, userOpt))
             }else{
               Forbidden ~> Html5(Pages(req).forbidden)
             }
@@ -93,7 +94,8 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
               if (invoiceOpt.isEmpty) NotFound ~> Html5(Pages(req).notFound)
               else if (invoiceOpt.exists(_.username == session.username)) {
                 val matchOpt = matchService.assignedMatches(session).find(_.fiksId == invoiceOpt.get.matchData.fiksId)
-                Ok ~> Html5(Pages(req).invoiceInfoPage(invoiceOpt, matchOpt))
+                val userOpt = userService.byUsername(session.username)
+                Ok ~> Html5(Pages(req).invoiceInfoPage(invoiceOpt, matchOpt, userOpt))
               } else {
                 Forbidden ~> Html5(Pages(req).forbidden)
               }
@@ -134,7 +136,6 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
               case Accepts.Json(_) =>{
                 val year = YearParam.unapply(Params.unapply(req).get).map(_.toInt).getOrElse(LocalDate.now.getYear)
                 val invoices = invoiceRepository.findInvoicesForUser(session.username).filter(_.matchData.date.getYear == year)
-                val totals = invoices.foldLeft(InvoiceTotals.empty)(_+_)
                 Ok ~> JsonContent ~> ResponseString(invoices.toList.map(_.toJson).jencode.nospaces)
               }
               case _ => Ok ~> Html5(Pages(req).invoiceSAP)
@@ -154,8 +155,9 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
     val perDiem = params("perDiem").headOption.filter(_.trim.nonEmpty).map(_.toInt)
     val pass = params.valueOrNone("passengers").map(_.toInt)
     val passKm = params.valueOrNone("passengerKm").map(_.toDouble)
+    val kmAllowanceMunicipal = params.valueOrNone("kmAllowanceMunicipal")
     val passengerAllowance = PassengerAllowance.fromWeb(pass, passKm)
-    Invoice.createNew(username, MatchData.fromAssignedMatch(m),matchFee, toll, perDiem, km, otherExpenses, passengerAllowance)
+    Invoice.createNew(username, MatchData.fromAssignedMatch(m),matchFee, toll, perDiem, km, otherExpenses, passengerAllowance, kmAllowanceMunicipal)
   }
 
   def extractUpdatedInvoiceFromParams(username:String, invoice:Invoice, params: Map[String, Seq[String]]) = {
@@ -167,8 +169,9 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
     val otherExpenses = params("otherExpenses").headOption.filter(_.trim.nonEmpty).map(_.toDouble)
     val pass = params.valueOrNone("passengers").map(_.toInt)
     val passKm = params.valueOrNone("passengerKm").map(_.toDouble)
+    val kmAllowanceMunicipal = params.valueOrNone("kmAllowanceMunicipal")
     val passengerAllowance = PassengerAllowance.fromWeb(pass, passKm)
-    invoice.copy(matchFee = matchFee, toll = toll, perDiem = perDiem, km = km, otherExpenses = otherExpenses, passengerAllowance = passengerAllowance)
+    invoice.copy(matchFee = matchFee, toll = toll, perDiem = perDiem, km = km, otherExpenses = otherExpenses, passengerAllowance = passengerAllowance, kmAllowanceMunicipal = kmAllowanceMunicipal)
   }
 
   object YearParam extends Params.Extract("year", Params.first)

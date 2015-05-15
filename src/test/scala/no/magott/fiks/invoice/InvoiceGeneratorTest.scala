@@ -44,13 +44,13 @@ class InvoiceGeneratorTest extends FlatSpec with Matchers{
   }
 
   def createUser = {
-    val invoiceData = InvoiceData(Some("Morten Andersen-Gott"), Some("Adressen min 1A"), Some("1358"), Some("Jar"), Some("99887766"), Some("12345678910"), Some("Bærum"))
+    val invoiceData = InvoiceData(Some("Morten Andersen-Gott"), Some("Adressen min 1A"), Some("1358"), Some("Jar"), Some("99887766"), Some("12345678910"), Some("Bærum"), None)
     val user = User("morten.andersen.gott", None, "fiks@andersen-gott.com", None, false, Some(invoiceData))
     user
   }
 
   def createInvoice = {
-    val invoice = Invoice(None, "morten.andersen.gott", MatchData("123", "031000000", "Blåbær", "Øvre Årdal", "Hjemmebanen kunstgress", "3 div avd 01", DateTime.now), 900, Some(77.5), Some(280), None, None, Some(10), Some(10), Some(PassengerAllowance(2,2)))
+    val invoice = Invoice(None, "morten.andersen.gott", MatchData("123", "031000000", "Blåbær", "Øvre Årdal", "Hjemmebanen kunstgress", "3 div avd 01", DateTime.now), 900, Some(77.5), Some(280), None, None, Some(10), Some(10), Some(PassengerAllowance(2,2)), None)
     invoice
   }
 

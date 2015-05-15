@@ -195,10 +195,10 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
   }
 
 
-  def invoiceInfoPage(invoice:Option[Invoice], am:Option[AssignedMatch]) = {
+  def invoiceInfoPage(invoice:Option[Invoice], am:Option[AssignedMatch], u:Option[User]) = {
     val navbar:Option[NodeSeq] = am.map(invoiceNavBar)
     val matchDataPanel:Option[NodeSeq] = invoice.map(i => invoiceMatchDataPanel(i.matchData))
-    val form:NodeSeq = invoiceForm(invoice)
+    val form:NodeSeq = invoiceForm(invoice, u)
     emptyPage(navbar.getOrElse(NodeSeq.Empty) ++ form ++ matchDataPanel.getOrElse(NodeSeq.Empty), Some(invoiceScripts))
   }
 

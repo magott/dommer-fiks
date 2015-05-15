@@ -1,20 +1,32 @@
-$("#km").keyup(function(e) {
+$("#km").keyup(updateMillage);
+
+$("#kmAllowanceMunicipal").change(updateMillage);
+
+function updateMillage(event) {
     var m = calculateMillageAllowance();
     if(m > 0){
         $("#millageAllowance").val(Number(m).toFixed(2));
     }else{
         $("#millageAllowance").val("");
     }
-});
+}
 
 function calculateMillageAllowance(){
-    var kmMultiplier = 4.10;
+    var kmMultiplier = findKmMultiplier();
     var km = parseFloat($("#km").val());
     var millageAllowance = 0.00;
     if(_.isFinite(km)){
         millageAllowance = Number(km * kmMultiplier);
     }
     return millageAllowance;
+}
+
+function findKmMultiplier(){
+    if($('#kmAllowanceMunicipal').prop('checked')) {
+        return 4.20;
+    }else{
+        return 4.10;
+    }
 }
 
 $("#invoice").change(function(){

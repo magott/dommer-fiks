@@ -23,10 +23,18 @@ class InvoiceTest extends FlatSpec with Matchers{
     sum shouldBe total
   }
 
-  def createInvoice(kickoff: DateTime) = {
+  it should "use Tromsø rates if invoice for tromsø" in {
+    import org.scalatest.OptionValues._
+    val invoice = createInvoice(DateTime.now.withYear(2015), Some("Tromsø"))
+    val calculatedMillageAllowance = invoice.millageAllowance
+    val correctMillageForTromso = BigDecimal("10") * BigDecimal("4.20")
+    calculatedMillageAllowance.value shouldBe correctMillageForTromso
+  }
+
+  def createInvoice(kickoff: DateTime, kmAllowanceMunicipal:Option[String] = None) = {
     val matchData = MatchData("123", "031000000", "Blåbær", "Øvre Årdal", "Hjemmebanen kunstgress", "3 div avd 01", kickoff)
     val invoice = Invoice(None, "morten.andersen.gott", matchData,
-      900, Some(77.5), Some(280), None, None, Some(10), Some(10), Some(PassengerAllowance(2,2)))
+      900, Some(77.5), Some(280), None, None, Some(10), Some(10), Some(PassengerAllowance(2,2)), kmAllowanceMunicipal)
     invoice
   }
 

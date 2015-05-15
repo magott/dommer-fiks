@@ -424,7 +424,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       <li class="active"><a href={s"/fiks/mymatches/${m.fiksId}/invoice"}>Regning</a></li>
     </ul>
   }
-  def invoiceForm(i:Option[Invoice]) = {
+  def invoiceForm(i:Option[Invoice], u: Option[User]) = {
     <legend>Dommerregning</legend>
     <form id="invoice" method="post" class="form-horizontal">
       <div class="form-group">
@@ -444,6 +444,23 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         </div>
         <p class="help-block"></p>
       </div>
+      {if(u.exists(_.isTromso)){
+      <div class="form-group">
+      <label class="control-label col-sm-2" for="tromso">Kjøring i Tromsø kommune?</label>
+      <div class="col-sm-2">
+        <label class="checkbox-inline">
+          {
+          if(i.exists(_.kmAllowanceMunicipal.isDefined))
+              <input type="checkbox" name="kmAllowanceMunicipal" id="kmAllowanceMunicipal" value="tromsø" checked=""/>
+          else
+              <input type="checkbox" id="kmAllowanceMunicipal" name="kmAllowanceMunicipal" value="tromsø"/>
+          }
+          Ja
+        </label>
+      </div>
+      <p class="help-block"></p>
+      </div>
+      }}
       <div class="form-group">
         <label class="control-label col-sm-2" for="passengers">Passasjertillegg</label>
         <div class="col-sm-2">
@@ -632,10 +649,10 @@ def tableOfAvailableMatches = {
             <td>
               {"{{match.role}}"}
             </td>
-            <td ng-if="_.isNull(match.availabilityId)">
+            <td ng-if="match.availabilityId === null">
               Interesse meldt
             </td>
-            <td ng-if="!(_.isNull(match.availabilityId))">
+            <td ng-if="match.availabilityId != null">
               {<a href="availablematches?matchid={{match.availabilityId}}">Meld interesse</a>}
             </td>
           </tr>
@@ -888,6 +905,7 @@ def tableOfAvailableMatches = {
     val email = user.map(_.email).getOrElse("")
     val pwd = user.flatMap(_.password).getOrElse("")
     val phone = user.map(_.phoneForInvoice).getOrElse("")
+    val tromso = user.exists(_.isTromso)
 
     (
     <div class="col-md-8">
@@ -981,6 +999,20 @@ def tableOfAvailableMatches = {
           <div class="col-md-4">
             <input id="taxMuncipal" name="taxMuncipal" type="text" placeholder=" " value={mun} class="form-control
             input-md"></input>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="tromso">Kjører i Tromsø kommune</label>
+          <div class="col-md-4">
+              <label class="checkbox-inline">
+                {if(tromso)
+                  <input type="checkbox" id="tromso" name="tromso" value="true" checked=""/>
+                else
+                  <input type="checkbox" id="tromso" name="tromso" value="true"/>
+                }
+                Ja
+              </label>
           </div>
         </div>
       </fieldset>

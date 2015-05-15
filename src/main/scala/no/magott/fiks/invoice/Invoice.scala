@@ -7,7 +7,7 @@ import scala.collection.mutable
 import scalaz._, Scalaz._
 import argonaut._, Argonaut._
 
-case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], perDiem: Option[Int], reminder:Option[DateTime], settled:Option[DateTime], km:Option[Double], otherExpenses:Option[Double], passengerAllowance: Option[PassengerAllowance]) {
+case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], perDiem: Option[Int], reminder:Option[DateTime], settled:Option[DateTime], km:Option[Double], otherExpenses:Option[Double], passengerAllowance: Option[PassengerAllowance], kmAllowanceMunicipal:Option[String]) {
 
   def status = if(settled.isDefined) s"Betalt ${settled.get.toString("dd.MM")}" else if(reminder.isDefined) s"Purret ${reminder.get.toString("dd.MM")}" else "Utestående"
   def rowClass = if(settled.isDefined) "success" else if(moreDaysPassedThan(10)) "danger" else if(moreDaysPassedThan(7)) "warning" else if(moreDaysPassedThan(5)) "info" else ""
@@ -16,7 +16,7 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
 
   def millageAllowance : Option[Double] = {
     km.map{k =>
-      (BigDecimal.valueOf(k) * Invoice.kmMultiplierFor(matchData.date)).toDouble
+      (BigDecimal.valueOf(k) * Invoice.kmMultiplierFor(matchData.date, kmAllowanceMunicipal.getOrElse(""))).toDouble
     }
   }
 
@@ -33,6 +33,7 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
     otherExpenses.foreach(x => map += "otherExpenses" -> x)
     perDiem.foreach(x=> map += "perDiem" -> x)
     passengerAllowance.foreach(map += "passengerAllowance" -> _.toMongo)
+    kmAllowanceMunicipal.foreach(map += "kmAllowanceMunicipal" -> _)
     map += "updated" -> DateTime.now
     map
   }
@@ -45,6 +46,7 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
     if(perDiem.isEmpty) unsets += "perDiem"
     if(otherExpenses.isEmpty) unsets += "otherExpenses"
     if(km.isEmpty) unsets += "km"
+    if(kmAllowanceMunicipal.isEmpty) unsets += "kmAllowanceMunicipal"
 
     unsets
   }
@@ -86,8 +88,16 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
 
 
 object Invoice {
-  def createNew(username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], perDiem: Option[Int], kms:Option[Double], otherExpenses:Option[Double], passengerAllowance:Option[PassengerAllowance]) = {
-    Invoice(None, username, matchData, matchFee, toll, perDiem, None, None, kms, otherExpenses, passengerAllowance)
+
+  val kmDefaults = Map(2014 -> BigDecimal("4.05")).withDefaultValue(BigDecimal("4.10"))
+  val kmTromso = Map(2014 -> BigDecimal("4.15")).withDefaultValue(BigDecimal("4.20"))
+  val kmRates = Map(
+    "tromsø" -> kmTromso
+  ).withDefaultValue(kmDefaults)
+
+
+  def createNew(username:String, matchData:MatchData, matchFee: Int, toll:Option[Double], perDiem: Option[Int], kms:Option[Double], otherExpenses:Option[Double], passengerAllowance:Option[PassengerAllowance], kmAllowanceMunicipal:Option[String]) = {
+    Invoice(None, username, matchData, matchFee, toll, perDiem, None, None, kms, otherExpenses, passengerAllowance, kmAllowanceMunicipal)
   }
 
   def fromMongo(m:DBObject) = {
@@ -102,14 +112,13 @@ object Invoice {
     val otherExpenses = m.getAs[Double]("otherExpenses")
     val perDiem = m.getAs[Int]("perDiem")
     val passAllowance = m.getAs[DBObject]("passengerAllowance").map(PassengerAllowance.fromMongo(_))
-    Invoice(Some(id), username, matchData, matchFee, toll, perDiem, reminder, settled, km, otherExpenses, passAllowance)
+    val kmAllowanceMunicipal = m.getAs[String]("kmAllowanceMunicipal")
+    Invoice(Some(id), username, matchData, matchFee, toll, perDiem, reminder, settled, km, otherExpenses, passAllowance, kmAllowanceMunicipal)
   }
 
-  def kmMultiplierFor(date:DateTime) = {
-    date.getYear match {
-      case 2014 => BigDecimal("4.05")
-      case 2015 => BigDecimal("4.10")
-    }
+  def kmMultiplierFor(date:DateTime, municipal:String = "") = {
+    val ratesForMunicipal: Map[Int, BigDecimal] = kmRates(municipal.toLowerCase)
+    ratesForMunicipal(date.getYear)
   }
 
   def unsettledJson = """{"buttonText":"Merk betalt", "buttonClass":"btn"}"""

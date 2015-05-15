@@ -36,6 +36,7 @@ case class User(username: String, password: Option[String], email: String, calen
   def zipForInvoice = invoiceData.flatMap(_.postalCode).getOrElse("")
   def cityForInvoice = invoiceData.flatMap(_.city).getOrElse("")
   def phoneForInvoice = invoiceData.flatMap(_.phone).getOrElse("")
+  def isTromso = invoiceData.exists(_.tromso.getOrElse(false))
 
 }
 
@@ -49,13 +50,13 @@ object User{
     mo.getAs[DBObject]("invoiceData").map(InvoiceData.fromMongo(_)))
 
   import scalaz.Scalaz._
-  def validate(username: String, password: Option[String], email: Option[String], calendarId: Option[String], name: Option[String], address: Option[String], postalCode:Option[String], city:Option[String], phone:Option[String], accountNumber:Option[String], taxMuncipal:Option[String]) = {
+  def validate(username: String, password: Option[String], email: Option[String], calendarId: Option[String], name: Option[String], address: Option[String], postalCode:Option[String], city:Option[String], phone:Option[String], accountNumber:Option[String], taxMuncipal:Option[String], tromso:Option[Boolean]) = {
 
     val vPassword = validatePassword(username, password)
     val vEmail = validateEmail(email)
     val validated = (vPassword |@| vEmail ) {
-          val invoiceData = if(List(name, address, postalCode, city, phone, accountNumber, taxMuncipal).exists(_.nonEmpty))
-            Some(InvoiceData(name, address, postalCode, city, phone, accountNumber, taxMuncipal))
+          val invoiceData = if(List(name, address, postalCode, city, phone, accountNumber, taxMuncipal, tromso).exists(_.nonEmpty))
+            Some(InvoiceData(name, address, postalCode, city, phone, accountNumber, taxMuncipal, tromso))
           else None
       (pwd, em) => User(username, pwd, em, calendarId, false, invoiceData)
     }
@@ -77,7 +78,7 @@ object User{
   }
 }
 
-case class InvoiceData(name:Option[String], address: Option[String], postalCode:Option[String], city:Option[String], phone:Option[String], accountNumber:Option[String], taxMuncipal:Option[String]) {
+case class InvoiceData(name:Option[String], address: Option[String], postalCode:Option[String], city:Option[String], phone:Option[String], accountNumber:Option[String], taxMuncipal:Option[String], tromso:Option[Boolean]) {
   def toMongo = {
     val builder = MongoDBObject.newBuilder
     name.foreach(builder += "name" -> _)
@@ -87,6 +88,7 @@ case class InvoiceData(name:Option[String], address: Option[String], postalCode:
     phone.foreach(builder += "phone" -> _)
     accountNumber.foreach(builder += "accountNo" -> _)
     taxMuncipal.foreach(builder += "taxMuncipal" -> _)
+    tromso.foreach(builder += "tromso" -> _)
     builder.result
   }
 }
@@ -100,6 +102,8 @@ object InvoiceData{
     mo.getAs[String]("city"),
     mo.getAs[String]("phone"),
     mo.getAs[String]("accountNo"),
-    mo.getAs[String]("taxMuncipal")
+    mo.getAs[String]("taxMuncipal"),
+    mo.getAs[Boolean]("tromso")
+
   )
 }
