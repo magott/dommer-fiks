@@ -31,6 +31,11 @@ class InvoiceTest extends FlatSpec with Matchers{
     calculatedMillageAllowance.value shouldBe correctMillageForTromso
   }
 
+  "Ofk invoice" should "only displayed if matchid starts with 01, 02 or 03" in {
+    val invoice = createInvoice(DateTime.now)
+    Invoice.displayOfkInvoice(invoice) shouldBe true
+  }
+
   def createInvoice(kickoff: DateTime, kmAllowanceMunicipal:Option[String] = None) = {
     val matchData = MatchData("123", "031000000", "Blåbær", "Øvre Årdal", "Hjemmebanen kunstgress", "3 div avd 01", kickoff)
     val invoice = Invoice(None, "morten.andersen.gott", matchData,

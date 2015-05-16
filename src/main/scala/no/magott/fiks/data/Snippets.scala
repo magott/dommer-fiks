@@ -539,12 +539,20 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
                 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Last ned <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu">
+                {
+                if(i.get.kmAllowanceMunicipal.isDefined){
+                  <li>
+                    <a href={s"/invoice/${i.get.id.get.toString}?export=tromso"}>Tromsø bredderegning (xslx)</a>
+                  </li>
+                }}
                 <li>
                   <a href={s"/invoice/${i.get.id.get.toString}?export=nffbredde"}>NFF Bredderegning (xslx)</a>
                 </li>
+                {if(Invoice.displayOfkInvoice(i.get)) {
                 <li>
                   <a href={s"/invoice/${i.get.id.get.toString}?export=ofk"}>OFK Bredderegning (xslx)</a>
                 </li>
+                }}
                 <li>
                   <a href={s"/invoice/${i.get.id.get.toString}?export=nfftopp"}>NFF Toppfotball (xslx)</a>
                 </li>

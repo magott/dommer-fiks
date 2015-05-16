@@ -88,6 +88,11 @@ class InvoicePlan(matchService:MatchService, userService:UserService, invoiceRep
                 val invoice = InvoiceGenerator.generateOfkInvoice(invoiceOpt.get, userOpt)
                 Ok ~> ContentDisposition(s"""filename="${invoiceOpt.get.matchData.teams}.xlsx"""") ~> XslxResponse(invoice)
               }
+              case "tromso" => {
+                val userOpt = userService.byUsername(session.username)
+                val invoice = InvoiceGenerator.generateTromsoBreddeInvoice(invoiceOpt.get, userOpt)
+                Ok ~> ContentDisposition(s"""filename="${invoiceOpt.get.matchData.teams}.xlsx"""") ~> XslxResponse(invoice)
+              }
               case _ => BadRequest ~> Html5(Pages(req).error(<div>Ukjent regningstype</div>))
             }
             case GET(_) => {

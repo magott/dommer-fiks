@@ -33,6 +33,17 @@ class InvoiceGeneratorTest extends FlatSpec with Matchers{
     spreadsheetTotal shouldBe(createInvoice.calculateTotal)
   }
 
+  "Tromsø" should "be generated" in {
+    val tromsoInvoice = createInvoice.copy(kmAllowanceMunicipal = Some("tromsø"))
+    val tromso = InvoiceGenerator.generateTromsoBreddeInvoice(tromsoInvoice, Some(createUser))
+    val output = new FileOutputStream("/tmp/tromso.xlsx")
+    tromso.write(output)
+    output.close()
+    val spreadsheetTotal = tromso.getSheetAt(0)(52)('H').getNumericCellValue
+    println(tromsoInvoice.debugCalculationString)
+    spreadsheetTotal shouldBe(tromsoInvoice.calculateTotal)
+  }
+
   "OFK-bredde" should "be generated" in {
     val ofkbreddeInvoice = createInvoice
     val ofkBredde = InvoiceGenerator.generateOfkInvoice(ofkbreddeInvoice, Some(createUser))

@@ -62,8 +62,14 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
   def total = calculateTotal
 
   def calculateTotal : Double = {
-    matchFee + perDiem.getOrElse(0) + toll.getOrElse(0d) + otherExpenses.getOrElse(0d) + millageAllowance.getOrElse(0d) + passengerAllowance.map(_.getTotal).getOrElse(0d)
+    matchFee + perDiem.getOrElse(0) +
+      toll.getOrElse(0d) +
+      otherExpenses.getOrElse(0d) +
+      millageAllowance.getOrElse(0d) +
+      passengerAllowance.map(_.getTotal).getOrElse(0d)
   }
+
+  private[invoice] def debugCalculationString =  s" $matchFee + ${perDiem.getOrElse(0)} + ${toll.getOrElse(0d)} + ${otherExpenses.getOrElse(0d)} + ${millageAllowance.getOrElse(0d)} + ${passengerAllowance.map(_.getTotal).getOrElse(0d)}"
 
   def updateClause : MongoDBObject = MongoDBObject("_id" -> id.get)
 
@@ -120,6 +126,8 @@ object Invoice {
     val ratesForMunicipal: Map[Int, BigDecimal] = kmRates(municipal.toLowerCase)
     ratesForMunicipal(date.getYear)
   }
+
+  def displayOfkInvoice(i: Invoice) = i.matchData.matchId.startsWith("03") || i.matchData.matchId.startsWith("02") || i.matchData.matchId.startsWith("01")
 
   def unsettledJson = """{"buttonText":"Merk betalt", "buttonClass":"btn"}"""
   def settledJson = """{"buttonText":"Betalt", "buttonClass":"btn btn-success"}"""

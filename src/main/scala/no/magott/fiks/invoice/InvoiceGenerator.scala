@@ -2,7 +2,7 @@ package no.magott.fiks.invoice
 
 import java.io.FileOutputStream
 
-import no.magott.fiks.user.User
+import no.magott.fiks.user.{InvoiceData, User}
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFSheet, XSSFWorkbook}
 
@@ -21,18 +21,28 @@ object InvoiceGenerator {
   }
   def generateNffToppInvoice(invoice:Invoice, userOpt: Option[User]) =
     withTemplate("/Dommerregning-reise_topp_2015_rev3.xlsx"){ template =>
-      applyToNffSpreadsheet(template, invoice, userOpt)
+      applyCommonNffHeaders(template, invoice, userOpt)
+      applyToNffSpreadsheet(template, invoice, userOpt)(0)
       template.getSheetAt(0)(18)('F').setDouble(invoice.km) //No km formula in NFF Topp
       template
   }
 
   def generateNffBreddeInvoice(invoice: Invoice, userOpt: Option[User]) =
     withTemplate("/Dommerregning-reise_bredde-2015.xlsx"){ template =>
-      applyToNffSpreadsheet(template, invoice, userOpt)
+      applyCommonNffHeaders(template, invoice, userOpt)
+      applyToNffSpreadsheet(template, invoice, userOpt)(0)
       template
   }
 
-  private def applyToNffSpreadsheet(template: XSSFWorkbook, invoice: Invoice, userOpt: Option[User]) = {
+  def generateTromsoBreddeInvoice(invoice:Invoice, userOpt:Option[User]) =
+    withTemplate("/Dommerregning-reise_bredde-2015_tromsoformula.xlsx"){ template =>
+      applyCommonNffHeaders(template, invoice, userOpt)
+      applyToTromsoBredde(template, invoice, userOpt)
+      applyToNffSpreadsheet(template, invoice, userOpt)(1)
+      template
+  }
+
+  private def applyCommonNffHeaders(template: XSSFWorkbook, invoice: Invoice, userOpt:Option[User]) = {
     val sheet = template.getSheetAt(0)
     userOpt.foreach { user =>
       sheet(5)('D').setCellValue(user.nameForInvoice)
@@ -48,36 +58,49 @@ object InvoiceGenerator {
         sheet(15)('B').setCellValue(invoice.matchData.venue)
         sheet(15)('D').setString(userOpt.map(_.addressForInvoice))
       }
+      sheet(14)('F').setDouble(invoice.km.map(_ / 2))
+      sheet(15)('F').setDouble(invoice.km.map(_ / 2))
     }
+  }
+
+  private def applyToNffSpreadsheet(template: XSSFWorkbook, invoice: Invoice, userOpt: Option[User])(rowOffset:Int = 0) = {
+    val sheet = template.getSheetAt(0)
     invoice.passengerAllowance.foreach{ passengerAllowance =>
       import passengerAllowance._
-      sheet(19)('F').setCellValue(km)
+      sheet(19+rowOffset)('F').setCellValue(km)
       if(pax > 1){
-        sheet(19)('G').setCellValue(s"x $pax,00")
-        sheet(19)('H').setCellFormula(s"F19*$pax")
+        val passengerRow = 19 + rowOffset
+        sheet(passengerRow)('G').setCellValue(s"x $pax,00")
+        sheet(passengerRow)('H').setCellFormula(s"F$passengerRow*$pax")
       }
     }
     invoice.toll.foreach { toll =>
-      sheet(44)('D').setCellValue("Bompenger")
-      sheet(44)('F').setCellValue(toll)
+      sheet(44+rowOffset)('D').setCellValue("Bompenger")
+      sheet(44+rowOffset)('F').setCellValue(toll)
     }
 
     invoice.otherExpenses.foreach{ otherExpenses =>
       val row = 44 + (if(invoice.toll.isDefined) 1 else 0)
-      sheet(row)('F').setCellValue(otherExpenses)
+      sheet(row+rowOffset)('F').setCellValue(otherExpenses)
     }
 
     invoice.perDiem.foreach { perDiem =>
       if (perDiem == 280) {
-        sheet(25)('F').setCellValue(1)
+        sheet(25+rowOffset)('F').setCellValue(1)
       }
       if (perDiem == 520) {
-        sheet(26)('F').setCellValue(1)
+        sheet(26+rowOffset)('F').setCellValue(1)
       }
     }
-    sheet(14)('F').setDouble(invoice.km.map(_ / 2))
-    sheet(15)('F').setDouble(invoice.km.map(_ / 2))
-    sheet(49)('F').setCellValue(invoice.matchFee)
+    sheet(49+rowOffset)('F').setCellValue(invoice.matchFee)
+  }
+
+  private def applyToTromsoBredde(template: XSSFWorkbook, invoice: Invoice, userOpt:Option[User]) = {
+    val sheet = template.getSheetAt(0)
+    invoice.km.foreach{km =>
+      sheet(18)('F').setCellValue(km)
+      sheet(19)('F').setCellValue(km)
+    }
   }
 
   private def applyToOfkSpreadsheet(template: XSSFWorkbook, invoice: Invoice, userOpt:Option[User]) = {
