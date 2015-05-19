@@ -5,7 +5,7 @@ app.controller("ctrl", function($scope, $http, $window) {
      $scope.loadMatchInfo = function() {
         var httpRequest = $http({
             method: 'GET',
-            url: '/fiks/availabilityinfo?matchid='+ _.trim($(".kampnummer").text()),
+            url: '/fiks/availabilityinfo?matchid='+ _.trim($(".kampnummer").text()) +"&tournament="+ _.trim($(".turnering").text()),
             headers: {
                'Content-Type': 'application/json'
             }

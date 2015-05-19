@@ -11,7 +11,7 @@ import unfiltered.{response, Cookie}
 import java.util.concurrent.ExecutionException
 import javax.servlet.http.HttpServletRequest
 import com.google.common.util.concurrent.UncheckedExecutionException
-import java.net.SocketTimeoutException
+import java.net.{URLEncoder, SocketTimeoutException}
 import QParams._
 import validation.Validators._
 import validation.FormField
@@ -202,11 +202,17 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
       matchservice.reportInterest(matchId, comment, session)
       HerokuRedirect(r, "/fiks/availablematches")
     })
-    case r@GET(Path(Seg("fiks"::"availabilityinfo" :: Nil))) & Params(MatchIdParameter(matchId)) & SessionId(loginToken) => {
-      matchservice.appointmentInfoForMatchId(matchId).fold(
-        errors => {
-          println("Error while fetching availabilityinfo: "+errors)
-          GatewayTimeout ~> ResponseString(errors.mkString)
+    case r@GET(Path(Seg("fiks"::"availabilityinfo" :: Nil))) & Params(MatchIdParameter(matchId)) & Params(TournamentParameter(tournament)) & SessionId(loginToken) => {
+      matchservice.appointmentInfoForMatchId(matchId, tournament).fold(
+        errors => errors match{
+          case ht: HttpError => {
+            println("Error while fetching availabilityinfo: "+errors.toString)
+            BadGateway ~> ResponseString(errors.toString)
+          }
+          case JsonParseError(msg) => {
+            println("Error parsing response: "+msg)
+            BadGateway ~> ResponseString("Error parsing json response from upstream service")
+          }
         },
         matchInfo => Ok ~> JsonContent ~> ResponseString(matchInfo.asJson.nospaces)
       )

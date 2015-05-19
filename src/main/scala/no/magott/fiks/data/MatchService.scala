@@ -1,11 +1,15 @@
 package no.magott.fiks.data
 
+import java.net.URLEncoder
+import java.nio.charset.Charset
+
 import argonaut.{DecodeJson, Parse}
+import com.ning.http.client.RequestBuilder
 import geo.LatLong
 
 import scala.concurrent.ops.spawn
 import java.util.concurrent.{TimeUnit}
-import util.Properties
+import scala.util.Properties
 import com.google.common.cache.{LoadingCache, Cache, CacheLoader, CacheBuilder}
 import org.joda.time.{DateTimeZone, LocalDateTime, LocalDate}
 import no.magott.fiks.user.UserSession
@@ -76,14 +80,29 @@ class MatchService(val matchscraper:MatchScraper) {
     matchscraper.scrapeMatchResult(matchId, session)
   }
 
-  def appointmentInfoForMatchId(matchId: String) : String \/ AppointmentInfo= {
+  def appointmentInfoForMatchId(matchId: String, tournamentId:String) : HttpServiceError \/ AppointmentInfo = {
+    import dispatch._
+    val encodedTournament = URLEncoder.encode(tournamentId, "UTF-8").replace("+", "%20")
+    val serviceUrl = s"http://fiksservice.littinnsikt.no/Farena/WhoIsReferee2/$matchId/$encodedTournament"
+    println(serviceUrl)
+    val gjermshusServiceV2 = url(serviceUrl)
+    parseGjermshus(gjermshusServiceV2)
+  }
+
+  def appointmentInfoForMatchId(matchId: String) : HttpServiceError \/ AppointmentInfo= {
+    import dispatch._
+    val gjermhusService = url(s"http://fiksservice.littinnsikt.no/Farena/WhoIsReferee/$matchId")
+    parseGjermshus(gjermhusService)
+  }
+
+  def parseGjermshus(req: RequestBuilder) : HttpServiceError \/ AppointmentInfo = {
     import dispatch._, Defaults._
     import scalaz.Scalaz._
-    val gjermhusService = url(s"http://fiksservice.littinnsikt.no/Farena/WhoIsReferee/$matchId")
-    val http = Http(gjermhusService OK as.String).either.map(_.disjunction.leftMap(_.getMessage))
+    val http = Http(req).either.map(_.disjunction.leftMap(_.getMessage))
     for {
-      jsonString <- http()
-      parsed <- Parse.decodeEither[AppointmentInfo](jsonString)
+      resp <- http().leftMap(JsonParseError)
+      jsonString <- if(resp.getStatusCode == 200) resp.getResponseBody.right else HttpError(resp.getStatusCode, resp.getStatusText).left
+      parsed <- Parse.decodeEither[AppointmentInfo](jsonString).leftMap(JsonParseError)
     } yield parsed
   }
 

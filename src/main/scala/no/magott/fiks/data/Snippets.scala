@@ -742,6 +742,7 @@ def tableOfAvailableMatches = {
   def reportInterestForm(availableMatch: AvailableMatch) = {
     <div ng-app="reportinterest">
       <span class="kampnummer" hidden="hidden">{availableMatch.matchId}</span>
+      <span class="turnering" hidden="hidden">{availableMatch.tournament}</span>
       <div ng-controller="ctrl" data-ng-init="loadMatchInfo()">
         <table class="table table-striped table-bordered table-condensed">
         <tr>

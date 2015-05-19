@@ -4,6 +4,8 @@ import unfiltered.request.Params
 
 object MatchIdParameter extends Params.Extract("matchid", Params.first)
 
+object TournamentParameter extends Params.Extract("tournament", Params.first)
+
 object ResultParameter extends Params.Extract("result", Params.first)
 
 object CommentParameter extends Params.Extract("comment", Params.first)
