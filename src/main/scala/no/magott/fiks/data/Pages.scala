@@ -297,10 +297,10 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
         </div>
         <div class="form-group">
           <div class="col-sm-2 col-sm-offset-2">
-            <button type="submit" class="btn">Send inn</button>
+            <button type="submit" class="btn" id="submit">Send inn</button>
           </div>
         </div>
       </form>
-    )
+    , Some(stadiumSubmitJs))
   }
 }

@@ -1074,6 +1074,7 @@ def tableOfAvailableMatches = {
     fields.filterKeys(parameterNames.contains(_)).values.exists(_.isError)
   }
 
+  def stadiumSubmitJs = <script src="/js/stadiumsubmit.js" type="text/javascript"></script>
 
   private def momentAngularJS = <script src="//cdnjs.cloudflare.com/ajax/libs/angular-moment/0.9.0/angular-moment.min.js" type="text/javascript"></script>
   def momentJS = <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js" type="text/javascript"></script>
