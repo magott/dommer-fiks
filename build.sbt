@@ -13,7 +13,7 @@ libraryDependencies ++=
     "net.databinder" %% "unfiltered" % "0.6.7",
     "net.databinder" %% "unfiltered-filter" % "0.6.7",
     "net.databinder" %% "unfiltered-jetty" % "0.6.7",
-    "net.databinder.dispatch" %% "dispatch-core" % "0.10.1",
+    "net.databinder.dispatch" %% "dispatch-core" % "0.11.2",
     "io.argonaut" %% "argonaut" % "6.0.4",
     "org.slf4j" % "slf4j-simple" % "1.6.4",
     "commons-logging" % "commons-logging" % "1.1.1",

@@ -205,6 +205,10 @@ class FiksPlan(matchservice: MatchService, stadiumService:StadiumService, invoic
     case r@GET(Path(Seg("fiks"::"availabilityinfo" :: Nil))) & Params(MatchIdParameter(matchId)) & Params(TournamentParameter(tournament)) & SessionId(loginToken) => {
       matchservice.appointmentInfoForMatchId(matchId, tournament).fold(
         errors => errors match{
+          case RemotingError(msg) =>{
+            println(s"Network error $msg")
+            BadGateway ~> ResponseString(s"Network error $msg")
+          }
           case ht: HttpError => {
             println("Error while fetching availabilityinfo: "+errors.toString)
             BadGateway ~> ResponseString(errors.toString)

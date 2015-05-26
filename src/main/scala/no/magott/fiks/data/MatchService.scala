@@ -5,6 +5,7 @@ import java.nio.charset.Charset
 
 import argonaut.{DecodeJson, Parse}
 import com.ning.http.client.RequestBuilder
+import dispatch.Http
 import geo.LatLong
 
 import scala.concurrent.ops.spawn
@@ -22,6 +23,14 @@ class MatchService(val matchscraper:MatchScraper) {
   val assignedMatchesCache: LoadingCache[UserSession, List[AssignedMatch]] = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((session: UserSession) => matchscraper.scrapeAssignedMatches(session)))
   val availableMatchesCache:LoadingCache[UserSession, List[AvailableMatch]] = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((session:UserSession) => matchscraper.scrapeAvailableMatches(session)))
   val matchInfoCache:Cache[String,AvailableMatch] = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).maximumSize(50).build()
+
+  val withTimeOut = Http.configure(
+    builder => {
+      builder.setRequestTimeoutInMs(25 * 1000)
+      builder.setConnectionTimeoutInMs(5 * 1000)
+    }
+  )
+
 
   def assignedMatches(session:UserSession): List[AssignedMatch] = {
     assignedMatchesCache.get(session).filter(_.date.year == LocalDateTime.now.year)
@@ -95,12 +104,12 @@ class MatchService(val matchscraper:MatchScraper) {
     parseGjermshus(gjermhusService)
   }
 
-  def parseGjermshus(req: RequestBuilder) : HttpServiceError \/ AppointmentInfo = {
+  def parseGjermshus(req: dispatch.Req) : HttpServiceError \/ AppointmentInfo = {
     import dispatch._, Defaults._
     import scalaz.Scalaz._
-    val http = Http(req).either.map(_.disjunction.leftMap(_.getMessage))
+    val http = withTimeOut(req).either.map(_.disjunction.leftMap(_.getMessage))
     for {
-      resp <- http().leftMap(JsonParseError)
+      resp <- http().leftMap(RemotingError)
       jsonString <- if(resp.getStatusCode == 200) resp.getResponseBody.right else HttpError(resp.getStatusCode, resp.getStatusText).left
       parsed <- Parse.decodeEither[AppointmentInfo](jsonString).leftMap(JsonParseError)
     } yield parsed
