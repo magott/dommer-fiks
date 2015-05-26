@@ -1,0 +1,220 @@
+
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+
+<html>
+<head><script type="text/javascript">window.NREUM||(NREUM={});NREUM.info = {"beacon":"bam.nr-data.net","errorBeacon":"bam.nr-data.net","licenseKey":"18083db3e4","applicationID":"2430379","transactionName":"NVFbNhRVWEtTBxYPXgwbeDE2G3BXVQ0RIl4PVUspCl1TVkZLBglcA0ZcTQJbW1lAAQ4DVQtTUQcSWF9LRgVMB0ISTA==","queueTime":0,"applicationTime":11,"ttGuid":"8E2681C93B4FFE15","agent":"js-agent.newrelic.com/nr-632.min.js"}</script><script type="text/javascript">window.NREUM||(NREUM={}),__nr_require=function(e,n,t){function r(t){if(!n[t]){var o=n[t]={exports:{}};e[t][0].call(o.exports,function(n){var o=e[t][1][n];return r(o?o:n)},o,o.exports)}return n[t].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<t.length;o++)r(t[o]);return r}({QJf3ax:[function(e,n){function t(e){function n(n,t,a){e&&e(n,t,a),a||(a={});for(var u=c(n),f=u.length,s=i(a,o,r),p=0;f>p;p++)u[p].apply(s,t);return s}function a(e,n){f[e]=c(e).concat(n)}function c(e){return f[e]||[]}function u(){return t(n)}var f={};return{on:a,emit:n,create:u,listeners:c,_events:f}}function r(){return{}}var o="nr@context",i=e("gos");n.exports=t()},{gos:"7eSDFh"}],ee:[function(e,n){n.exports=e("QJf3ax")},{}],3:[function(e,n){function t(e){return function(){r(e,[(new Date).getTime()].concat(i(arguments)))}}var r=e("handle"),o=e(1),i=e(2);"undefined"==typeof window.newrelic&&(newrelic=window.NREUM);var a=["setPageViewName","addPageAction","setCustomAttribute","finished","addToTrace","inlineHit","noticeError"];o(a,function(e,n){window.NREUM[n]=t("api-"+n)}),n.exports=window.NREUM},{1:12,2:13,handle:"D5DuLP"}],"7eSDFh":[function(e,n){function t(e,n,t){if(r.call(e,n))return e[n];var o=t();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,n,{value:o,writable:!0,enumerable:!1}),o}catch(i){}return e[n]=o,o}var r=Object.prototype.hasOwnProperty;n.exports=t},{}],gos:[function(e,n){n.exports=e("7eSDFh")},{}],handle:[function(e,n){n.exports=e("D5DuLP")},{}],D5DuLP:[function(e,n){function t(e,n,t){return r.listeners(e).length?r.emit(e,n,t):(o[e]||(o[e]=[]),void o[e].push(n))}var r=e("ee").create(),o={};n.exports=t,t.ee=r,r.q=o},{ee:"QJf3ax"}],id:[function(e,n){n.exports=e("XL7HBI")},{}],XL7HBI:[function(e,n){function t(e){var n=typeof e;return!e||"object"!==n&&"function"!==n?-1:e===window?0:i(e,o,function(){return r++})}var r=1,o="nr@id",i=e("gos");n.exports=t},{gos:"7eSDFh"}],G9z0Bl:[function(e,n){function t(){var e=d.info=NREUM.info,n=f.getElementsByTagName("script")[0];if(e&&e.licenseKey&&e.applicationID&&n){c(p,function(n,t){n in e||(e[n]=t)});var t="https"===s.split(":")[0]||e.sslForHttp;d.proto=t?"https://":"http://",a("mark",["onload",i()]);var r=f.createElement("script");r.src=d.proto+e.agent,n.parentNode.insertBefore(r,n)}}function r(){"complete"===f.readyState&&o()}function o(){a("mark",["domContent",i()])}function i(){return(new Date).getTime()}var a=e("handle"),c=e(1),u=(e(2),window),f=u.document,s=(""+location).split("?")[0],p={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-632.min.js"},d=n.exports={offset:i(),origin:s,features:{}};f.addEventListener?(f.addEventListener("DOMContentLoaded",o,!1),u.addEventListener("load",t,!1)):(f.attachEvent("onreadystatechange",r),u.attachEvent("onload",t)),a("mark",["firstbyte",i()])},{1:12,2:3,handle:"D5DuLP"}],loader:[function(e,n){n.exports=e("G9z0Bl")},{}],12:[function(e,n){function t(e,n){var t=[],o="",i=0;for(o in e)r.call(e,o)&&(t[i]=n(o,e[o]),i+=1);return t}var r=Object.prototype.hasOwnProperty;n.exports=t},{}],13:[function(e,n){function t(e,n,t){n||(n=0),"undefined"==typeof t&&(t=e?e.length:0);for(var r=-1,o=t-n||0,i=Array(0>o?0:o);++r<o;)i[r]=e[n+r];return i}n.exports=t},{}]},{},["G9z0Bl"]);</script>
+    <title>DomareLedighetLista</title>
+    <meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1" />
+    <meta name="CODE_LANGUAGE" content="C#" />
+    <meta name="vs_defaultClientScript" content="JavaScript" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <link href="../Css/layers.css" type="text/css" rel="stylesheet" />
+    <link href="../Css/styles.css" type="text/css" rel="stylesheet" />
+    <script language="javascript" type="text/javascript">
+		//Funktionen sorterar tabellen beroende på vilken kolumn man valt.
+		function toggleSortering(sorteringstyp)
+		{
+			var sorteringsordningGammal = new String();
+			var sorteringsRiktningFallande = false;
+			sorteringsordningGammal = document.getElementById("Form1").hiddenSorteringsordning.value;
+
+			// Om vi sorterar på samma kolumn som innan....
+			if (sorteringsordningGammal == sorteringstyp)
+			{
+				//Vi har redan den här sorteringsordningen och ska byta riktning
+				if (document.getElementById("Form1").hiddenSorteringsRiktningFallande.value == 'True')
+					sorteringsRiktningFallande = true;
+				// Byt riktnig
+				sorteringsRiktningFallande  = !sorteringsRiktningFallande;
+			}
+			else
+			{
+				// Vi har inte haft någon explicit sortering på denna
+				// sorteringsordning innan.
+				// Default: Stigande
+				sorteringsRiktningFallande = false;
+			}
+
+			// Skicka den nya sorteringen till servern. Bind först till
+			// de gömda fälten.
+			document.getElementById("Form1").hiddenSorteringsordning.value = sorteringstyp;
+			if (sorteringsRiktningFallande)
+			{
+				document.getElementById("Form1").hiddenSorteringsRiktningFallande.value = 'True';
+			}
+			else
+			{
+				document.getElementById("Form1").hiddenSorteringsRiktningFallande.value = 'False';
+			}
+			document.getElementById("Form1").submit();
+		}
+
+
+	</script>
+
+    <!--Ger möjlighet att anropa generella javascriptfunktioner som finns i "../JS/generellaFunktioner.js"-->
+    <script language="javascript" type="text/javascript" src="../JS/generellaFunktioner.js">
+		//Funktioner från detta formulär som används där är:
+		//visaOchDoljVanstermenyFranCookie();
+		//visaOchDoljVanstermeny();
+	</script>
+
+</head>
+<body>
+<form method="post" action="DomareLedighetLista.aspx" id="Form1">
+    <div class="aspNetHidden">
+        <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTU1NTM5NzY4NQ9kFgICAQ9kFgoCBQ8WAh4FY2xhc3MFDWFrdGl2U3RpZ2FuZGVkAgcPFgIfAAUHaW5ha3RpdmQCCQ8WAh8ABQdpbmFrdGl2ZAILDxYCHwAFB2luYWt0aXZkAg0PFgIeC18hSXRlbUNvdW50AggWEGYPZBYCZg8VCQAGMzA4NTQxBjMwODU0MQYzMDg1NDEENzE5MhAyMDE1LTAzLTI5IDAwOjAwEDIwMTUtMDMtMjkgMjM6NTlMPGltZyBzcmM9Jy4uL0JpbGRlci9kb2t1bWVudExpdGVuX2lrb24uZ2lmJyBib3JkZXI9JzAnIGFsdD0nRMOlcCB0aWwgbmllc2UnPgBkAgEPZBYCZg8VCQAGMzE3NzM2BjMxNzczNgYzMTc3MzYENzE5MhAyMDE1LTA0LTI3IDAwOjAwEDIwMTUtMDQtMjggMDA6MDBMPGltZyBzcmM9Jy4uL0JpbGRlci9kb2t1bWVudExpdGVuX2lrb24uZ2lmJyBib3JkZXI9JzAnIGFsdD0nSm9iYmtvbmZlcmFuc2UnPgBkAgIPZBYCZg8VCQAGMzIwMDIxBjMyMDAyMQYzMjAwMjEENzE5MhAyMDE1LTA0LTI5IDAwOjAwEDIwMTUtMDQtMjkgMjM6NTkAAGQCAw9kFgJmDxUJAAYzMjE2MTUGMzIxNjE1BjMyMTYxNQQ3MTkyEDIwMTUtMDQtMzAgMDA6MDAQMjAxNS0wNC0zMCAyMzo1OVQ8aW1nIHNyYz0nLi4vQmlsZGVyL2Rva3VtZW50TGl0ZW5faWtvbi5naWYnIGJvcmRlcj0nMCcgYWx0PSdidXJzZGFnc3NlbHNrYXAgZGF0dGVyJz4AZAIED2QWAmYPFQkABjMyMzE5MAYzMjMxOTAGMzIzMTkwBDcxOTIQMjAxNS0wNS0wNyAwMDowMBAyMDE1LTA1LTA3IDIzOjU5AABkAgUPZBYCZg8VCQAGMzA4NTQzBjMwODU0MwYzMDg1NDMENzE5MhAyMDE1LTA1LTIyIDAwOjAwEDIwMTUtMDUtMjQgMDA6MDAAAGQCBg9kFgJmDxUJAAYzMjQ4NTIGMzI0ODUyBjMyNDg1MgQ3MTkyEDIwMTUtMDUtMjYgMDA6MDAQMjAxNS0wNS0yNiAyMzo1OWw8aW1nIHNyYz0nLi4vQmlsZGVyL2Rva3VtZW50TGl0ZW5faWtvbi5naWYnIGJvcmRlcj0nMCcgYWx0PSdGb3JlbGRyZW3DuHRlIHDDpSBza29sZSBmb3IgbnllIGbDuHJzdGVrbGFzc2VyJz4AZAIHD2QWAmYPFQkABjMxNTk3MgYzMTU5NzIGMzE1OTcyBDcxOTIQMjAxNS0wOC0wNyAxMjowNxAyMDE1LTA4LTA5IDE4OjAwAABkZHqRNnP6+G2UjX7XNXfjHngDVBp/" />
+    </div>
+
+    <div class="aspNetHidden">
+
+        <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="3921B7B3" />
+    </div>
+    <div id="divPageContainer" class="divPageContainerClass">
+        <div id="divMain" class="divMainClass">
+            <div id="divError">
+                <span id="lblError"></span>
+            </div>
+            <div id="divMainContentUtanMeny" class="divMainContentUtanMenyClass">
+                <table>
+                    <tr>
+                        <td><img alt="" src="../Bilder/pil_ikon.gif" border="0" /></td>
+                        <td><a id="linkNyLedighet" href="../Domare/DomareLedighet.aspx">Ny ferie</a></td>
+                    </tr>
+                </table>
+                <table class="fogisInfoTable" id="fogisInfoTable">
+                    <tr>
+                        <th class="inaktivEjKlickbar">
+                            <input type="checkbox" id="cbMarkeraAlla" name="cbMarkeraAlla" class="checkbox" onclick="markeraAllaCheckboxar('fogisInfoTable', 'cbMarkeraAlla');" /></th>
+                        <th id="thStarttid" class="aktivStigande" onclick="toggleSortering(&#39;Starttid&#39;); return false">
+                            Starttid</th>
+
+                        <th id="thSluttid" class="inaktiv" onclick="toggleSortering(&#39;Sluttid&#39;); return false">
+                            Sluttid</th>
+
+                        <th id="thAnledning" class="inaktiv" onclick="toggleSortering(&#39;Anledning&#39;); return false">
+                            Grunn</th>
+
+                        <th id="thInaktiv" class="inaktiv" onclick="toggleSortering(&#39;Inaktiv&#39;); return false">
+                            Inaktiv</th>
+
+                    </tr>
+
+                    <tr>
+                        <td><input type="checkbox"
+
+                                   class="checkbox"
+                                   id="cb_308541"
+                                   name="cb_308541"
+                                   onclick="kontrolleraMarkeradeCheckboxar('fogisInfoTable', 'cbMarkeraAlla');"></td>
+                        <td><a href="../Domare/DomareLedighet.aspx?domarledighetId=308541&domareId=7192&valjejflik=1">2015-03-29 00:00</td>
+                        <td>2015-03-29 23:59</td>
+                        <td align="center"><img src='../Bilder/dokumentLiten_ikon.gif' border='0' alt='Dåp til niese'></td>
+                        <td align="center"></td>
+                    </tr>
+
+                    <tr class="alternate">
+                        <td><input type="checkbox"
+
+                                   class="checkbox"
+                                   id="cb_317736"
+                                   name="cb_317736"
+                                   onclick="kontrolleraMarkeradeCheckboxar('fogisInfoTable', 'cbMarkeraAlla');"></td>
+                        <td><a href="../Domare/DomareLedighet.aspx?domarledighetId=317736&domareId=7192&valjejflik=1">2015-04-27 00:00</td>
+                        <td>2015-04-28 00:00</td>
+                        <td align="center"><img src='../Bilder/dokumentLiten_ikon.gif' border='0' alt='Jobbkonferanse'></td>
+                        <td align="center"></td>
+                    </tr>
+
+                    <tr>
+                        <td><input type="checkbox"
+
+                                   class="checkbox"
+                                   id="cb_320021"
+                                   name="cb_320021"
+                                   onclick="kontrolleraMarkeradeCheckboxar('fogisInfoTable', 'cbMarkeraAlla');"></td>
+                        <td><a href="../Domare/DomareLedighet.aspx?domarledighetId=320021&domareId=7192&valjejflik=1">2015-04-29 00:00</td>
+                        <td>2015-04-29 23:59</td>
+                        <td align="center"></td>
+                        <td align="center"></td>
+                    </tr>
+
+                    <tr class="alternate">
+                        <td><input type="checkbox"
+
+                                   class="checkbox"
+                                   id="cb_321615"
+                                   name="cb_321615"
+                                   onclick="kontrolleraMarkeradeCheckboxar('fogisInfoTable', 'cbMarkeraAlla');"></td>
+                        <td><a href="../Domare/DomareLedighet.aspx?domarledighetId=321615&domareId=7192&valjejflik=1">2015-04-30 00:00</td>
+                        <td>2015-04-30 23:59</td>
+                        <td align="center"><img src='../Bilder/dokumentLiten_ikon.gif' border='0' alt='bursdagsselskap datter'></td>
+                        <td align="center"></td>
+                    </tr>
+
+                    <tr>
+                        <td><input type="checkbox"
+
+                                   class="checkbox"
+                                   id="cb_323190"
+                                   name="cb_323190"
+                                   onclick="kontrolleraMarkeradeCheckboxar('fogisInfoTable', 'cbMarkeraAlla');"></td>
+                        <td><a href="../Domare/DomareLedighet.aspx?domarledighetId=323190&domareId=7192&valjejflik=1">2015-05-07 00:00</td>
+                        <td>2015-05-07 23:59</td>
+                        <td align="center"></td>
+                        <td align="center"></td>
+                    </tr>
+
+                    <tr class="alternate">
+                        <td><input type="checkbox"
+
+                                   class="checkbox"
+                                   id="cb_308543"
+                                   name="cb_308543"
+                                   onclick="kontrolleraMarkeradeCheckboxar('fogisInfoTable', 'cbMarkeraAlla');"></td>
+                        <td><a href="../Domare/DomareLedighet.aspx?domarledighetId=308543&domareId=7192&valjejflik=1">2015-05-22 00:00</td>
+                        <td>2015-05-24 00:00</td>
+                        <td align="center"></td>
+                        <td align="center"></td>
+                    </tr>
+
+                    <tr>
+                        <td><input type="checkbox"
+
+                                   class="checkbox"
+                                   id="cb_324852"
+                                   name="cb_324852"
+                                   onclick="kontrolleraMarkeradeCheckboxar('fogisInfoTable', 'cbMarkeraAlla');"></td>
+                        <td><a href="../Domare/DomareLedighet.aspx?domarledighetId=324852&domareId=7192&valjejflik=1">2015-05-26 00:00</td>
+                        <td>2015-05-26 23:59</td>
+                        <td align="center"><img src='../Bilder/dokumentLiten_ikon.gif' border='0' alt='Foreldremøte på skole for nye førsteklasser'></td>
+                        <td align="center"></td>
+                    </tr>
+
+                    <tr class="alternate">
+                        <td><input type="checkbox"
+
+                                   class="checkbox"
+                                   id="cb_315972"
+                                   name="cb_315972"
+                                   onclick="kontrolleraMarkeradeCheckboxar('fogisInfoTable', 'cbMarkeraAlla');"></td>
+                        <td><a href="../Domare/DomareLedighet.aspx?domarledighetId=315972&domareId=7192&valjejflik=1">2015-08-07 12:07</td>
+                        <td>2015-08-09 18:00</td>
+                        <td align="center"></td>
+                        <td align="center"></td>
+                    </tr>
+
+                </table>
+                <input name="hiddenSorteringsordning" type="hidden" id="hiddenSorteringsordning" value="Starttid" /><input name="hiddenSorteringsRiktningFallande" type="hidden" id="hiddenSorteringsRiktningFallande" />
+            </div>
+            <div id="divMainFooter" class="divMainFooterClass">
+                <input type="submit" name="btnRadera" value="Slett" id="btnRadera" title="Sletter ferier som er markert" class="button70" />
+            </div>
+        </div>
+    </div>
+
+    <script language='javascript' src='../JS/generellaFunktioner.js'></script><script language='javascript'>hideMsgDiv();</script></form>
+</body>
+</html>

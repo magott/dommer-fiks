@@ -48,6 +48,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
                  <ul class="dropdown-menu" role="menu">
                    <li><a href="/user"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Min bruker</a></li>
                    <li><a href="/calendar/mycal"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Kalender</a></li>
+                   <li><a href="/vacation"><span class="glyphicon glyphicon-plane" aria-hidden="true"></span> Ferie</a></li>
                  </ul>
                </li>
                  <li class={if (pages.contains("invoice")) "active" else "inactive"}>
@@ -601,19 +602,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
       <script src="/js/invoice.js" type="text/javascript"></script> )  ++lodashJS
   }
 
-  def availableMatchesScripts = {
-    angularJs ++ (<script src="/js/availablematches.js" type="text/javascript"></script>) ++ lodashJS ++ momentJS
-  }
 
-  def reportInterestScripts = {
-    angularJs ++ (<script src="/js/reportinterest.js" type="text/javascript"></script>) ++ lodashJS
-  }
-
-  def matchesScripts = {
-    angularJs ++ (<script src="/js/matches.js" type="text/javascript"></script>) ++ lodashJS ++ momentJS
-  }
-
-  def angularJs = <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.min.js" type="text/javascript"></script>
 
 def tableOfAvailableMatches = {
   <div ng-app="availablematchesapp">
@@ -1047,6 +1036,111 @@ def tableOfAvailableMatches = {
     </div>)
   }
 
+  def vacationTable = {
+    <div ng-app="vacationlist">
+      <div ng-controller="ctrl" data-ng-init="loadVacations()">
+        <div class="col-sm-12">
+          <div class ="row">
+            <div class="col-sm-2">
+              <a class="btn btn-default btn-sm" href="/vacation/new">
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Legg til ferie
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive col-md-12 col-xs-12">
+          <table ng-cloak="" class="table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Fra</th>
+                <th>Til</th>
+                <th>Kommentar</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="vacation in vacationList" ng-class="{'text-muted': isHistoric(vacation)}">
+                <td>{"{{vacation.start | date:'dd.MM.yy HH:mm'}}"}</td>
+                <td>{"{{vacation.end | date:'dd.MM.yy HH:mm'}}"}</td>
+                <td>{"{{vacation.reason}}"}</td>
+                <td>
+                  <button class="btn btn-default" ng-click="deleteVacation(vacation.id)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+    </div>
+  }
+
+  def vacationForm = {
+    <legend>Ny ferie/sperre</legend>
+      <div ng-app="vacationform">
+        <div ng-controller="ctrl">
+          <div class="row">
+            <div class="col-sm-offset-2 col-sm-4">
+              <div class="alert alert-danger" ng-show="hasErrors()" ng-cloak="">
+                <ul ng-repeat="error in errors">
+                  <li>{"{{error}}"}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <form name="vacationForm" class="form-horizontal">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="date">Fra</label>
+            <div class="col-sm-2">
+              <input type="date" name="fromDate" class="form-control" ng-model="vacation.fromDate"
+                     placeholder={LocalDate.now.toString("yyyy-MM-dd")} required="required"/>
+            </div>
+            <div class="col-sm-3">
+              <div class="row">
+                <div class="col-sm-6">
+                  <input type="time" id="fromTime" name="fromTime" class="form-control" ng-model="vacation.fromTime" ng-disabled="wholeDay" placeholder="16:00"/>
+                </div>
+              </div>
+            </div>
+            <p class="help-block"></p>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="toDate">Til</label>
+            <div class="col-sm-2">
+              <input type="date" id="toDate" name="toDate" class="form-control" required="required" ng-model="vacation.toDate" placeholder={LocalDate.now.toString("yyyy-MM-dd")}/>
+            </div>
+            <div class="col-sm-3">
+              <div class="row">
+                <div class="col-sm-6">
+                  <input type="time" id="toTime" name="toTime" class="form-control" ng-disabled="wholeDay" ng-model="vacation.toTime" placeholder="22:00"/>
+                </div>
+                <div class="col-sm-6">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="wholeDays" ng-change='toggleWholeDay()' ng-model="wholeDay"/> Hele dager
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="help-block"></p>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="reason">Kommentar/begrunnelse</label>
+            <div class="col-sm-3">
+              <textarea class="form-control" rows="3" id="reason" ng-model="vacation.reason"></textarea>
+            </div>
+            <p class="help-block"></p>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-4 col-sm-offset-2">
+              <button id="submit" class="btn btn-default" ng-click="vacationForm.$valid &amp;&amp; submitVacation(vacation)">Lagre</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
 
   private def urlEscape(url: String) = {
     url.replaceAllLiterally(" ", "%20")
@@ -1073,8 +1167,23 @@ def tableOfAvailableMatches = {
   private def errorInGroup(fields:Map[String, FormField], parameterNames:String*):Boolean = {
     fields.filterKeys(parameterNames.contains(_)).values.exists(_.isError)
   }
+  def availableMatchesScripts = {
+    angularJs ++ (<script src="/js/availablematches.js" type="text/javascript"></script>) ++ lodashJS ++ momentJS
+  }
+
+  def reportInterestScripts = {
+    angularJs ++ (<script src="/js/reportinterest.js" type="text/javascript"></script>) ++ lodashJS
+  }
+
+  def matchesScripts = {
+    angularJs ++ (<script src="/js/matches.js" type="text/javascript"></script>) ++ lodashJS ++ momentJS
+  }
+
+  def angularJs = <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.min.js" type="text/javascript"></script> ++ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/i18n/angular-locale_nb-no.js"></script>
 
   def stadiumSubmitJs = <script src="/js/stadiumsubmit.js" type="text/javascript"></script>
+  def vacationListScripts = momentJS ++ angularJs ++ (<script src="/js/vacationlist.js" type="text/javascript"></script>)
+  def vacationFormScripts = lodashJS ++ momentJS ++ angularJs ++ (<script src="/js/vacationform.js" type="text/javascript"></script>)
 
   private def momentAngularJS = <script src="//cdnjs.cloudflare.com/ajax/libs/angular-moment/0.9.0/angular-moment.min.js" type="text/javascript"></script>
   def momentJS = <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js" type="text/javascript"></script>

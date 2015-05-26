@@ -303,4 +303,7 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
       </form>
     , Some(stadiumSubmitJs))
   }
+
+  def vacationList = emptyPage(vacationTable, Some(vacationListScripts))
+  def newVacation = emptyPage(vacationForm, Some(vacationFormScripts))
 }

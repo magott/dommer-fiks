@@ -1,5 +1,6 @@
 package no.magott.fiks.data
 
+import no.magott.fiks.FiksScraper
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import scala.collection.JavaConverters._
@@ -12,22 +13,18 @@ import no.magott.fiks.user.UserSession
 import no.magott.fiks.JSoupPimps._
 
 
-class MatchScraper {
-  val COOKIE_NAME = "ASP.NET_SessionId"
+class MatchScraper extends FiksScraper{
   val cancelIdPattern = """.*\((.*)\).*""".r
-  val dateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm")
   val matchReportUrl = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchDomarrapport.aspx?matchId=s%"
-  val VIEWSTATE = "__VIEWSTATE"
   val EVENTVALIDATION = "__EVENTVALIDATION"
   val EVENTTARGET = "__EVENTTARGET"
-  val VIEWSTATEGENERATOR = "__VIEWSTATEGENERATOR"
 
   def scrapeAssignedMatches(session: UserSession) = {
     val assignedMatchesDoc = withAutomaticReAuth(session, doScrapeAssignedMatches)
     val matchesElements = assignedMatchesDoc.select("div#divUppdrag").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
     val upcomingAssignedMatches = matchesElements.map {
       el: Element =>
-        AssignedMatch(dateTimeFormat.parseLocalDateTime(el.child(0).text),
+        AssignedMatch(fiksDateFormat.parseLocalDateTime(el.child(0).text),
           el.child(1).text,
           el.child(3).getElementsByTag("a").text,
           el.child(4).text,
@@ -51,7 +48,7 @@ class MatchScraper {
       el: Element =>
         AvailableMatch(el.child(0).text,
           el.child(1).text,
-          dateTimeFormat.parseLocalDateTime(el.child(2).text),
+          fiksDateFormat.parseLocalDateTime(el.child(2).text),
           el.child(4).text,
           el.child(5).text,
           el.child(6).text,
@@ -72,7 +69,7 @@ class MatchScraper {
     AvailableMatch(
       el.select("span#lblTavlingskategori").text,
       el.select("span#lblTavling").text,
-      dateTimeFormat.parseLocalDateTime(el.select("span#lblTid").text),
+      fiksDateFormat.parseLocalDateTime(el.select("span#lblTid").text),
       el.select("span#lblMatchnr").text,
       el.select("span#lblMatch").text,
       el.select("span#lblAnlaggning").text,

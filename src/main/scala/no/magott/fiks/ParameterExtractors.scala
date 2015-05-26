@@ -17,3 +17,5 @@ object CancellationIdParameter extends Params.Extract("cancellationId", Params.f
 object ReasonParameter extends Params.Extract("reason", Params.first)
 
 object ExportParameter extends Params.Extract("export", Params.first)
+
+object IdParameter extends Params.Extract("id", Params.first)
