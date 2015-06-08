@@ -1063,6 +1063,7 @@ def tableOfAvailableMatches = {
                 <td>{"{{vacation.start | date:'dd.MM.yy HH:mm'}}"}</td>
                 <td>{"{{vacation.end | date:'dd.MM.yy HH:mm'}}"}</td>
                 <td>{"{{vacation.reason}}"}</td>
+                <td>Slett</td>
                 <td>
                   <button class="btn btn-default" ng-click="deleteVacation(vacation.id)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
                 </td>
