@@ -30,16 +30,18 @@ class VacationScraper extends FiksScraper{
       val viewState = vacationFormDoc.valueOfElement(VIEWSTATE)
       val viewStateGenerator = vacationFormDoc.valueOfElement(VIEWSTATEGENERATOR)
 
-      val response = Jsoup.connect(url).cookie(COOKIE_NAME, session.sessionToken).data(VIEWSTATE, viewState)
+      val request = Jsoup.connect(url).cookie(COOKIE_NAME, session.sessionToken).data(VIEWSTATE, viewState)
         .data(VIEWSTATEGENERATOR, viewStateGenerator)
         .data("__LASTFOCUS","").data("__EVENTARGUMENT","").data("__EVENTTARGET","") //Required garbage
         .data("DatumValjareStartdatum$tbDatum", vacation.fiksStartDateParam)
         .data("tbStarttid", vacation.fiksStartTimeParam)
-        .data("DatumValjareSlutdatum$tbDatum", vacation.fiksStartDateParam)
+        .data("DatumValjareSlutdatum$tbDatum", vacation.fiksEndDateParam)
         .data("tbSluttid", vacation.fiksEndTimeParam)
         .data("tbAnledning", vacation.reason.getOrElse(""))
         .data("btnSpara", "Lagre")
-        .timeout(25000).method(Method.POST).execute()
+        .timeout(25000).method(Method.POST)
+      println(request)
+      val response = request.execute()
 //      if(response.statusCode == 200) //This is JS-dialog error page, validation error
       response.parse()
     })
