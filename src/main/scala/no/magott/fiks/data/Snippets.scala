@@ -43,11 +43,12 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
             {
 
              if(isLoggedIn){
-               <li class={if (List("calendar","user").exists(pages.contains(_))) "dropdown active" else "dropdown inactive"}>
+               <li class={if (List("calendar","user","messages").exists(pages.contains(_))) "dropdown active" else "dropdown inactive"}>
                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Bruker <span class="caret"></span></a>
                  <ul class="dropdown-menu" role="menu">
                    <li><a href="/user"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Min bruker</a></li>
                    <li><a href="/calendar/mycal"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Kalender</a></li>
+                   <li><a href="/messages"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Meldinger <span class="badge unread"></span></a></li>
                    <li><a href="/vacation"><span class="glyphicon glyphicon-plane" aria-hidden="true"></span> Ferie</a></li>
                  </ul>
                </li>
@@ -158,6 +159,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
              }
         """}
         </script>
+        {messageCountScripts}
         {if(scripts.isDefined) scripts.get}
        </body>
     </html>
@@ -1142,6 +1144,23 @@ def tableOfAvailableMatches = {
     </div>
   }
 
+  def messagesList = {
+    <div ng-app="messages">
+      <div ng-controller="ctrl" class="messages col-md-6" data-ng-init="loadMessages()">
+        <div class="panel panel-default" ng-repeat="message in messages">
+          <div class="panel-heading">
+            <h3 class="panel-title">{"{{message.title}}"}</h3>
+            <small>{"{{message.author}}"}</small>
+            <small class="pull-right">{"{{message.timestamp | date: 'EEE d MMMM'}}"}</small>
+          </div>
+          <div class="panel-body" ng-bind-html="message.body">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
   private def urlEscape(url: String) = {
     url.replaceAllLiterally(" ", "%20")
       .replaceAllLiterally("-", "%2D")
@@ -1179,7 +1198,17 @@ def tableOfAvailableMatches = {
     angularJs ++ (<script src="/js/matches.js" type="text/javascript"></script>) ++ lodashJS ++ momentJS
   }
 
-  def angularJs = <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.min.js" type="text/javascript"></script> ++ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/i18n/angular-locale_nb-no.js"></script>
+  def messagesScripts = {
+    angularJs ++ angularJsSanitize ++(<script src="/js/messages.js" type="text/javascript"></script>)
+  }
+
+  def messageCountScripts = {
+    (<script src="/js/messagecount.js" type="text/javascript"></script>)
+  }
+
+  def angularJs = <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js" type="text/javascript"></script> ++ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/i18n/angular-locale_nb-no.js"></script>
+
+  def angularJsSanitize = <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-sanitize.min.js" type="text/javascript"></script>
 
   def stadiumSubmitJs = <script src="/js/stadiumsubmit.js" type="text/javascript"></script>
   def vacationListScripts = momentJS ++ angularJs ++ (<script src="/js/vacationlist.js" type="text/javascript"></script>)

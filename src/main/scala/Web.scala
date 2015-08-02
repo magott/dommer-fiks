@@ -4,6 +4,7 @@ import no.magott.fiks.calendar.{CalendarService, CalendarPlan}
 import no.magott.fiks.data._
 import no.magott.fiks.FallbackPlan
 import no.magott.fiks.invoice.{InvoiceRepository, InvoicePlan}
+import no.magott.fiks.message.{MessageScraper, MessageRepository, MessageService, MessagePlan}
 import no.magott.fiks.user.{UserPlan, UserService}
 import no.magott.fiks.vacation.{VacationScraper, VacationPlan}
 import org.joda.time.{Weeks, DateTimeUtils}
@@ -32,6 +33,7 @@ object Web {
       .plan(new InvoicePlan(matchservice, userservice, invoiceRepository))
       .plan(new UserPlan(userservice))
       .plan(new VacationPlan(userservice, new VacationScraper))
+      .plan(new MessagePlan(new MessageService(new MessageRepository, new MessageScraper), userservice))
       .plan(new FallbackPlan)
     .run()
   }

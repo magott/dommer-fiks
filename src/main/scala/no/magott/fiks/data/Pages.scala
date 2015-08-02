@@ -306,4 +306,5 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
 
   def vacationList = emptyPage(vacationTable, Some(vacationListScripts))
   def newVacation = emptyPage(vacationForm, Some(vacationFormScripts))
+  def messages: NodeSeq = emptyPage(messagesList, Some(messagesScripts))
 }

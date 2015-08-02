@@ -20,7 +20,7 @@ class MatchScraper extends FiksScraper{
   val EVENTTARGET = "__EVENTTARGET"
 
   def scrapeAssignedMatches(session: UserSession) = {
-    val assignedMatchesDoc = withAutomaticReAuth(session, doScrapeAssignedMatches)
+    val assignedMatchesDoc = withAutomaticReAuthExceptionBased(session, doScrapeAssignedMatches)
     val matchesElements = assignedMatchesDoc.select("div#divUppdrag").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
     val upcomingAssignedMatches = matchesElements.map {
       el: Element =>
@@ -38,7 +38,7 @@ class MatchScraper extends FiksScraper{
   }
 
   def scrapeAvailableMatches(session: UserSession) = {
-    val availableMatchesDoc = withAutomaticReAuth(session, doScrapeAvailableMatches)
+    val availableMatchesDoc = withAutomaticReAuthExceptionBased(session, doScrapeAvailableMatches)
     parseAvailableMatches(availableMatchesDoc)
   }
 
@@ -64,7 +64,7 @@ class MatchScraper extends FiksScraper{
 
   def scrapeMatchInfo(assignmentId: String, session:UserSession) = {
     val cleanAssignmentId = Jsoup.clean(assignmentId, Whitelist.none)
-    val response = withAutomaticReAuth(session, doScrapeMatchInfo(assignmentId) )
+    val response = withAutomaticReAuthExceptionBased(session, doScrapeMatchInfo(assignmentId) )
     val el = response.select("table")
     AvailableMatch(
       el.select("span#lblTavlingskategori").text,
@@ -80,14 +80,14 @@ class MatchScraper extends FiksScraper{
 
   def scrapeMeldForfallViewState(forfallId:String, session:UserSession) = {
     val url = s"https://fiks.fotball.no/FogisDomarKlient/Uppdrag/UppdragAterbudOrsakModal.aspx?domaruppdragId=$forfallId"
-    val viewstate = withAutomaticReAuth(session, session => Jsoup.connect(url).cookie(COOKIE_NAME, session.sessionToken).timeout(10000).get)
+    val viewstate = withAutomaticReAuthExceptionBased(session, session => Jsoup.connect(url).cookie(COOKIE_NAME, session.sessionToken).timeout(10000).get)
                       .select("input#__VIEWSTATE").`val`
     viewstate
   }
 
   def postForfall(forfallId:String, reason:String, viewstate:String, session:UserSession) = {
     val url = s"https://fiks.fotball.no/FogisDomarKlient/Uppdrag/UppdragAterbudOrsakModal.aspx?domaruppdragId=$forfallId"
-    withAutomaticReAuth(session, session => {
+    withAutomaticReAuthExceptionBased(session, session => {
       val resp = Jsoup.connect(url)
         .cookie(COOKIE_NAME, session.sessionToken)
         .data("tbKommentar", reason)
@@ -101,14 +101,14 @@ class MatchScraper extends FiksScraper{
 
   def scrapeMatchResult(fiksId:String, session:UserSession) = {
     val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(fiksId)
-    val matchResultDocument = withAutomaticReAuth(session,
+    val matchResultDocument = withAutomaticReAuthExceptionBased(session,
       session=> Jsoup.connect(url).cookie(COOKIE_NAME, session.sessionToken).timeout(10000).get)
     parseMatchResultDocument(fiksId:String, matchResultDocument)
   }
 
   def deleteMatchResult(fiksId:String, deletions:Set[ResultReport], session:UserSession){
     val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(fiksId)
-    val matchResultForm = withAutomaticReAuth(session,
+    val matchResultForm = withAutomaticReAuthExceptionBased(session,
       session => Jsoup.connect(url).cookie(COOKIE_NAME,session.sessionToken).get)
     val con = Jsoup.connect(url).cookie(COOKIE_NAME, session.sessionToken).timeout(15000)
     deletions.foreach(r => con.data(r.reportId,"on"))
@@ -123,7 +123,7 @@ class MatchScraper extends FiksScraper{
 
   def postMatchResult(matchResult: MatchResult, session:UserSession){
     val url = "https://fiks.fotball.no/Fogisdomarklient/Match/MatchResultat.aspx?matchId=%s".format(matchResult.fiksId)
-    val matchResultForm = withAutomaticReAuth(session, session => Jsoup.connect(url).cookie(COOKIE_NAME,session.sessionToken).get)
+    val matchResultForm = withAutomaticReAuthExceptionBased(session, session => Jsoup.connect(url).cookie(COOKIE_NAME,session.sessionToken).get)
 
     val con = Jsoup.connect(url).cookie(COOKIE_NAME, session.sessionToken).timeout(25000)
     matchResult.halfTimeScore.foreach(x => con.data("tbHalvtidHemmalag", x.home.toString)) //XXX: Fixit!!
@@ -141,7 +141,7 @@ class MatchScraper extends FiksScraper{
 
   def postInterestForm(availabilityId: String, comment:String, session:UserSession) {
     val url = "https://fiks.fotball.no/Fogisdomarklient/Uppdrag/UppdragLedigtUppdrag.aspx?domaruppdragId=" + availabilityId
-    val reportInterestForm = withAutomaticReAuth(session, doScrapeReportInterestForm(url))
+    val reportInterestForm = withAutomaticReAuthExceptionBased(session, doScrapeReportInterestForm(url))
     val req = Jsoup.connect(url)
       .method(Method.POST)
       .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
@@ -156,7 +156,7 @@ class MatchScraper extends FiksScraper{
       req.execute()
   }
 
-  private def withAutomaticReAuth(session:UserSession, f: UserSession => Document):Document = {
+  private def withAutomaticReAuthExceptionBased(session:UserSession, f: UserSession => Document):Document = {
     val first = f(session)
     if(isJsRedirectToLogin(first)) {
       FiksLoginService.reAuthenticate(session)

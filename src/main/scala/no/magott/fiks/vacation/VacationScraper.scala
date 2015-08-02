@@ -96,23 +96,4 @@ class VacationScraper extends FiksScraper{
     vacations
   }
 
-  private def withAutomaticReAuth(session: UserSession, f: UserSession => Document): ScrapeError \/ Document = {
-    val first = f(session)
-    if (isJsRedirectToLogin(first)) {
-      FiksLoginService.reAuthenticate(session)
-      val second = f(session)
-      if (isJsRedirectToLogin(second)) {
-        ReAuthRequired("Login required").left
-      } else {
-        second.right
-      }
-    } else {
-      first.right
-    }
-  }
-
-  private def isJsRedirectToLogin(doc:Document) = {
-    Option(doc.body).flatMap(el => Option(el.children)).forall(_.isEmpty)
-  }
-
 }
