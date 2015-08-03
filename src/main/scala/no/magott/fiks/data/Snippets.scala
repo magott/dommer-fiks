@@ -1148,7 +1148,7 @@ def tableOfAvailableMatches = {
     <div ng-app="messages">
       <div ng-controller="ctrl" class="messages col-md-6" data-ng-init="loadMessages()">
         <div class="panel panel-default" ng-repeat="message in messages">
-          <div class="panel-heading">
+          <div class="panel-heading" ng-cloak="">
             <h3 class="panel-title">{"{{message.title}}"}</h3>
             <small>{"{{message.author}}"}</small>
             <small class="pull-right">{"{{message.timestamp | date: 'EEE d MMMM'}}"}</small>
