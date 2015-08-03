@@ -22,7 +22,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
+            <span class="icon-bar"><span class="badge badge-notify unread"></span></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
@@ -44,11 +44,11 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
              if(isLoggedIn){
                <li class={if (List("calendar","user","messages").exists(pages.contains(_))) "dropdown active" else "dropdown inactive"}>
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Bruker <span class="caret"></span></a>
+                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Bruker <span class="badge badge-notify unread"></span><span class="caret"></span></a>
                  <ul class="dropdown-menu" role="menu">
                    <li><a href="/user"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Min bruker</a></li>
                    <li><a href="/calendar/mycal"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Kalender</a></li>
-                   <li><a href="/messages"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Meldinger <span class="badge unread"></span></a></li>
+                   <li><a href="/messages"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Meldinger <span class="badge badge-notify unread"></span></a></li>
                    <li><a href="/vacation"><span class="glyphicon glyphicon-plane" aria-hidden="true"></span> Ferie</a></li>
                  </ul>
                </li>

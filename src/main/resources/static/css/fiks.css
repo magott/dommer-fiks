@@ -34,6 +34,19 @@
     line-height: 1.33;
     border-radius: 6px;
 }
+
+.badge-notify{
+    background:red;
+    position:relative;
+    top: -5px;
+    left: 0px;
+}
+
+button .badge-notify{
+    top: -20px;
+    left: 15px;
+}
+
 @-webkit-viewport{width: device-width;}
 @-moz-viewport{width: device-width;}
 @-ms-viewport{width: device-width;}
