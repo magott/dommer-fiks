@@ -87,7 +87,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
         <link rel="shortcut icon" href="/favicon.ico" />
 
       <!-- Le styles -->
-        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>
         <style type="text/css">
           {
           {"""
@@ -133,7 +133,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
 
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script type="text/javascript">
           {"""
           var _gaq = _gaq || [];
