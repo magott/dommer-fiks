@@ -73,6 +73,9 @@ button .badge-notify{
     margin-bottom: 20px;
     margin-top: 10px;
 }
+.message-body{
+    word-break: break-word;
+}
 
 @media screen and (max-width: 991px) and (min-width: 768px){
     body { padding-top: 110px; }

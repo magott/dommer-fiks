@@ -266,7 +266,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     </p>
     <div>
     {val errorMsgs:Set[String] = fields.filter(_._2.isError).values.map(_.errorMessage.get).toSet
-     if(!errorMsgs.isEmpty){
+     if(errorMsgs.nonEmpty){
        <div class="alert alert-error">
          {errorMsgs.map(s => <div>{s}</div>)}
        </div>
@@ -275,7 +275,7 @@ case class Snippets[T <: HttpServletRequest] (req: HttpRequest[T]) {
     </div>
     <div>
       {
-      if(!r.resultReports.isEmpty){
+      if(r.resultReports.nonEmpty){
         <h4>Historikk</h4>
           <table class="table table-striped table-bordered table-condensed">
             <thead>
@@ -1153,7 +1153,7 @@ def tableOfAvailableMatches = {
             <small>{"{{message.author}}"}</small>
             <small class="pull-right">{"{{message.timestamp | date: 'EEE d MMMM'}}"}</small>
           </div>
-          <div class="panel-body" ng-bind-html="message.body">
+          <div class="panel-body message-body" ng-bind-html="message.body">
 
           </div>
         </div>
