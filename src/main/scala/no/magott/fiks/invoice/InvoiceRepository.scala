@@ -42,19 +42,19 @@ class InvoiceRepository {
   }
 
   def reminderSent(invoiceId:String, date:DateTime) = {
-    db("invoice").update(where("_id"->new ObjectId(invoiceId)), $set(Seq("reminder" -> date))).getN == 1
+    db("invoice").update(where("_id"->new ObjectId(invoiceId)), $set("reminder" -> date)).getN == 1
   }
 
   def unsetReminder(invoiceId:String) = {
-    db("invoice").update(where("_id"->new ObjectId(invoiceId)), $unset(Seq("reminder"))).getN == 1
+    db("invoice").update(where("_id"->new ObjectId(invoiceId)), $unset("reminder")).getN == 1
   }
 
   def invoiceSettled(invoiceId:String, date:DateTime) = {
-    db("invoice").update(where("_id"->new ObjectId(invoiceId)), $set(Seq("settled" -> date))).getN == 1
+    db("invoice").update(where("_id"->new ObjectId(invoiceId)), $set("settled" -> date)).getN == 1
   }
 
   def unsetSettled(invoiceId:String) = {
-    db("invoice").update(where("_id"->new ObjectId(invoiceId)), $unset(Seq("settled"))).getN == 1
+    db("invoice").update(where("_id"->new ObjectId(invoiceId)), $unset("settled")).getN == 1
   }
 
 }

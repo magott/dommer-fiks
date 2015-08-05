@@ -20,7 +20,7 @@ class MessageRepository {
 
   def updateReadDate(user: UserSession, localDateTime: LocalDateTime) = {
     val Norway = DateTimeZone.forID("Europe/Oslo")
-    db("messages").update(where("username" -> user.username), $set(Seq("lastRead"-> localDateTime.toDateTime(Norway))), upsert=true)
+    db("messages").update(where("username" -> user.username), $set("lastRead"-> localDateTime.toDateTime(Norway)), upsert=true)
   }
 
   def getLastRead(user:UserSession) = {

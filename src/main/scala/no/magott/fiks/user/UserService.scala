@@ -22,7 +22,7 @@ class UserService {
   cipher.setAlgorithm("PBEWITHSHA256AND256BITAES-CBC-BC")
 
   def removeCalendarFor(username: String) {
-    db("users").update(where("username"->username), $unset(Seq("calid")))
+    db("users").update(where("username"->username), $unset("calid"))
   }
 
   def byUsername(username:String) = {
@@ -44,14 +44,14 @@ class UserService {
   @deprecated("use saveUser")
   def newUser(username: String, password: String, email:String) = {
     val calendarId = UUID.randomUUID.toString
-    db("users").update(where("username"->username), $set(Seq("calid" -> calendarId, "username" -> username, "password" -> cipher.encrypt(password), "email" -> email)), true, false)
+    db("users").update(where("username"->username), $set("calid" -> calendarId, "username" -> username, "password" -> cipher.encrypt(password), "email" -> email), true, false)
     calendarId
   }
 
   def newCalendarId(username:String) = {
     val newCalendarId = UUID.randomUUID.toString
     val users = db("users")
-    users.findAndModify(where("username"->username), $set(Seq("calid" -> newCalendarId )))
+    users.findAndModify(where("username"->username), $set("calid" -> newCalendarId ))
     newCalendarId
   }
 

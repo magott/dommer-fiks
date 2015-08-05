@@ -52,7 +52,7 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
   }
 
   def asMongoUpdate:DBObject = {
-    $set(Seq(asMap.toSeq:_*)) ++ $unset(Seq(unsetList:_*))
+    $set(asMap.toSeq:_*) ++ $unset(unsetList:_*)
   }
 
   def asMongoInsert: DBObject = {

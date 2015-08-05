@@ -4,9 +4,6 @@ import scala.xml._
 import org.joda.time.{DateTimeZone, DateTime, Interval, LocalDateTime}
 import dispatch._, Defaults._
 import geo.LatLong
-import scala.concurrent.duration.Duration
-import java.util.concurrent.TimeUnit
-import org.specs2.internal.scalaz.Digit._0
 import scala.util.control.Exception._
 
 class WeatherService {
