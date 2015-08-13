@@ -7,9 +7,11 @@ import unfiltered.filter.{Intent, Plan}
 import javax.servlet.http.HttpServletRequest
 import no.magott.fiks.user.{LoggedOnUser, UserService}
 import no.magott.fiks.data.{SessionId, CalendarContentType, FiksLoginService, Pages}
-import scala.concurrent.ops.spawn
+
+import scala.concurrent.Future
 
 class CalendarPlan(calendarService: CalendarService, userservice: UserService) extends Plan {
+  import scala.concurrent.ExecutionContext.Implicits.global
   val requiredParams = Vector("username", "password", "terms", "email")
 
 
@@ -53,7 +55,7 @@ class CalendarPlan(calendarService: CalendarService, userservice: UserService) e
       case Some(user) => {
         calendarService.calendarForUser(user) match {
           case Some(matches) => {
-            spawn{
+            Future{
               userservice.incrementPollcount(user)
               val UserAgent(ua) = r
               println("Fetching calendar username %s for agent %s".format(user.username,ua))

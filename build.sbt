@@ -4,15 +4,15 @@ SbtStartScript.startScriptForClassesSettings
 
 name:="dommer-fiks"
 
-scalaVersion:="2.10.4"
+scalaVersion:="2.11.7"
 
 organization := "com.andersen-gott"
 
 libraryDependencies ++=
   Seq(
-    "net.databinder" %% "unfiltered" % "0.6.7",
-    "net.databinder" %% "unfiltered-filter" % "0.6.7",
-    "net.databinder" %% "unfiltered-jetty" % "0.6.7",
+    "net.databinder" %% "unfiltered" % "0.8.4",
+    "net.databinder" %% "unfiltered-filter" % "0.8.4",
+    "net.databinder" %% "unfiltered-jetty" % "0.8.4",
     "net.databinder.dispatch" %% "dispatch-core" % "0.11.2",
     "io.argonaut" %% "argonaut" % "6.0.4",
     "org.slf4j" % "slf4j-simple" % "1.6.4",

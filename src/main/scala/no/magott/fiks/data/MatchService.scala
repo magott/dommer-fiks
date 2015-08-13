@@ -8,7 +8,7 @@ import com.ning.http.client.RequestBuilder
 import dispatch.Http
 import geo.LatLong
 
-import scala.concurrent.ops.spawn
+import scala.concurrent.Future
 import java.util.concurrent.{TimeUnit}
 import scala.util.Properties
 import com.google.common.cache.{LoadingCache, Cache, CacheLoader, CacheBuilder}
@@ -20,6 +20,7 @@ import scalaz.\/
 class MatchService(val matchscraper:MatchScraper) {
 
   import Scala2GuavaConversions.scalaFunction2GuavaFunction
+  import scala.concurrent.ExecutionContext.Implicits.global
   val assignedMatchesCache: LoadingCache[UserSession, List[AssignedMatch]] = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((session: UserSession) => matchscraper.scrapeAssignedMatches(session)))
   val availableMatchesCache:LoadingCache[UserSession, List[AvailableMatch]] = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).maximumSize(100).build(CacheLoader.from((session:UserSession) => matchscraper.scrapeAvailableMatches(session)))
   val matchInfoCache:Cache[String,AvailableMatch] = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).maximumSize(50).build()
@@ -74,13 +75,13 @@ class MatchService(val matchscraper:MatchScraper) {
   }
 
   def prefetchAssignedMatches(session:UserSession) {
-    spawn{
+    Future{
       assignedMatchesCache.get(session)
     }
   }
 
   def prefetchAvailableMatches(session:UserSession) {
-    spawn{
+    Future{
       availableMatchesCache.get(session)
     }
   }
@@ -105,7 +106,7 @@ class MatchService(val matchscraper:MatchScraper) {
   }
 
   def parseGjermshus(req: dispatch.Req) : HttpServiceError \/ AppointmentInfo = {
-    import dispatch._, Defaults._
+    import dispatch._
     import scalaz.Scalaz._
     val http = withTimeOut(req).either.map(_.disjunction.leftMap(_.getMessage))
     for {
