@@ -5,7 +5,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import scala.collection.JavaConverters._
 import org.joda.time.format.DateTimeFormat
-import org.joda.time.LocalDate
+import org.joda.time.{LocalDateTime, LocalDate}
 import org.jsoup.Connection.Method
 import org.jsoup.safety.Whitelist
 import unfiltered.request.POST
@@ -24,7 +24,8 @@ class MatchScraper extends FiksScraper{
     val matchesElements = assignedMatchesDoc.select("div#divUppdrag").select("table.fogisInfoTable > tbody > tr").listIterator.asScala.drop(1)
     val upcomingAssignedMatches = matchesElements.map {
       el: Element =>
-        AssignedMatch(fiksDateFormat.parseLocalDateTime(el.child(0).text),
+        AssignedMatch(
+          fiksDateFormat.parseLocalDateTime(el.child(0).text),
           el.child(1).text,
           el.child(3).getElementsByTag("a").text,
           el.child(4).text,
