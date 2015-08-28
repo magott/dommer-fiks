@@ -64,12 +64,20 @@ case class Pages[T <: HttpServletRequest](req: HttpRequest[T]) {
 
         <h3>Sikkerhet</h3>
         <p>
+          For å få mer funksjonalitet kan du frivilig velge å la Dommer-FIKS lagre fødselsnummer og passordet ditt.
+          Slike sensitive opplysninger lagres kryptert av Dommer-FIKS med svært sterk krypteringsalgoritme (PBEWITHSHA256AND256BITAES-CBC-BC)
+        </p>
+        <p>
           Dommer-FIKS trenger ditt brukernavn og passord for fiks for å hente ut informasjon om dine kamper.
           Brukernavnet og passordet sendes kryptert fra deg til Dommer-FIKS og fra Dommer-FIKS til Fiks.
           Dersom du velger å benytte deg av Dommer-FIKS kalenderfunksjon for å kunne synkronisere
           dine kamper med Outlook, iCal, Google Calendar eller lignende vil ditt passord bli kryptert
           og lagret av Dommer-FIKS, mer informasjon om dette får du før oppretter en slik kalender. Dersom du ikke
           oppretter kalender vil ditt brukernavn og passord ikke bli lagret av Dommer-FIKS.
+        </p>
+        <p>
+          Dersom du ønsker at fødselsnummer skal kunne fylles ut automatisk på dommerregninger du laster ned i excel fra Dommer-FIKS,
+          må du oppgi fødselsnummer i brukerprofilen din. Dette lagres kryptert.
         </p>
         <h3>Støtt siden</h3>
         <p>

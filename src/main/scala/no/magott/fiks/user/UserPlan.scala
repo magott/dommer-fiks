@@ -52,6 +52,7 @@ class UserPlan(userService: UserService) extends Plan{
       p.valueOrNone("phone"),
       p.valueOrNone("accountNo"),
       p.valueOrNone("taxMuncipal"),
+      p.valueOrNone("fnr"),
       p.valueOrNone("tromso").map(_.toBoolean)
     )
   }

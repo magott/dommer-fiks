@@ -45,6 +45,7 @@ object InvoiceGenerator {
   private def applyCommonNffHeaders(template: XSSFWorkbook, invoice: Invoice, userOpt:Option[User]) = {
     val sheet = template.getSheetAt(0)
     userOpt.foreach { user =>
+      sheet(5)('B').setCellValue(user.fnrForInvoice)
       sheet(5)('D').setCellValue(user.nameForInvoice)
       sheet(5)('F').setCellValue(user.addressForInvoice)
       sheet(5)('H').setCellValue(user.zipForInvoice + " " + user.cityForInvoice)
@@ -93,6 +94,9 @@ object InvoiceGenerator {
       }
     }
     sheet(49+rowOffset)('F').setCellValue(invoice.matchFee)
+    sheet(53+rowOffset)('B').setCellValue(invoice.matchData.date.toDate)
+    sheet(53+rowOffset)('D').setCellValue(userOpt.map(_.cityForInvoice).getOrElse(""))
+    sheet(53+rowOffset)('F').setCellValue(userOpt.map(_.nameForInvoice).getOrElse(""))
   }
 
   private def applyToTromsoBredde(template: XSSFWorkbook, invoice: Invoice, userOpt:Option[User]) = {
@@ -113,10 +117,12 @@ object InvoiceGenerator {
       sheet(13)('K').setCellValue(user.zipForInvoice)
       sheet(13)('O').setCellValue(user.cityForInvoice)
       sheet(15)('E').setCellValue(user.email)
+      sheet(15)('O').setCellValue(user.fnrForInvoice)
       sheet(17)('E').setCellValue(user.phoneForInvoice)
       sheet(17)('O').setCellValue(user.muncipalForInvoice)
       sheet(25)('E').setCellValue(user.addressForInvoice)
       sheet(26)('L').setCellValue(user.addressForInvoice)
+      sheet(37)('J').setCellValue(user.nameForInvoice)
     }
     sheet(20)('E').setCellValue(invoice.matchData.matchId)
     sheet(20)('O').setCellValue(invoice.matchData.date.toString("yyyy-MM-dd"))
@@ -134,6 +140,7 @@ object InvoiceGenerator {
       sheet(31)('H').setCellValue(passengerAllowance.km)
       sheet(31)('J').setCellValue(passengerAllowance.pax)
     }
+    sheet(37)('C').setCellValue(invoice.matchData.dateString)
   }
 
   def withTemplate(filename:String)(f: XSSFWorkbook => XSSFWorkbook) = {

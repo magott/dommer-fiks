@@ -4,7 +4,6 @@ import java.util.UUID
 
 import com.mongodb.DBObject
 import com.mongodb.casbah.commons.MongoDBObject
-import no.magott.fiks.ParameterImplicits
 import no.magott.fiks.data.FiksLoginService
 
 import scala.xml.Utility
@@ -37,6 +36,7 @@ case class User(username: String, password: Option[String], email: String, calen
   def cityForInvoice = invoiceData.flatMap(_.city).getOrElse("")
   def phoneForInvoice = invoiceData.flatMap(_.phone).getOrElse("")
   def isTromso = invoiceData.exists(_.tromso.getOrElse(false))
+  def fnrForInvoice = invoiceData.flatMap(_.fnr).getOrElse("")
 
 }
 
@@ -50,13 +50,13 @@ object User{
     mo.getAs[DBObject]("invoiceData").map(InvoiceData.fromMongo(_)))
 
   import scalaz.Scalaz._
-  def validate(username: String, password: Option[String], email: Option[String], calendarId: Option[String], name: Option[String], address: Option[String], postalCode:Option[String], city:Option[String], phone:Option[String], accountNumber:Option[String], taxMuncipal:Option[String], tromso:Option[Boolean]) = {
+  def validate(username: String, password: Option[String], email: Option[String], calendarId: Option[String], name: Option[String], address: Option[String], postalCode:Option[String], city:Option[String], phone:Option[String], accountNumber:Option[String], taxMuncipal:Option[String], fnr:Option[String], tromso:Option[Boolean]) = {
 
     val vPassword = validatePassword(username, password)
     val vEmail = validateEmail(email)
     val validated = (vPassword |@| vEmail ) {
-          val invoiceData = if(List(name, address, postalCode, city, phone, accountNumber, taxMuncipal, tromso).exists(_.nonEmpty))
-            Some(InvoiceData(name, address, postalCode, city, phone, accountNumber, taxMuncipal, tromso))
+          val invoiceData = if(List(name, address, postalCode, city, phone, accountNumber, taxMuncipal, fnr, tromso).exists(_.nonEmpty))
+            Some(InvoiceData(name, address, postalCode, city, phone, accountNumber, taxMuncipal, fnr, tromso))
           else None
       (pwd, em) => User(username, pwd, em, calendarId, false, invoiceData)
     }
@@ -78,7 +78,8 @@ object User{
   }
 }
 
-case class InvoiceData(name:Option[String], address: Option[String], postalCode:Option[String], city:Option[String], phone:Option[String], accountNumber:Option[String], taxMuncipal:Option[String], tromso:Option[Boolean]) {
+case class InvoiceData(name:Option[String], address: Option[String], postalCode:Option[String], city:Option[String], phone:Option[String], accountNumber:Option[String], taxMuncipal:Option[String], fnr:Option[String], tromso:Option[Boolean]) {
+  import no.magott.fiks.user.Encryption.cipher
   def toMongo = {
     val builder = MongoDBObject.newBuilder
     name.foreach(builder += "name" -> _)
@@ -88,6 +89,7 @@ case class InvoiceData(name:Option[String], address: Option[String], postalCode:
     phone.foreach(builder += "phone" -> _)
     accountNumber.foreach(builder += "accountNo" -> _)
     taxMuncipal.foreach(builder += "taxMuncipal" -> _)
+    fnr.foreach(builder += "fnr" -> cipher.encrypt(_))
     tromso.foreach(builder += "tromso" -> _)
     builder.result
   }
@@ -95,6 +97,7 @@ case class InvoiceData(name:Option[String], address: Option[String], postalCode:
 
 object InvoiceData{
   import com.mongodb.casbah.Implicits._
+  import no.magott.fiks.user.Encryption.cipher
   def fromMongo(mo: DBObject) : InvoiceData = new InvoiceData(
     mo.getAs[String]("name"),
     mo.getAs[String]("address"),
@@ -103,7 +106,9 @@ object InvoiceData{
     mo.getAs[String]("phone"),
     mo.getAs[String]("accountNo"),
     mo.getAs[String]("taxMuncipal"),
+    mo.getAs[String]("fnr").map(cipher.decrypt),
     mo.getAs[Boolean]("tromso")
 
   )
 }
+

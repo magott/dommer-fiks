@@ -16,10 +16,6 @@ class UserService {
 
   val MongoSetting(db) = Properties.envOrNone("MONGOLAB_URI")
   val where = MongoDBObject
-  val cipher = new StandardPBEStringEncryptor();
-  cipher.setProvider(new BouncyCastleProvider());
-  cipher.setPassword(Properties.envOrElse("ENCRYPTION_PWD", "foo"))
-  cipher.setAlgorithm("PBEWITHSHA256AND256BITAES-CBC-BC")
 
   def removeCalendarFor(username: String) {
     db("users").update(where("username"->username), $unset("calid"))
@@ -43,6 +39,7 @@ class UserService {
 
   @deprecated("use saveUser")
   def newUser(username: String, password: String, email:String) = {
+    import Encryption._
     val calendarId = UUID.randomUUID.toString
     db("users").update(where("username"->username), $set("calid" -> calendarId, "username" -> username, "password" -> cipher.encrypt(password), "email" -> email), true, false)
     calendarId
@@ -61,6 +58,7 @@ class UserService {
   }
 
   def saveUser(user:User) = {
+    import Encryption._
     val encryptedPassword = user.password.map(cipher.encrypt(_))
     db("users").update(where("username"->user.username), user.copy(password = encryptedPassword).toMongo, true, false)
   }
@@ -85,6 +83,7 @@ class UserService {
 
 
   private def decrypt(user:User) = {
+    import Encryption._
     if(user.password.isDefined){
       user.copy(password=Some(cipher.decrypt(user.password.get)))
     }else{

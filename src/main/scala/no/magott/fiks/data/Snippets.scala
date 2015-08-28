@@ -896,6 +896,7 @@ def tableOfAvailableMatches = {
   }
 
   def userForm(user: Option[User], errors:Option[List[String]]) = {
+    val fnr = user.flatMap(_.invoiceData.flatMap(_.fnr)).getOrElse("")
     val name = user.flatMap(_.invoiceData.flatMap(_.name)).getOrElse("")
     val adr = user.flatMap(_.invoiceData.flatMap(_.address)).getOrElse("")
     val zip = user.flatMap(_.invoiceData.flatMap(_.postalCode)).getOrElse("")
@@ -932,6 +933,15 @@ def tableOfAvailableMatches = {
           </ul>
         </div>
         }
+
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="name">Fødselsnummer</label>
+          <div class="col-md-4">
+            <input id="fnr" name="fnr" type="text" placeholder="Fødselsnummer" class="form-control input-md" value={fnr}></input>
+            <span class="help-block">Fødselsnummer lagres <a href="/fiks/about">kryptert</a> hos Dommer-FIKS</span>
+          </div>
+        </div>
+
         <!-- Text input-->
         <div class="form-group">
           <label class="col-md-4 control-label" for="name">Navn</label>
@@ -947,7 +957,6 @@ def tableOfAvailableMatches = {
           <div class="col-md-4">
             <input id="address" name="address" type="text" placeholder="Gatenavn og nummer" value={adr} class="form-control
             input-md"></input>
-
           </div>
         </div>
 
