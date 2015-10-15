@@ -1,5 +1,7 @@
 package no.magott.fiks.data
 
+import java.util.Locale
+
 import unfiltered.request.{HttpRequest, Params}
 import org.joda.time.{DateTimeZone, Interval, LocalDateTime}
 import validation.{FormField, InputOk}
@@ -101,7 +103,7 @@ case class AssignedMatch(date:LocalDateTime, tournament: String, matchId:String,
   def refereeFirstName = refereeTuples.find(findReferee).get._2.split(" ").dropRight(1).mkString(" ").trim
   def first2DigitsMatchId = matchId.take(2)
   private def last9DigitsMatchId = matchId.drop(2)
-  private def month3Letters = date.toString("MMM").capitalize
+  private def month3Letters = date.toString("MMM", Locale.ENGLISH).capitalize
   private def day2Digits = date.toString("dd")
   private def year4Digits = date.toString("yyyy")
   def homeTeam = teams.split("\u00A0-\u00A0")(0)
