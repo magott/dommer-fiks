@@ -1,7 +1,5 @@
 package no.magott.fiks.vacation
 
-import java.time.LocalDate
-
 import no.magott.fiks.IdParameter
 import no.magott.fiks.data.{Snippets, Pages, MatchScraper, SessionId}
 import no.magott.fiks.user.{User, UserService, LoggedOnUser}
