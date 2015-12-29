@@ -12,7 +12,7 @@ class MatchScraperTest extends FunSuite{
     val doc = Jsoup.parse(getClass.getResourceAsStream("/result_page.html"), "UTF-8","")
     val result:MatchResult = scraper.parseMatchResultDocument("123", doc)
     import result._
-    assert(finalScore == Score(7,2), "Result does not match expectation")
+    assert(finalScore == Some(Score(7,2)), "Result does not match expectation")
     assert(resultReport(ResultType.FinalResult).isDefined)
     assert(resultReport(ResultType.FinalResult).get.reporter == "Sverre Lie Nordby")
     assert(resultReport(ResultType.HalfTime).isDefined)
