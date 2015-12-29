@@ -6,6 +6,8 @@ name:="dommer-fiks"
 
 scalaVersion:="2.11.7"
 
+scalacOptions += "-target:jvm-1.8"
+
 organization := "com.andersen-gott"
 
 libraryDependencies ++=
