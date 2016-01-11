@@ -5,3 +5,5 @@ resolvers += Classpaths.typesafeReleases
 addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-start-script" % "0.10.0")
+
+addSbtPlugin("com.earldouglas" % "xsbt-web-plugin" % "2.1.0")

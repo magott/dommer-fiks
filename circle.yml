@@ -2,3 +2,11 @@ machine:
   java:
     version:
       oraclejdk8
+
+deployment:
+  staging:
+    branch: master
+    commands:
+      - sbt package
+      - scp /home/ubuntu/dommer-fiks/target/scala-2.11/dommer-fiks_*.war voksen@api.voksen.no:/opt/web-apps/staging
+      - ssh voksen@api.voksen.no 'mv /opt/web-apps/staging/* /opt/web-apps/webapps'

@@ -2,6 +2,8 @@ import com.typesafe.sbt.SbtStartScript
 
 SbtStartScript.startScriptForClassesSettings
 
+enablePlugins(JettyPlugin)
+
 name:="dommer-fiks"
 
 scalaVersion:="2.11.7"
