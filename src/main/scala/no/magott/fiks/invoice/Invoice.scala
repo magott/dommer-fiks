@@ -95,8 +95,8 @@ case class Invoice(id:Option[ObjectId], username:String, matchData:MatchData, ma
 
 object Invoice {
 
-  val kmDefaults = Map(2014 -> BigDecimal("4.05")).withDefaultValue(BigDecimal("4.10"))
-  val kmTromso = Map(2014 -> BigDecimal("4.15")).withDefaultValue(BigDecimal("4.20"))
+  val kmDefaults = Map(2015-> BigDecimal("4.10"), 2014 -> BigDecimal("4.05")).withDefaultValue(BigDecimal("3.80"))
+  val kmTromso = Map(2015-> BigDecimal("4.20"), 2014 -> BigDecimal("4.15")).withDefaultValue(BigDecimal("3.90"))
   val kmRates = Map(
     "tromsø" -> kmTromso
   ).withDefaultValue(kmDefaults)

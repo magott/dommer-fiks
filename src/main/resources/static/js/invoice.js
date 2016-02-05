@@ -23,9 +23,9 @@ function calculateMillageAllowance(){
 
 function findKmMultiplier(){
     if($('#kmAllowanceMunicipal').prop('checked')) {
-        return 4.20;
+        return 3.90;
     }else{
-        return 4.10;
+        return 3.80;
     }
 }
 
