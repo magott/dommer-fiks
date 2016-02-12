@@ -38,8 +38,10 @@ class SecurityPlan(matchservice:MatchService, userservice:UserService) extends P
     val username = map.get("username").get.head.toLowerCase
     val password = map.get("password").get.head
     val rememberMe = true //map.get("RememberMe").exists(_.contains("on"))
+    println(s"Logging in $username")
     FiksLoginService.login(username, password, rememberMe) match {
       case Right(session) => {
+        println(s"Logged in $username")
         matchservice.prefetchAvailableMatches(session)
         userservice.save(session)
         val secure = req match { case XForwardProto("https") => Some(true) case _ => Some(false)}
