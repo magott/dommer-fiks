@@ -20,6 +20,7 @@ object FiksLoginService {
   val REQ_VAL_FORMFIELD_NAME = "__RequestVerificationToken"
 
   def login(username: String, password: String, rememberMe: Boolean) : Either[Exception, UserSession] = {
+    println(s"$username getting loginpage")
     val loginPage = Jsoup.connect(LOGIN_FORM_URL).method(Method.GET).timeout(10000).execute()
     val loginDocument = loginPage.parse
     val requestValidationCookie = loginPage.cookie(VALIDATION_COOKIE_NAME)
@@ -28,6 +29,7 @@ object FiksLoginService {
       .collect{
       case (k, Some(v)) => k -> v
     }
+    println(s"$username posting to loginpage")
     val loginRequest = Jsoup.connect(LOGIN_URL)
       .data(params.asJava)
       .header("Referer", "https://fiks.fotball.no/FiksWeb/Login")
