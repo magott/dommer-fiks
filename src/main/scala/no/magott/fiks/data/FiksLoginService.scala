@@ -39,14 +39,20 @@ object FiksLoginService {
       .followRedirects(false)
       .timeout(15000)
 
-      val response = loginRequest.execute()
-
-    if (response.statusCode == 302) {
-      val applicationCookie = response.cookie(APP_COOKIE_NAME)
-      val session: UserSession = authenticate(username, applicationCookie, None)
-      Right(session)
-    } else {
-      Left(new RuntimeException("Login failed"))
+      try {
+        val response = loginRequest.execute()
+        if (response.statusCode == 302) {
+          val applicationCookie = response.cookie(APP_COOKIE_NAME)
+          val session: UserSession = authenticate(username, applicationCookie, None)
+          Right(session)
+        } else {
+          Left(new RuntimeException("Login failed"))
+        }
+      } catch {
+        case e:Exception => {
+          e.printStackTrace()
+          Left(e)
+        }
     }
   }
 
