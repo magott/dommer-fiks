@@ -30,16 +30,17 @@ object FiksLoginService {
       case (k, Some(v)) => k -> v
     }
     println(s"$username posting to loginpage")
-    val loginRequest = Jsoup.connect(LOGIN_URL)
-      .data(params.asJava)
-      .header("Referer", "https://fiks.fotball.no/FiksWeb/Login")
-      .method(Method.POST)
-      .cookie(VALIDATION_COOKIE_NAME, requestValidationCookie)
-      .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
-      .followRedirects(false)
-      .timeout(15000)
+    try {
+      val loginRequest = Jsoup.connect(LOGIN_URL)
+        .data(params.asJava)
+        .header("Referer", "https://fiks.fotball.no/FiksWeb/Login")
+        .method(Method.POST)
+        .cookie(VALIDATION_COOKIE_NAME, requestValidationCookie)
+        .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
+        .followRedirects(false)
+        .timeout(15000)
 
-      try {
+        println(s"$username executing loginrequest")
         val response = loginRequest.execute()
         if (response.statusCode == 302) {
           val applicationCookie = response.cookie(APP_COOKIE_NAME)
