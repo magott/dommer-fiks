@@ -21,7 +21,7 @@ libraryDependencies ++=
     "io.argonaut" %% "argonaut" % "6.0.4",
     "org.slf4j" % "slf4j-simple" % "1.6.4",
     "commons-logging" % "commons-logging" % "1.1.1",
-    "org.jsoup" % "jsoup" % "1.6.1",
+    "org.jsoup" % "jsoup" % "1.8.3",
     "joda-time" % "joda-time" % "2.1",
     "org.joda" % "joda-convert" % "1.2",
     "org.scalatest" %% "scalatest" % "2.2.1" % "test",

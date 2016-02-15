@@ -18,25 +18,27 @@ object FiksLoginService {
   val REF_CLIENT_URL = "https://fiks.fotball.no/FiksWeb/Home/RedirectToFiksReferee?clubId=0"
   val VALIDATION_COOKIE_NAME = "__RequestVerificationToken_L0Zpa3NXZWI1"
   val REQ_VAL_FORMFIELD_NAME = "__RequestVerificationToken"
+  val UA_STRING = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36"
 
   def login(username: String, password: String, rememberMe: Boolean) : Either[Exception, UserSession] = {
     println(s"$username getting loginpage")
-    val loginPage = Jsoup.connect(LOGIN_FORM_URL).method(Method.GET).timeout(10000).execute()
-    val loginDocument = loginPage.parse
-    val requestValidationCookie = loginPage.cookie(VALIDATION_COOKIE_NAME)
-    val requestValidationFormField = Option(loginDocument.getElementsByAttributeValue("name", REQ_VAL_FORMFIELD_NAME)).flatMap(el=> Option(el.attr("value")))
-    val params = Map("UserName" -> Some(username), "Password" -> Some(password), REQ_VAL_FORMFIELD_NAME -> requestValidationFormField, "RememberMe" -> Some(rememberMe.toString))
-      .collect{
-      case (k, Some(v)) => k -> v
-    }
-    println(s"$username posting to loginpage")
     try {
+      val loginPage = Jsoup.connect(LOGIN_FORM_URL).method(Method.GET).timeout(10000).userAgent(UA_STRING).execute()
+      val loginDocument = loginPage.parse
+      val requestValidationCookie = loginPage.cookie(VALIDATION_COOKIE_NAME)
+      val requestValidationFormField = Option(loginDocument.getElementsByAttributeValue("name", REQ_VAL_FORMFIELD_NAME)).flatMap(el=> Option(el.attr("value")))
+      val params = Map("UserName" -> Some(username), "Password" -> Some(password), REQ_VAL_FORMFIELD_NAME -> requestValidationFormField, "RememberMe" -> Some(rememberMe.toString))
+        .collect{
+        case (k, Some(v)) => k -> v
+      }
+      println(s"$username posting to loginpage")
+
       val loginRequest = Jsoup.connect(LOGIN_URL)
         .data(params.asJava)
         .header("Referer", "https://fiks.fotball.no/FiksWeb/Login")
         .method(Method.POST)
         .cookie(VALIDATION_COOKIE_NAME, requestValidationCookie)
-        .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11")
+        .userAgent(UA_STRING)
         .followRedirects(false)
         .timeout(15000)
 
@@ -60,7 +62,7 @@ object FiksLoginService {
   def reAuthenticate(session:UserSession) = authenticate(session.id, session.longLivedToken, Some(session.sessionToken))
 
   def authenticate(username: String, applicationCookie: String, sessionCookie:Option[String]): UserSession = {
-    val connection = Jsoup.connect(REF_CLIENT_URL).method(Method.GET).timeout(10000)
+    val connection = Jsoup.connect(REF_CLIENT_URL).method(Method.GET).timeout(10000).userAgent(UA_STRING)
       .cookie(APP_COOKIE_NAME, applicationCookie)
     sessionCookie.foreach(value => connection.cookie(SESS_COOKIE_NAME, value))
     val cookieFromServer =  connection.execute().cookie(SESS_COOKIE_NAME)
