@@ -2,7 +2,7 @@ import com.mongodb.casbah.commons.conversions.scala.RegisterJodaTimeConversionHe
 import java.util.Locale
 import no.magott.fiks.calendar.{CalendarService, CalendarPlan}
 import no.magott.fiks.data._
-import no.magott.fiks.FallbackPlan
+import no.magott.fiks.{ShutdownPlan, FallbackPlan}
 import no.magott.fiks.invoice.{InvoiceRepository, InvoicePlan}
 import no.magott.fiks.message.{MessageScraper, MessageRepository, MessageService, MessagePlan}
 import no.magott.fiks.user.{UserPlan, UserService}
@@ -26,6 +26,7 @@ object Web {
     println("Starting on port:" + port)
     val http = jetty.Http(port)
     http.resources(getClass().getResource("/static"))
+      .plan(new ShutdownPlan)
       .plan(new SecurityPlan(matchservice, userservice))
       .plan(new FiksPlan(matchservice, stadiumservice, invoiceRepository, userservice))
       .plan(new CalendarPlan(calendarservice,userservice))
